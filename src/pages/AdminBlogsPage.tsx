@@ -1,10 +1,10 @@
 import { useEffect, useMemo, useState } from "react";
 import type { FormEvent } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { signOut } from "firebase/auth";
 import { ROUTES } from "@/routes";
 import { auth } from "@/services/firebase";
-import { Button } from "@/components/base/button";
+import AdminSidebar from "@/components/shell/AdminSidebar";
 import {
   createBlogAuthorFromAdmin,
   createBlogCategoryFromAdmin,
@@ -218,6 +218,20 @@ export default function AdminBlogsPage() {
       return matchesStatus && haystack.includes(query);
     });
   }, [posts, postSearch, postStatusFilter]);
+
+  const sidebarItems = useMemo(
+    () => [
+      { key: "posts" as const, label: "Posts", count: posts.length },
+      { key: "authors" as const, label: "Authors", count: authors.length },
+      {
+        key: "categories" as const,
+        label: "Categories",
+        count: categories.length,
+      },
+      { key: "tags" as const, label: "Tags", count: tags.length },
+    ],
+    [posts.length, authors.length, categories.length, tags.length],
+  );
 
   async function refreshData() {
     const [postData, authorData, categoryData, tagData] = await Promise.all([
@@ -643,80 +657,39 @@ export default function AdminBlogsPage() {
         className="mx-auto max-w-7xl space-y-8"
         aria-labelledby="admin-cms-heading"
       >
-        <div className="rounded-2xl border border-border/70 bg-bg-secondary/80 p-5 shadow-lg backdrop-blur-sm sm:p-6">
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-            <div>
+        <div className="grid gap-6 lg:grid-cols-[280px_1fr]">
+          <AdminSidebar
+            items={sidebarItems}
+            activeSection={activeSection}
+            activePage="dashboard"
+            onSectionChange={setActiveSection}
+            onLogout={handleLogout}
+          />
+
+          <div className="space-y-6">
+            <div className="rounded-2xl border border-border/70 bg-bg-secondary/80 p-5 shadow-lg backdrop-blur-sm sm:p-6">
               <p className="text-xs uppercase tracking-[0.2em] text-text-muted">
                 Admin Dashboard
               </p>
-              <h1 id="admin-cms-heading" className="text-3xl font-black">
+              <h1 id="admin-cms-heading" className="mt-1 text-3xl font-black">
                 Blog CMS Operations
               </h1>
+              <p className="mt-2 text-sm text-text-secondary">
+                Create, update, and manage all publishing entities from one place.
+              </p>
             </div>
-            <div className="flex flex-wrap items-center gap-3">
-              <Button asChild variant="outline" className="rounded-xl">
-                <Link to={ROUTES.BLOG}>View blog</Link>
-              </Button>
-              <Button asChild variant="outline" className="rounded-xl">
-                <Link to={ROUTES.ADMIN_PROFILE}>Profile</Link>
-              </Button>
-              <Button
-                type="button"
-                variant="destructive"
-                className="rounded-xl"
-                onClick={handleLogout}
+
+            {message && (
+              <div
+                role="status"
+                aria-live="polite"
+                className="rounded-xl border border-border bg-bg-secondary px-4 py-3 text-sm text-text-secondary"
               >
-                Logout
-              </Button>
-            </div>
-          </div>
-        </div>
+                {message}
+              </div>
+            )}
 
-        {message && (
-          <div
-            role="status"
-            aria-live="polite"
-            className="rounded-xl border border-border bg-bg-secondary px-4 py-3 text-sm text-text-secondary"
-          >
-            {message}
-          </div>
-        )}
-
-        <div
-          className="grid gap-3 sm:grid-cols-4"
-          role="tablist"
-          aria-label="Admin content sections"
-        >
-          {[
-            { key: "posts", label: `Posts (${posts.length})` },
-            { key: "authors", label: `Authors (${authors.length})` },
-            { key: "categories", label: `Categories (${categories.length})` },
-            { key: "tags", label: `Tags (${tags.length})` },
-          ].map((item) => {
-            const isActive = activeSection === item.key;
-            return (
-              <Button
-                key={item.key}
-                type="button"
-                onClick={() => setActiveSection(item.key as AdminSection)}
-                role="tab"
-                aria-selected={isActive}
-                aria-controls={`admin-panel-${item.key}`}
-                id={`admin-tab-${item.key}`}
-                variant={isActive ? "default" : "outline"}
-                className={`h-auto rounded-xl px-4 py-3 text-sm font-semibold transition ${
-                  isActive
-                    ? "bg-accent text-black hover:bg-accent/90"
-                    : "border-border bg-bg-secondary text-text-secondary hover:border-accent"
-                }`}
-              >
-                {item.label}
-              </Button>
-            );
-          })}
-        </div>
-
-        {activeSection === "posts" && (
+            {activeSection === "posts" && (
           <div
             id="admin-panel-posts"
             role="tabpanel"
@@ -1061,9 +1034,9 @@ export default function AdminBlogsPage() {
               )}
             </div>
           </div>
-        )}
+            )}
 
-        {activeSection === "authors" && (
+            {activeSection === "authors" && (
           <div
             id="admin-panel-authors"
             role="region"
@@ -1249,9 +1222,9 @@ export default function AdminBlogsPage() {
               )}
             </div>
           </div>
-        )}
+            )}
 
-        {activeSection === "categories" && (
+            {activeSection === "categories" && (
           <div
             id="admin-panel-categories"
             role="region"
@@ -1420,9 +1393,9 @@ export default function AdminBlogsPage() {
               )}
             </div>
           </div>
-        )}
+            )}
 
-        {activeSection === "tags" && (
+            {activeSection === "tags" && (
           <div
             id="admin-panel-tags"
             role="region"
@@ -1528,7 +1501,9 @@ export default function AdminBlogsPage() {
               )}
             </div>
           </div>
-        )}
+            )}
+          </div>
+        </div>
       </section>
     </main>
   );

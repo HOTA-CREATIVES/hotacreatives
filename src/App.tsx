@@ -3,6 +3,7 @@ import { lazy, Suspense } from "react";
 import { Toaster } from "sonner";
 import { MainLayout } from "@/layouts";
 import { ROUTES } from "@/routes/routes";
+import AdminProtectedRoute from "@/components/common/AdminProtectedRoute";
 
 // Lazy load pages for better code splitting
 const HomePage = lazy(() => import("@/pages/HomePage"));
@@ -49,9 +50,30 @@ function App() {
       <Suspense fallback={<PageLoader />}>
         <Routes>
           <Route path={ROUTES.ADMIN_LOGIN} element={<AdminLoginPage />} />
-          <Route path={ROUTES.ADMIN_BLOGS} element={<AdminBlogsPage />} />
-          <Route path={ROUTES.ADMIN_PROFILE} element={<AdminProfilePage />} />
-          <Route path="/blogs" element={<AdminBlogsPage />} />
+          <Route
+            path={ROUTES.ADMIN_BLOGS}
+            element={
+              <AdminProtectedRoute>
+                <AdminBlogsPage />
+              </AdminProtectedRoute>
+            }
+          />
+          <Route
+            path={ROUTES.ADMIN_PROFILE}
+            element={
+              <AdminProtectedRoute>
+                <AdminProfilePage />
+              </AdminProtectedRoute>
+            }
+          />
+          <Route
+            path="/blogs"
+            element={
+              <AdminProtectedRoute>
+                <AdminBlogsPage />
+              </AdminProtectedRoute>
+            }
+          />
           <Route element={<MainLayout />}>
             <Route path={ROUTES.HOME} element={<HomePage />} />
             <Route path={ROUTES.SERVICES} element={<ServicesPage />} />
