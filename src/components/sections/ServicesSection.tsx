@@ -106,7 +106,7 @@ function ServiceCard({ service }: { service: Service }) {
     >
       <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-accent/40 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
       <div className="absolute inset-0 bg-linear-to-br from-accent/5 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
-      
+
       <div className="relative z-10 flex flex-col gap-6 h-full">
         <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-[1.25rem] bg-accent/10 transition-colors duration-300 group-hover:bg-accent/20">
           {service.image ? (
@@ -126,7 +126,9 @@ function ServiceCard({ service }: { service: Service }) {
         </div>
 
         <div className="flex-1 min-w-0 flex flex-col justify-center">
-          <h3 className="mb-3 text-2xl font-bold tracking-tight">{service.title}</h3>
+          <h3 className="mb-3 text-2xl font-bold tracking-tight">
+            {service.title}
+          </h3>
           <p className="text-text-secondary text-base leading-relaxed">
             {service.description}
           </p>
@@ -179,7 +181,7 @@ export default function ServicesSection() {
             </div>
           </motion.div>
 
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, x: 50, scale: 0.95 }}
             whileInView={{ opacity: 1, x: 0, scale: 1 }}
             viewport={{ once: true, margin: "-100px" }}
@@ -210,7 +212,7 @@ export default function ServicesSection() {
           </motion.div>
         </div>
 
-        <motion.div 
+        <motion.div
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"

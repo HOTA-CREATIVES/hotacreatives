@@ -1,296 +1,257 @@
-import { useMemo, useState, Suspense, lazy } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   ArrowRight,
-  CheckCircle,
-  Circle,
-  LayoutGrid,
+  BarChart3,
+  CheckCircle2,
+  Globe,
+  LineChart,
+  Megaphone,
+  Palette,
+  PenTool,
+  Rocket,
   Sparkles,
-  Loader2,
+  Target,
+  Video,
 } from "lucide-react";
-import { Button } from "@/components/base/button";
 import HomeCTAButton from "@/components/composite/HomeCTAButton";
+import { Button } from "@/components/base/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/base/card";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/base/tooltip";
 import { ROUTES } from "@/routes";
-import LottieAnimation from "@/components/composite/LottieAnimation";
-import { LOTTIE_ANIMATIONS } from "@/constants";
-import { useInView } from "@/hooks";
-// import cuateImg from "@/assets/cuate.png";
 
-// Lazy load the heavy 3D component to keep initial bundle size small
-const GrowthVisualization3D = lazy(
-  () => import("@/components/composite/GrowthVisualization3D")
-);
-
-const services: {
-  animation?: string;
-  image?: string;
+type Service = {
+  id: string;
   title: string;
   tagline: string;
   description: string;
+  icon: typeof Megaphone;
   features: string[];
   deliverables: string[];
-}[] = [
+  outcome: string;
+};
+
+const services: Service[] = [
   {
-    image:
-      "https://res.cloudinary.com/diiyy6bar/image/upload/v1772949005/Website_setup-pana_kdmoks.svg",
+    id: "social-media",
     title: "Social Media Management",
-    tagline: "Building communities that convert",
+    tagline: "Build a loyal brand community",
     description:
-      "End-to-end management of your Instagram, Facebook, LinkedIn, and X (Twitter) presence with daily content, engagement, and community building.",
+      "From strategy to posting to engagement, we operate your social channels as one consistent growth system.",
+    icon: Megaphone,
     features: [
-      "Daily content calendar & scheduling",
-      "Community management & engagement",
-      "Competitor analysis & trend monitoring",
-      "Monthly performance reports",
-      "Hashtag research & strategy",
-      "Influencer collaboration management",
+      "Monthly content and publishing plan",
+      "Channel-specific content formatting",
+      "Community engagement workflow",
+      "Weekly traction reviews",
     ],
     deliverables: [
-      "15-30 posts per month across platforms",
-      "Story & reel ideas",
-      "Caption writing & hashtag strategy",
-      "Weekly performance metrics",
+      "15-30 posts across key platforms",
+      "Caption and hashtag framework",
+      "Story and reel publishing calendar",
+      "Monthly report with action points",
     ],
+    outcome:
+      "Consistent brand voice and predictable organic engagement growth.",
   },
   {
-    image:
-      "https://res.cloudinary.com/diiyy6bar/image/upload/v1772948840/About_us_page-amico_x6pzpn.svg",
+    id: "content-creation",
     title: "Content Creation",
-    tagline: "Content that stops the scroll",
+    tagline: "Creative that people remember",
     description:
-      "Reels, carousels, stories, memes, and static posts — designed to resonate with your Indian audience and drive meaningful engagement.",
+      "We produce audience-first content that balances trend relevance with your long-term brand story.",
+    icon: PenTool,
     features: [
-      "Reels, carousels, and static posts",
-      "Meme marketing & trend jacking",
-      "Story templates & highlights",
-      "Festival & occasion specific content",
-      "Product photography & editing",
-      "Copywriting & caption creation",
+      "Reel and carousel ideation",
+      "Brand-aligned design execution",
+      "Short-form script direction",
+      "Hook and format experimentation",
     ],
     deliverables: [
-      "10-20 custom designs per month",
-      "5-10 reels concepts",
-      "Story templates",
-      "Brand-aligned content themes",
+      "10-20 creative assets per month",
+      "Campaign-oriented content batches",
+      "Story kit for daily publishing",
+      "Creative sprint notes",
     ],
+    outcome: "Higher retention and faster idea-to-publish turnaround.",
   },
   {
-    image:
-      "https://res.cloudinary.com/diiyy6bar/image/upload/v1772948723/Content_creator-amico_1_dkabfw.svg",
+    id: "performance",
     title: "Performance Marketing",
-    tagline: "Turning ad spend into revenue",
+    tagline: "Make ad spend accountable",
     description:
-      "Meta Ads, Google Ads, and campaign management optimised for ROAS. We turn ad spend into revenue with data-driven strategies.",
+      "We run paid campaigns with structured testing, clean tracking, and sharp optimization loops.",
+    icon: BarChart3,
     features: [
-      "Meta Ads (Facebook & Instagram)",
-      "Google Ads (Search & Display)",
-      "Landing page optimization",
-      "A/B testing & conversion tracking",
-      "Retargeting & lookalike audiences",
-      "Weekly campaign optimization",
+      "Audience and offer architecture",
+      "Conversion tracking setup",
+      "Creative and copy testing",
+      "Weekly optimization cycles",
     ],
     deliverables: [
-      "Campaign strategy & setup",
-      "Ad creative & copywriting",
-      "Weekly performance reports",
-      "Monthly ROAS analysis",
+      "Campaign setup and launch",
+      "Performance dashboard",
+      "Testing matrix and findings",
+      "Monthly ROI summary",
     ],
+    outcome: "Lower wasted spend and stronger lead quality over time.",
   },
   {
-    image:
-      "https://res.cloudinary.com/diiyy6bar/image/upload/v1772948723/Videographer-pana_gladr0.svg",
+    id: "brand-identity",
     title: "Brand Identity & Design",
-    tagline: "Make your brand unforgettable",
+    tagline: "Look premium and stay recognizable",
     description:
-      "Logo design, brand guidelines, visual identity systems, and packaging design that makes your brand look like a ₹100 Cr company from day one.",
+      "We build visual systems that make your brand feel intentional and consistent across every touchpoint.",
+    icon: Palette,
     features: [
-      "Logo & brand mark design",
-      "Complete brand guidelines",
-      "Color palette & typography system",
-      "Marketing collateral design",
-      "Packaging & label design",
-      "Social media templates",
+      "Logo and identity exploration",
+      "Color and type system",
+      "Social and ad template system",
+      "Visual language consistency rules",
     ],
     deliverables: [
-      "3 logo concepts + revisions",
-      "Brand guideline document",
-      "Brand asset library",
-      "Stationery & business card designs",
+      "Brand toolkit",
+      "Usage guideline document",
+      "Template starter pack",
+      "Campaign visual direction",
     ],
+    outcome: "Stronger first impressions and better brand recall.",
   },
   {
-    image:
-      "https://res.cloudinary.com/diiyy6bar/image/upload/v1772948722/Mobile_Marketing-pana_x02k3u.svg",
+    id: "video-production",
     title: "Video Production",
-    tagline: "Videos that build trust & drive sales",
+    tagline: "Move people from attention to trust",
     description:
-      "Product shoots, brand films, testimonial videos, and UGC-style content that builds trust and drives conversions across platforms.",
+      "We create platform-ready videos designed for retention, trust-building, and conversion.",
+    icon: Video,
     features: [
-      "Product photography & videography",
-      "Brand films & commercials",
-      "Testimonial & case study videos",
-      "UGC-style content creation",
-      "Video editing & post-production",
-      "YouTube & platform optimization",
+      "Concept and shot planning",
+      "Narrative edit structure",
+      "Subtitle and cut-down versions",
+      "Platform-specific exports",
     ],
     deliverables: [
-      "4-8 edited videos per month",
-      "Raw footage & B-rolls",
-      "Multiple format exports",
-      "Subtitles & captions",
+      "4-8 edited videos each month",
+      "Multiple hook variations",
+      "Short and long versions",
+      "Creative performance notes",
     ],
+    outcome: "Better watch-through rates and stronger message clarity.",
   },
   {
-    animation: LOTTIE_ANIMATIONS.services,
+    id: "website-funnel",
     title: "Website & Funnel Design",
-    tagline: "Websites that work 24/7",
+    tagline: "Turn traffic into qualified action",
     description:
-      "High-converting landing pages, sales funnels, and brand websites that don't just look good — they generate leads 24/7.",
+      "We design conversion-first web journeys that remove friction and guide users toward action.",
+    icon: Globe,
     features: [
-      "Custom website design & development",
-      "Landing page optimization",
-      "Sales funnel creation",
-      "Mobile-responsive design",
-      "SEO-friendly structure",
-      "Analytics & conversion tracking",
+      "Page and funnel mapping",
+      "UX and copy alignment",
+      "Responsive UI implementation",
+      "Analytics event planning",
     ],
     deliverables: [
-      "Fully responsive website",
-      "5-10 page designs",
-      "Contact forms & CTAs",
-      "3 months of maintenance",
+      "Conversion-optimized pages",
+      "Mobile and desktop layouts",
+      "CTA and form wiring",
+      "Post-launch improvement list",
     ],
+    outcome: "More qualified leads and cleaner conversion flow.",
   },
 ];
 
-/* ── Animated service block ──────────────────────────────────────── */
-function ServiceBlock({
-  service,
-  index,
-}: {
-  service: (typeof services)[number];
-  index: number;
-}) {
-  const { ref, inView } = useInView({ threshold: 0.1 });
-  const isOdd = index % 2 === 1;
+const workflow = [
+  {
+    title: "Audit & Direction",
+    detail: "We map goals, current bottlenecks, and growth constraints first.",
+    icon: Target,
+  },
+  {
+    title: "System Build",
+    detail: "Creative, distribution, and paid channels are connected as one engine.",
+    icon: Rocket,
+  },
+  {
+    title: "Creative Sprints",
+    detail: "Fast weekly execution cycles to ship assets without quality drops.",
+    icon: Sparkles,
+  },
+  {
+    title: "Scale by Signal",
+    detail: "We double down on what works and trim what does not.",
+    icon: LineChart,
+  },
+];
 
-  return (
-    <div
-      ref={ref}
-      className={`grid lg:grid-cols-2 gap-12 items-center transition-all duration-700 ${
-        isOdd ? "lg:flex-row-reverse" : ""
-      } ${inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"}`}
-    >
-      {/* Animation Side */}
-      <div className={isOdd ? "lg:order-2" : "lg:order-1"}>
-        <div className="bg-bg-card border border-border rounded-3xl p-12 flex items-center justify-center">
-          {service.image ? (
-            <img
-              src={service.image}
-              alt={service.title}
-              className="w-64 h-64"
-            />
-          ) : (
-            <LottieAnimation
-              src={service.animation!}
-              className="w-64 h-64"
-              loop
-              autoplay
-            />
-          )}
-        </div>
-      </div>
-
-      {/* Content Side */}
-      <div className={isOdd ? "lg:order-1" : "lg:order-2"}>
-        <div className="inline-flex items-center gap-3 bg-accent/10 rounded-full px-4 py-2 mb-6">
-          {service.image ? (
-            <img src={service.image} alt={service.title} className="w-6 h-6" />
-          ) : (
-            <LottieAnimation
-              src={service.animation!}
-              className="w-6 h-6"
-              loop
-              autoplay
-            />
-          )}
-          <span className="text-xs font-bold uppercase tracking-widest text-accent">
-            {service.title}
-          </span>
-        </div>
-
-        <h2 className="text-4xl sm:text-5xl font-black tracking-tight mb-4">
-          {service.tagline}
-        </h2>
-
-        <p className="text-text-secondary text-lg mb-8 leading-relaxed">
-          {service.description}
-        </p>
-
-        {/* Features */}
-        <div className="mb-8">
-          <h3 className="text-xl font-bold mb-4">What's Included:</h3>
-          <div className="grid sm:grid-cols-2 gap-3">
-            {service.features.map((feature) => (
-              <div key={feature} className="flex items-start gap-2 text-sm">
-                <CheckCircle
-                  size={18}
-                  className="text-accent shrink-0 mt-0.5"
-                />
-                <span className="text-text-secondary">{feature}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Deliverables */}
-        <div className="bg-accent/5 border border-accent/20 rounded-2xl p-6">
-          <h4 className="font-bold mb-3 text-accent">Deliverables:</h4>
-          <ul className="space-y-2">
-            {service.deliverables.map((item) => (
-              <li
-                key={item}
-                className="text-sm text-text-secondary flex items-start gap-2"
-              >
-                <span className="text-accent">•</span>
-                {item}
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
-    </div>
-  );
-}
+const metricHints = [
+  {
+    label: "Conversion Lift",
+    hint: "Measured through lead form and CTA event improvements over baseline.",
+  },
+  {
+    label: "Creative Velocity",
+    hint: "How quickly your team can ship quality assets each week.",
+  },
+  {
+    label: "Brand Recall",
+    hint: "Consistency in messaging and visuals across channels.",
+  },
+  {
+    label: "ROAS Discipline",
+    hint: "Structured paid optimization to maintain efficient spend.",
+  },
+];
 
 export default function ServicesPage() {
   const navigate = useNavigate();
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [activeServiceId, setActiveServiceId] = useState(services[0].id);
 
-  const activeService = useMemo(() => services[activeIndex], [activeIndex]);
+  const activeService = useMemo(
+    () => services.find((service) => service.id === activeServiceId) ?? services[0],
+    [activeServiceId],
+  );
+
+  const ActiveIcon = activeService.icon;
 
   return (
     <>
-      <section className="relative overflow-hidden bg-bg-secondary pb-20 pt-32">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(244,194,13,0.12),transparent_36%),radial-gradient(circle_at_bottom_right,rgba(244,194,13,0.06),transparent_28%)]" />
+      <section className="relative overflow-hidden pb-20 pt-32">
+        <div
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{ backgroundImage: "url('/images/hero-services-v3.jpg')" }}
+          aria-hidden="true"
+        />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(244,194,13,0.14),transparent_34%),linear-gradient(135deg,rgba(0,0,0,0.80),rgba(0,0,0,0.62)_50%,rgba(0,0,0,0.88))]" />
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-size-[40px_40px] opacity-35" />
 
-        <div className="relative z-10 mx-auto flex max-w-7xl flex-col items-center gap-12 px-4 sm:px-6 lg:flex-row lg:px-8">
-          <div className="flex-1 text-center lg:text-left">
-            <span className="text-xs font-bold uppercase tracking-[0.28em] text-accent">
-              Our Services
+        <div className="relative z-10 mx-auto grid max-w-7xl items-end gap-8 px-4 sm:px-6 lg:grid-cols-[1.08fr_0.92fr] lg:px-8">
+          <div>
+            <span className="text-xs font-black uppercase tracking-[0.28em] text-accent">
+              Services
             </span>
-            <h1 className="mt-4 text-5xl font-black tracking-tight sm:text-7xl">
-              Systems Built
+            <h1 className="mt-4 text-5xl font-black tracking-tight text-white sm:text-7xl">
+              Growth Services
               <br />
-              <span className="text-accent">To Grow With Clarity</span>
+              <span className="text-accent">built like a system</span>
             </h1>
-            <p className="mt-6 max-w-2xl text-lg text-text-secondary">
-              Our motive is to remove random execution and replace it with a
-              repeatable growth system. Explore each service to see what it
-              includes and how it supports your brand trajectory.
+            <p className="mt-6 max-w-2xl text-lg leading-relaxed text-white/80">
+              We combine strategy, creative, distribution, and optimization so
+              your brand scales with consistency instead of random execution.
             </p>
 
-            <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center lg:justify-start">
+            <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center">
               <HomeCTAButton
                 onClick={() => navigate(ROUTES.FREE_AUDIT)}
                 className="w-full sm:w-auto font-bold"
@@ -298,198 +259,240 @@ export default function ServicesPage() {
                 Get Your Free Audit
               </HomeCTAButton>
               <Button
-                asChild
-                className="rounded-full border border-border bg-bg-card px-6 py-6 text-sm font-bold text-text-primary hover:bg-bg-card-hover"
+                onClick={() => navigate(ROUTES.CONTACT)}
+                className="rounded-full border border-white/20 bg-white/10 px-6 py-6 text-sm font-bold text-white hover:bg-white/20"
               >
-                <Link
-                  to={ROUTES.CONTACT}
-                  className="inline-flex items-center justify-center gap-2"
-                >
-                  Discuss your goals
-                  <ArrowRight size={16} />
-                </Link>
+                Discuss your scope
+                <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
             </div>
           </div>
 
-          <div className="flex-1 w-full max-w-lg min-h-[400px]">
-             <Suspense
-              fallback={
-                <div className="flex h-[400px] w-full items-center justify-center rounded-2xl border border-border bg-bg-card/50">
-                  <Loader2 className="h-8 w-8 animate-spin text-accent" />
+          <Card className="border-white/15 bg-black/45 backdrop-blur-xl">
+            <CardHeader>
+              <CardTitle className="text-xl font-black text-white">
+                Outcome Dashboard
+              </CardTitle>
+              <CardDescription className="text-white/70">
+                Hover each metric to see what we optimize for in real projects.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <TooltipProvider>
+                <div className="grid gap-3 sm:grid-cols-2">
+                  {metricHints.map((metric) => (
+                    <Tooltip key={metric.label}>
+                      <TooltipTrigger asChild>
+                        <button
+                          type="button"
+                          className="rounded-xl border border-white/15 bg-white/5 px-4 py-3 text-left text-sm font-semibold text-white transition-colors hover:bg-white/10"
+                        >
+                          {metric.label}
+                        </button>
+                      </TooltipTrigger>
+                      <TooltipContent className="max-w-[220px] border-border bg-bg-card text-text-secondary">
+                        {metric.hint}
+                      </TooltipContent>
+                    </Tooltip>
+                  ))}
                 </div>
-              }
-            >
-              <GrowthVisualization3D />
-            </Suspense>
-          </div>
+              </TooltipProvider>
+            </CardContent>
+          </Card>
         </div>
       </section>
 
       <section className="relative py-24">
-        <div className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-accent/45 to-transparent" />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="mb-14 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-            <div>
-              <span className="text-xs font-bold uppercase tracking-[0.26em] text-accent">
-                Capability Grid
-              </span>
-              <h2 className="mt-3 text-4xl font-black tracking-tight sm:text-5xl">
-                Pick a service, see the
-                <span className="text-accent"> full breakdown</span>
-              </h2>
-            </div>
-            <p className="max-w-lg text-sm text-text-secondary">
-              Modeled after 21st-style feature sections, this interactive layout
-              helps you compare offerings quickly before booking an audit call.
+        <div className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-accent/50 to-transparent" />
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="mb-10">
+            <span className="text-xs font-bold uppercase tracking-[0.24em] text-accent">
+              Service Command Deck
+            </span>
+            <h2 className="mt-3 text-4xl font-black tracking-tight sm:text-5xl">
+              Select a service track,
+              <span className="text-accent"> inspect full execution scope</span>
+            </h2>
+            <p className="mt-4 max-w-3xl text-sm leading-relaxed text-text-secondary">
+              A unique, non-tabbed showcase to compare all service lanes without
+              overlap or stacked template behavior.
             </p>
           </div>
 
           <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr]">
-            <div className="rounded-[2rem] border border-border bg-bg-card/70 p-4 sm:p-5">
-              <div className="space-y-3">
-                {services.map((service, index) => {
-                  const active = index === activeIndex;
-                  return (
-                    <button
-                      key={service.title}
-                      type="button"
-                      onClick={() => setActiveIndex(index)}
-                      className={`w-full rounded-2xl border p-4 text-left transition-all duration-300 ${
-                        active
-                          ? "border-accent/50 bg-accent/10"
-                          : "border-border bg-black/15 hover:border-accent/30 hover:bg-bg-card-hover"
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-1">
+              {services.map((service) => {
+                const Icon = service.icon;
+                const isActive = activeService.id === service.id;
+
+                return (
+                  <button
+                    key={service.id}
+                    type="button"
+                    onClick={() => setActiveServiceId(service.id)}
+                    className={`text-left ${
+                      isActive ? "translate-x-1" : ""
+                    } transition-transform`}
+                  >
+                    <Card
+                      className={`rounded-2xl border transition-colors ${
+                        isActive
+                          ? "border-accent/55 bg-accent/10"
+                          : "border-border bg-bg-card hover:border-accent/30 hover:bg-bg-card-hover"
                       }`}
                     >
-                      <div className="flex items-start gap-3">
-                        <div
-                          className={`mt-0.5 ${
-                            active ? "text-accent" : "text-text-muted"
-                          }`}
-                        >
-                          {active ? (
-                            <CheckCircle size={18} />
-                          ) : (
-                            <Circle size={18} />
-                          )}
+                      <CardContent className="flex items-start gap-3 pt-6">
+                        <div className="rounded-lg bg-accent/15 p-2 text-accent">
+                          <Icon className="h-4 w-4" />
                         </div>
                         <div>
-                          <p className="text-base font-bold text-text-primary">
+                          <p className="text-sm font-black text-text-primary">
                             {service.title}
                           </p>
-                          <p className="mt-1 text-xs uppercase tracking-[0.16em] text-text-muted">
+                          <p className="mt-1 text-xs uppercase tracking-[0.14em] text-text-muted">
                             {service.tagline}
                           </p>
                         </div>
-                      </div>
-                    </button>
-                  );
-                })}
-              </div>
+                      </CardContent>
+                    </Card>
+                  </button>
+                );
+              })}
             </div>
 
-            <div className="rounded-[2rem] border border-border bg-bg-card p-6 sm:p-8">
-              <div className="mb-6 flex items-center gap-3">
-                <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-accent/15 text-accent">
-                  <LayoutGrid size={20} />
+            <Card className="rounded-3xl border-border bg-bg-card">
+              <CardHeader>
+                <div className="flex items-center gap-3">
+                  <div className="rounded-xl bg-accent/15 p-3 text-accent">
+                    <ActiveIcon className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <CardTitle className="text-2xl font-black text-text-primary">
+                      {activeService.title}
+                    </CardTitle>
+                    <CardDescription className="mt-1 text-text-secondary">
+                      {activeService.tagline}
+                    </CardDescription>
+                  </div>
                 </div>
-                <div>
-                  <p className="text-sm uppercase tracking-[0.2em] text-text-muted">
-                    Selected service
+              </CardHeader>
+              <CardContent>
+                <p className="text-base leading-relaxed text-text-secondary">
+                  {activeService.description}
+                </p>
+
+                <div className="mt-7 grid gap-4 sm:grid-cols-2">
+                  <div className="rounded-2xl border border-border bg-black/20 p-5">
+                    <p className="text-sm font-black uppercase tracking-[0.14em] text-accent">
+                      Includes
+                    </p>
+                    <ul className="mt-4 space-y-3">
+                      {activeService.features.map((feature) => (
+                        <li key={feature} className="flex items-start gap-2 text-sm">
+                          <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-accent" />
+                          <span className="text-text-secondary">{feature}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <div className="rounded-2xl border border-border bg-black/20 p-5">
+                    <p className="text-sm font-black uppercase tracking-[0.14em] text-accent">
+                      Deliverables
+                    </p>
+                    <ul className="mt-4 space-y-3">
+                      {activeService.deliverables.map((item) => (
+                        <li key={item} className="flex items-start gap-2 text-sm">
+                          <Sparkles className="mt-0.5 h-4 w-4 shrink-0 text-accent" />
+                          <span className="text-text-secondary">{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+
+                <div className="mt-6 rounded-2xl border border-accent/25 bg-accent/10 p-5">
+                  <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent">
+                    Expected outcome
                   </p>
-                  <h3 className="text-2xl font-black text-text-primary">
-                    {activeService.title}
-                  </h3>
-                </div>
-              </div>
-
-              <p className="text-base leading-relaxed text-text-secondary">
-                {activeService.description}
-              </p>
-
-              <div className="mt-7 grid gap-4 sm:grid-cols-2">
-                <div className="rounded-2xl border border-border bg-black/20 p-5">
-                  <p className="text-sm font-bold uppercase tracking-[0.14em] text-accent">
-                    Includes
+                  <p className="mt-2 text-sm text-text-secondary">
+                    {activeService.outcome}
                   </p>
-                  <ul className="mt-4 space-y-3">
-                    {activeService.features.slice(0, 4).map((feature) => (
-                      <li
-                        key={feature}
-                        className="flex items-start gap-2 text-sm"
-                      >
-                        <CheckCircle
-                          size={16}
-                          className="mt-0.5 shrink-0 text-accent"
-                        />
-                        <span className="text-text-secondary">{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
                 </div>
 
-                <div className="rounded-2xl border border-border bg-black/20 p-5">
-                  <p className="text-sm font-bold uppercase tracking-[0.14em] text-accent">
-                    Deliverables
-                  </p>
-                  <ul className="mt-4 space-y-3">
-                    {activeService.deliverables.map((item) => (
-                      <li key={item} className="flex items-start gap-2 text-sm">
-                        <Sparkles
-                          size={15}
-                          className="mt-0.5 shrink-0 text-accent"
-                        />
-                        <span className="text-text-secondary">{item}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-
-              <div className="mt-7">
-                <Button
-                  asChild
-                  className="rounded-full bg-accent px-6 py-6 text-sm font-bold text-black hover:bg-accent-hover"
-                >
-                  <Link
-                    to={ROUTES.FREE_AUDIT}
-                    className="inline-flex items-center gap-2"
+                <div className="mt-7 flex flex-col gap-3 sm:flex-row">
+                  <Button
+                    onClick={() => navigate(ROUTES.FREE_AUDIT)}
+                    className="rounded-full bg-accent px-6 py-6 text-sm font-bold text-black hover:bg-accent-hover"
                   >
-                    Start with an audit
-                    <ArrowRight size={16} />
-                  </Link>
-                </Button>
-              </div>
-            </div>
-          </div>
-
-          <div className="mt-24 space-y-32">
-            {services.map((service, index) => (
-              <ServiceBlock
-                key={service.title}
-                service={service}
-                index={index}
-              />
-            ))}
+                    Start with audit
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Button>
+                  <Button
+                    onClick={() => navigate(ROUTES.CONTACT)}
+                    className="rounded-full border border-border bg-bg-card px-6 py-6 text-sm font-bold text-text-primary hover:bg-bg-card-hover"
+                  >
+                    Discuss custom scope
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </section>
 
       <section className="relative overflow-hidden bg-bg-secondary py-24">
-        <div className="absolute inset-0">
-          <div className="absolute left-1/2 top-1/2 h-120 w-120 -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent/5 blur-3xl" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_10%_10%,rgba(244,194,13,0.10),transparent_28%),radial-gradient(circle_at_85%_80%,rgba(244,194,13,0.08),transparent_30%)]" />
+
+        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="mb-10 text-center">
+            <span className="text-xs font-bold uppercase tracking-[0.22em] text-accent">
+              How We Execute
+            </span>
+            <h3 className="mt-3 text-4xl font-black tracking-tight sm:text-5xl">
+              A creative workflow with
+              <span className="text-accent"> operational discipline</span>
+            </h3>
+          </div>
+
+          <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-4">
+            {workflow.map((step) => {
+              const Icon = step.icon;
+              return (
+                <Card
+                  key={step.title}
+                  className="rounded-2xl border-border/70 bg-black/30 backdrop-blur-sm"
+                >
+                  <CardHeader>
+                    <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-accent/15 text-accent">
+                      <Icon className="h-5 w-5" />
+                    </div>
+                    <CardTitle className="text-lg font-black text-text-primary">
+                      {step.title}
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-sm leading-relaxed text-text-secondary">
+                      {step.detail}
+                    </p>
+                  </CardContent>
+                </Card>
+              );
+            })}
+          </div>
         </div>
+      </section>
 
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-4xl sm:text-5xl font-black tracking-tight mb-6 relative z-10">
-            Ready to Build Your Growth System?
-          </h2>
-          <p className="text-text-secondary text-lg mb-8 relative z-10">
-            Tell us your stage, goals, and constraints. We will recommend the
-            right service stack for momentum without wasted execution.
+      <section className="relative py-24">
+        <div className="mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
+          <h4 className="text-4xl font-black tracking-tight sm:text-5xl">
+            Ready to build a smarter growth system?
+          </h4>
+          <p className="mt-5 text-lg text-text-secondary">
+            Tell us what you are optimizing for and we will suggest the right
+            service stack for your stage.
           </p>
-
-          <div className="relative z-10 flex flex-col sm:flex-row gap-6 justify-center">
+          <div className="mt-8 flex flex-col justify-center gap-4 sm:flex-row">
             <HomeCTAButton
               onClick={() => navigate(ROUTES.FREE_AUDIT)}
               className="w-full sm:w-auto font-bold"

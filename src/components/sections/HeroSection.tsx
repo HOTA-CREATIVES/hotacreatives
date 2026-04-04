@@ -33,7 +33,7 @@ export default function HeroSection() {
     <section className="relative -mt-20 flex min-h-[calc(100vh+5rem)] w-full flex-col justify-start overflow-hidden bg-bg-primary md:justify-start">
       <div
         className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat"
-        style={{ backgroundImage: "url('/images/hero-marketing.jpg')" }}
+        style={{ backgroundImage: "url('/images/hero-home-v3.jpg')" }}
         aria-hidden="true"
       />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(244,194,13,0.16),transparent_32%),radial-gradient(circle_at_75%_20%,rgba(244,194,13,0.08),transparent_25%),linear-gradient(180deg,rgba(0,0,0,0.2),rgba(0,0,0,0.72)_48%,rgba(0,0,0,0.96)_100%)] pointer-events-none" />

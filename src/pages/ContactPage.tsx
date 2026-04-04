@@ -134,6 +134,11 @@ export default function ContactPage() {
   return (
     <>
       <section className="relative overflow-hidden border-b border-border/60 bg-bg-secondary py-24">
+        <div
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-35"
+          style={{ backgroundImage: "url('/images/hero-contact.jpg')" }}
+          aria-hidden="true"
+        />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_15%_0%,rgba(244,194,13,0.2),transparent_35%),radial-gradient(circle_at_90%_20%,rgba(255,255,255,0.1),transparent_35%)]" />
         <div className="relative z-10 mx-auto grid max-w-7xl gap-8 px-4 sm:px-6 lg:grid-cols-5 lg:px-8">
           <div className="lg:col-span-3">
