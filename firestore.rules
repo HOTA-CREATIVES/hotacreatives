@@ -9,17 +9,34 @@ service cloud.firestore {
       return isSignedIn() && request.auth.uid == uid;
     }
 
-    function isAdmin() {
-      return isSignedIn() &&
-        get(/databases/$(database)/documents/admins/$(request.auth.uid)).data.role == "admin";
+    function currentAdminDoc() {
+      return get(/databases/$(database)/documents/admins/$(request.auth.uid));
     }
 
-    // Admin profile: each user can manage only their own document.
+    function isAdmin() {
+      return isSignedIn() &&
+        currentAdminDoc().data.role == "admin" &&
+        currentAdminDoc().data.isActive != false;
+    }
+
+    // Admin profiles: users can manage own profile, admins can view/update all admin profiles.
     match /admins/{uid} {
-      allow read: if isOwnAdminProfile(uid);
+      allow read: if isOwnAdminProfile(uid) || isAdmin();
       allow create: if isOwnAdminProfile(uid) && request.resource.data.uid == uid;
-      allow update: if isOwnAdminProfile(uid) && request.resource.data.uid == uid;
+      allow update: if (isOwnAdminProfile(uid) && request.resource.data.uid == uid) || isAdmin();
       allow delete: if false;
+    }
+
+    // Shared admin settings document.
+    match /settings/{docId} {
+      allow read, write: if isAdmin();
+    }
+
+    // Immutable audit logs for admin-sensitive actions.
+    match /admin_audit_logs/{logId} {
+      allow read: if isAdmin();
+      allow create: if isAdmin();
+      allow update, delete: if false;
     }
 
     // Public blog data can be read by anyone.

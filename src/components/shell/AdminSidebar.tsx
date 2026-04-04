@@ -1,8 +1,25 @@
 import { Link } from "react-router-dom";
-import { LayoutDashboard, LogOut, UserCircle2 } from "lucide-react";
+import {
+  LayoutDashboard,
+  LogOut,
+  Settings2,
+  SquarePen,
+  Users,
+  UserCircle2,
+} from "lucide-react";
 import { ROUTES } from "@/routes";
 import { Button } from "@/components/base/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/base/card";
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarFooter,
+  SidebarGroup,
+  SidebarGroupLabel,
+  SidebarHeader,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+} from "@/components/base/sidebar";
 import { cn } from "@/lib/utils";
 
 export type AdminSidebarSection = "posts" | "authors" | "categories" | "tags";
@@ -16,7 +33,7 @@ type AdminSidebarItem = {
 type AdminSidebarProps = {
   items?: AdminSidebarItem[];
   activeSection?: AdminSidebarSection;
-  activePage: "dashboard" | "profile";
+  activePage: "dashboard" | "content" | "profile" | "settings" | "users";
   onSectionChange?: (section: AdminSidebarSection) => void;
   onLogout: () => void | Promise<void>;
 };
@@ -28,101 +45,122 @@ export default function AdminSidebar({
   onSectionChange,
   onLogout,
 }: AdminSidebarProps) {
+  const primaryItems = [
+    {
+      key: "dashboard",
+      label: "Dashboard",
+      to: ROUTES.ADMIN_DASHBOARD,
+      icon: <LayoutDashboard size={16} />,
+    },
+    {
+      key: "content",
+      label: "Content CMS",
+      to: ROUTES.ADMIN_BLOGS,
+      icon: <SquarePen size={16} />,
+    },
+    {
+      key: "profile",
+      label: "Profile",
+      to: ROUTES.ADMIN_PROFILE,
+      icon: <UserCircle2 size={16} />,
+    },
+    {
+      key: "settings",
+      label: "Settings",
+      to: ROUTES.ADMIN_SETTINGS,
+      icon: <Settings2 size={16} />,
+    },
+    {
+      key: "users",
+      label: "Users",
+      to: ROUTES.ADMIN_USERS,
+      icon: <Users size={16} />,
+    },
+  ] as const;
+
   return (
-    <aside className="space-y-4">
-      <Card className="border-border/80 bg-bg-secondary/85">
-        <CardHeader className="pb-3">
-          <CardTitle className="text-sm font-black uppercase tracking-[0.18em] text-text-muted">
-            HOTA Admin
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-2">
-          <Button
-            asChild
-            variant={activePage === "dashboard" ? "default" : "outline"}
-            className={cn(
-              "w-full justify-start rounded-xl",
-              activePage === "dashboard"
-                ? "bg-accent text-black hover:bg-accent/90"
-                : "border-border bg-transparent text-text-secondary hover:border-accent",
-            )}
-          >
-            <Link to={ROUTES.ADMIN_BLOGS}>
-              <LayoutDashboard size={16} />
-              Dashboard
-            </Link>
-          </Button>
+    <Sidebar className="space-y-2">
+      <SidebarHeader>
+        <SidebarGroupLabel>HOTA Admin</SidebarGroupLabel>
+      </SidebarHeader>
 
-          <Button
-            asChild
-            variant={activePage === "profile" ? "default" : "outline"}
-            className={cn(
-              "w-full justify-start rounded-xl",
-              activePage === "profile"
-                ? "bg-accent text-black hover:bg-accent/90"
-                : "border-border bg-transparent text-text-secondary hover:border-accent",
-            )}
-          >
-            <Link to={ROUTES.ADMIN_PROFILE}>
-              <UserCircle2 size={16} />
-              Profile
-            </Link>
-          </Button>
+      <SidebarContent>
+        <SidebarGroup>
+          <SidebarMenu>
+            {primaryItems.map((item) => (
+              <SidebarMenuItem key={item.key}>
+                <SidebarMenuButton
+                  asChild
+                  isActive={activePage === item.key}
+                  className={cn(
+                    "rounded-xl",
+                    activePage === item.key
+                      ? "bg-accent text-black hover:bg-accent/90"
+                      : "text-text-secondary hover:text-text-primary",
+                  )}
+                >
+                  <Link to={item.to}>
+                    {item.icon}
+                    <span>{item.label}</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            ))}
+          </SidebarMenu>
+        </SidebarGroup>
 
-          <Button asChild variant="outline" className="w-full justify-start rounded-xl border-border">
-            <Link to={ROUTES.BLOG}>Public Blog</Link>
-          </Button>
-
-          <Button
-            type="button"
-            variant="destructive"
-            className="w-full justify-start rounded-xl"
-            onClick={onLogout}
-          >
-            <LogOut size={16} />
-            Logout
-          </Button>
-        </CardContent>
-      </Card>
-
-      {items && items.length > 0 && onSectionChange && activeSection && (
-        <Card className="border-border/80 bg-bg-secondary/85">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-black uppercase tracking-[0.18em] text-text-muted">
-              CMS Sections
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-2">
-            <nav aria-label="Admin sections" className="space-y-2">
+        {items && items.length > 0 && onSectionChange && activeSection && (
+          <SidebarGroup>
+            <SidebarGroupLabel>CMS Sections</SidebarGroupLabel>
+            <SidebarMenu>
               {items.map((item) => {
                 const isActive = activeSection === item.key;
                 return (
-                  <Button
-                    key={item.key}
-                    type="button"
-                    variant={isActive ? "default" : "outline"}
-                    className={cn(
-                      "w-full justify-between rounded-xl",
-                      isActive
-                        ? "bg-accent text-black hover:bg-accent/90"
-                        : "border-border bg-transparent text-text-secondary hover:border-accent hover:text-text-primary",
-                    )}
-                    aria-current={isActive ? "page" : undefined}
-                    onClick={() => onSectionChange(item.key)}
-                  >
-                    <span>{item.label}</span>
-                    {typeof item.count === "number" && (
-                      <span className="rounded-md bg-black/15 px-2 py-0.5 text-xs">
-                        {item.count}
-                      </span>
-                    )}
-                  </Button>
+                  <SidebarMenuItem key={item.key}>
+                    <SidebarMenuButton
+                      isActive={isActive}
+                      className={cn(
+                        "justify-between rounded-xl",
+                        isActive
+                          ? "bg-accent text-black hover:bg-accent/90"
+                          : "text-text-secondary hover:text-text-primary",
+                      )}
+                      aria-current={isActive ? "page" : undefined}
+                      onClick={() => onSectionChange(item.key)}
+                    >
+                      <span>{item.label}</span>
+                      {typeof item.count === "number" && (
+                        <span className="rounded-md bg-black/15 px-2 py-0.5 text-xs">
+                          {item.count}
+                        </span>
+                      )}
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
                 );
               })}
-            </nav>
-          </CardContent>
-        </Card>
-      )}
-    </aside>
+            </SidebarMenu>
+          </SidebarGroup>
+        )}
+      </SidebarContent>
+
+      <SidebarFooter>
+        <Button
+          asChild
+          variant="outline"
+          className="w-full justify-start rounded-xl border-border"
+        >
+          <Link to={ROUTES.BLOG}>Public Blog</Link>
+        </Button>
+        <Button
+          type="button"
+          variant="destructive"
+          className="mt-2 w-full justify-start rounded-xl"
+          onClick={onLogout}
+        >
+          <LogOut size={16} />
+          Logout
+        </Button>
+      </SidebarFooter>
+    </Sidebar>
   );
 }

@@ -68,7 +68,7 @@ export default function AdminLoginPage() {
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, (user) => {
       if (user) {
-        navigate(ROUTES.ADMIN_BLOGS, { replace: true });
+        navigate(ROUTES.ADMIN_DASHBOARD, { replace: true });
       }
     });
 
@@ -129,7 +129,7 @@ export default function AdminLoginPage() {
         values.password,
       );
       await upsertAdminProfile(credential.user);
-      navigate(ROUTES.ADMIN_BLOGS, { replace: true });
+      navigate(ROUTES.ADMIN_DASHBOARD, { replace: true });
     } catch {
       setSigninError("Invalid admin credentials. Please try again.");
     } finally {
@@ -149,7 +149,7 @@ export default function AdminLoginPage() {
         values.password,
       );
       await upsertAdminProfile(credential.user, values.name);
-      navigate(ROUTES.ADMIN_BLOGS, { replace: true });
+      navigate(ROUTES.ADMIN_DASHBOARD, { replace: true });
     } catch {
       setSignupError(
         "Failed to create admin account. Check Firebase auth configuration.",

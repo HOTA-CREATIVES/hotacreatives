@@ -1,54 +1,6 @@
 import { useNavigate } from "react-router-dom";
-import { lazy, Suspense } from "react";
 import { motion, type Variants } from "framer-motion";
 import HomeCTAButton from "@/components/composite/HomeCTAButton";
-
-const Hero3DBackground = lazy(
-  () => import("@/components/composite/Hero3DBackground"),
-);
-
-const heroStats = [
-  {
-    emoji: "🎯",
-    label: "POSITIONING-FIRST BRAND STRATEGY",
-    value: "CORE",
-  },
-  {
-    emoji: "⚡",
-    label: "CONTENT THAT EARNS ATTENTION",
-    value: "CRAFT",
-  },
-  {
-    emoji: "📈",
-    label: "FULL-FUNNEL GROWTH SYSTEMS",
-    value: "SCALE",
-  },
-];
-
-function StatsMarquee() {
-  const marqueeItems = [...heroStats, ...heroStats];
-
-  return (
-    <div className="hero-marquee rounded-full border border-white/10 bg-black/35 px-4 py-3 backdrop-blur-md">
-      <div className="hero-marquee-track">
-        {marqueeItems.map((stat, index) => (
-          <div
-            key={`${stat.label}-${index}`}
-            className="flex items-center gap-3 whitespace-nowrap"
-          >
-            <span className="font-heading text-sm font-black tracking-[0.3em] text-accent">
-              {stat.value}
-            </span>
-            <span className="text-xs font-semibold uppercase tracking-[0.22em] text-white/70 sm:text-sm">
-              {stat.label}
-            </span>
-            <span className="text-sm sm:text-base">{stat.emoji}</span>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
 
 const containerVariants: Variants = {
   hidden: { opacity: 0 },
@@ -79,9 +31,11 @@ export default function HeroSection() {
 
   return (
     <section className="relative -mt-20 flex min-h-[calc(100vh+5rem)] w-full flex-col justify-start overflow-hidden bg-bg-primary md:justify-start">
-      <Suspense fallback={<div className="absolute inset-0 bg-bg-primary" />}>
-        <Hero3DBackground />
-      </Suspense>
+      <div
+        className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat"
+        style={{ backgroundImage: "url('/images/hero-marketing.jpg')" }}
+        aria-hidden="true"
+      />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(244,194,13,0.16),transparent_32%),radial-gradient(circle_at_75%_20%,rgba(244,194,13,0.08),transparent_25%),linear-gradient(180deg,rgba(0,0,0,0.2),rgba(0,0,0,0.72)_48%,rgba(0,0,0,0.96)_100%)] pointer-events-none" />
       <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-size-[40px_40px] opacity-40 pointer-events-none" />
 
@@ -90,12 +44,8 @@ export default function HeroSection() {
           initial="hidden"
           animate="visible"
           variants={containerVariants}
-          className="max-w-4xl space-y-5"
-        >
-          <motion.div variants={itemVariants}>
-            <StatsMarquee />
-          </motion.div>
-        </motion.div>
+          className="max-w-4xl"
+        />
       </div>
 
       <div className="relative z-10 mx-auto w-full max-w-7xl px-4 pb-12 pt-4 sm:px-6 sm:pb-24 md:pt-6 lg:px-6 lg:pb-28">

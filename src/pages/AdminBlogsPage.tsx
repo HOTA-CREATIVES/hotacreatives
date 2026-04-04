@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import type { FormEvent } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { signOut } from "firebase/auth";
 import { ROUTES } from "@/routes";
 import { auth } from "@/services/firebase";
@@ -661,7 +661,7 @@ export default function AdminBlogsPage() {
           <AdminSidebar
             items={sidebarItems}
             activeSection={activeSection}
-            activePage="dashboard"
+            activePage="content"
             onSectionChange={setActiveSection}
             onLogout={handleLogout}
           />
@@ -675,7 +675,8 @@ export default function AdminBlogsPage() {
                 Blog CMS Operations
               </h1>
               <p className="mt-2 text-sm text-text-secondary">
-                Create, update, and manage all publishing entities from one place.
+                Create, update, and manage all publishing entities from one
+                place.
               </p>
             </div>
 
@@ -690,817 +691,878 @@ export default function AdminBlogsPage() {
             )}
 
             {activeSection === "posts" && (
-          <div
-            id="admin-panel-posts"
-            role="tabpanel"
-            aria-labelledby="admin-tab-posts"
-            className="grid gap-8 lg:grid-cols-2"
-          >
-            <div className="rounded-2xl border border-border bg-bg-secondary p-6">
-              <h2 className="text-xl font-bold mb-4">
-                {editingPostId ? "Edit Post" : "Create Post"}
-              </h2>
-              <form onSubmit={handlePostSubmit} className="space-y-4">
-                <input
-                  value={postForm.title}
-                  onChange={(e) =>
-                    setPostForm((prev) => ({ ...prev, title: e.target.value }))
-                  }
-                  required
-                  placeholder="Title"
-                  className="w-full rounded-xl border border-border bg-bg-primary px-4 py-3 text-sm outline-none focus:border-accent"
-                />
-
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <input
-                    value={postForm.slug}
-                    onChange={(e) =>
-                      setPostForm((prev) => ({ ...prev, slug: e.target.value }))
-                    }
-                    placeholder="Slug (optional, auto from title)"
-                    className="w-full rounded-xl border border-border bg-bg-primary px-4 py-3 text-sm outline-none focus:border-accent"
-                  />
-                  <select
-                    value={postForm.status}
-                    onChange={(e) =>
-                      setPostForm((prev) => ({
-                        ...prev,
-                        status: e.target.value as PostStatus,
-                      }))
-                    }
-                    className="w-full rounded-xl border border-border bg-bg-primary px-4 py-3 text-sm outline-none focus:border-accent"
-                  >
-                    <option value="draft">draft</option>
-                    <option value="published">published</option>
-                    <option value="archived">archived</option>
-                  </select>
-                </div>
-
-                <textarea
-                  value={postForm.excerpt}
-                  onChange={(e) =>
-                    setPostForm((prev) => ({
-                      ...prev,
-                      excerpt: e.target.value,
-                    }))
-                  }
-                  required
-                  rows={3}
-                  placeholder="Excerpt"
-                  className="w-full rounded-xl border border-border bg-bg-primary px-4 py-3 text-sm outline-none focus:border-accent"
-                />
-
-                <textarea
-                  value={postForm.metaDescription}
-                  onChange={(e) =>
-                    setPostForm((prev) => ({
-                      ...prev,
-                      metaDescription: e.target.value,
-                    }))
-                  }
-                  rows={2}
-                  placeholder="Meta description"
-                  className="w-full rounded-xl border border-border bg-bg-primary px-4 py-3 text-sm outline-none focus:border-accent"
-                />
-
-                <input
-                  value={postForm.coverImage}
-                  onChange={(e) =>
-                    setPostForm((prev) => ({
-                      ...prev,
-                      coverImage: e.target.value,
-                    }))
-                  }
-                  required
-                  placeholder="Cover image URL"
-                  className="w-full rounded-xl border border-border bg-bg-primary px-4 py-3 text-sm outline-none focus:border-accent"
-                />
-
-                <input
-                  value={postForm.coverImageAlt}
-                  onChange={(e) =>
-                    setPostForm((prev) => ({
-                      ...prev,
-                      coverImageAlt: e.target.value,
-                    }))
-                  }
-                  placeholder="Cover image alt"
-                  className="w-full rounded-xl border border-border bg-bg-primary px-4 py-3 text-sm outline-none focus:border-accent"
-                />
-
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <select
-                    value={postForm.authorId}
-                    onChange={(e) =>
-                      setPostForm((prev) => ({
-                        ...prev,
-                        authorId: e.target.value,
-                      }))
-                    }
-                    className="w-full rounded-xl border border-border bg-bg-primary px-4 py-3 text-sm outline-none focus:border-accent"
-                  >
-                    {authors.map((author) => (
-                      <option key={author.id} value={author.id}>
-                        {author.name}
-                      </option>
-                    ))}
-                  </select>
-
-                  <select
-                    value={postForm.categoryId}
-                    onChange={(e) =>
-                      setPostForm((prev) => ({
-                        ...prev,
-                        categoryId: e.target.value,
-                      }))
-                    }
-                    className="w-full rounded-xl border border-border bg-bg-primary px-4 py-3 text-sm outline-none focus:border-accent"
-                  >
-                    {categories.map((category) => (
-                      <option key={category.id} value={category.id}>
-                        {category.name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                <div className="grid gap-4 sm:grid-cols-3">
-                  <input
-                    type="number"
-                    min={1}
-                    value={postForm.readTime}
-                    onChange={(e) =>
-                      setPostForm((prev) => ({
-                        ...prev,
-                        readTime: Number(e.target.value),
-                      }))
-                    }
-                    className="w-full rounded-xl border border-border bg-bg-primary px-4 py-3 text-sm outline-none focus:border-accent"
-                  />
-
-                  <input
-                    type="datetime-local"
-                    value={postForm.publishDate}
-                    onChange={(e) =>
-                      setPostForm((prev) => ({
-                        ...prev,
-                        publishDate: e.target.value,
-                      }))
-                    }
-                    className="w-full rounded-xl border border-border bg-bg-primary px-4 py-3 text-sm outline-none focus:border-accent"
-                  />
-
-                  <label className="flex items-center gap-2 rounded-xl border border-border bg-bg-primary px-4 py-3 text-sm text-text-secondary">
-                    <input
-                      type="checkbox"
-                      checked={postForm.featured}
-                      onChange={(e) =>
-                        setPostForm((prev) => ({
-                          ...prev,
-                          featured: e.target.checked,
-                        }))
-                      }
-                    />
-                    Featured
-                  </label>
-                </div>
-
-                <input
-                  value={postForm.relatedPostIdsCsv}
-                  onChange={(e) =>
-                    setPostForm((prev) => ({
-                      ...prev,
-                      relatedPostIdsCsv: e.target.value,
-                    }))
-                  }
-                  placeholder="Related post IDs (comma separated)"
-                  className="w-full rounded-xl border border-border bg-bg-primary px-4 py-3 text-sm outline-none focus:border-accent"
-                />
-
-                <input
-                  value={postForm.tagsCsv}
-                  onChange={(e) =>
-                    setPostForm((prev) => ({
-                      ...prev,
-                      tagsCsv: e.target.value,
-                    }))
-                  }
-                  placeholder="Tags by slug or name (comma separated)"
-                  className="w-full rounded-xl border border-border bg-bg-primary px-4 py-3 text-sm outline-none focus:border-accent"
-                />
-
-                {tags.length > 0 && (
-                  <div className="rounded-xl border border-border bg-bg-primary p-3">
-                    <p className="text-xs uppercase tracking-[0.14em] text-text-muted mb-2">
-                      Quick tag picker
-                    </p>
-                    <div className="flex flex-wrap gap-2">
-                      {tags.map((tag) => {
-                        const selected = selectedTagSlugs.includes(tag.slug);
-                        return (
-                          <button
-                            key={tag.id}
-                            type="button"
-                            onClick={() =>
-                              selected
-                                ? removeTagFromPostForm(tag.slug)
-                                : addTagToPostForm(tag.slug)
-                            }
-                            className={`rounded-full border px-3 py-1 text-xs ${
-                              selected
-                                ? "border-accent bg-accent text-black"
-                                : "border-border text-text-secondary"
-                            }`}
-                          >
-                            {tag.name}
-                          </button>
-                        );
-                      })}
+              <div
+                id="admin-panel-posts"
+                role="tabpanel"
+                aria-labelledby="admin-tab-posts"
+                className="grid gap-8 lg:grid-cols-2"
+              >
+                <div className="rounded-2xl border border-border bg-bg-secondary p-6">
+                  {!editingPostId ? (
+                    <div className="space-y-4">
+                      <h2 className="text-xl font-bold">Create New Post</h2>
+                      <p className="text-sm text-text-secondary">
+                        New post creation now opens in a dedicated editor page.
+                      </p>
+                      <Link
+                        to={ROUTES.ADMIN_BLOG_CREATE}
+                        className="inline-flex rounded-xl bg-accent px-5 py-3 text-sm font-bold text-black"
+                      >
+                        Open New Post Page
+                      </Link>
                     </div>
-                  </div>
-                )}
+                  ) : (
+                    <>
+                      <h2 className="text-xl font-bold mb-4">Edit Post</h2>
+                      <form onSubmit={handlePostSubmit} className="space-y-4">
+                        <input
+                          value={postForm.title}
+                          onChange={(e) =>
+                            setPostForm((prev) => ({
+                              ...prev,
+                              title: e.target.value,
+                            }))
+                          }
+                          required
+                          placeholder="Title"
+                          className="w-full rounded-xl border border-border bg-bg-primary px-4 py-3 text-sm outline-none focus:border-accent"
+                        />
 
-                <textarea
-                  value={postForm.contentJson}
-                  onChange={(e) =>
-                    setPostForm((prev) => ({
-                      ...prev,
-                      contentJson: e.target.value,
-                    }))
-                  }
-                  required
-                  rows={10}
-                  placeholder="Content JSON array"
-                  className="w-full rounded-xl border border-border bg-bg-primary px-4 py-3 text-xs font-mono outline-none focus:border-accent"
-                />
+                        <div className="grid gap-4 sm:grid-cols-2">
+                          <input
+                            value={postForm.slug}
+                            onChange={(e) =>
+                              setPostForm((prev) => ({
+                                ...prev,
+                                slug: e.target.value,
+                              }))
+                            }
+                            placeholder="Slug (optional, auto from title)"
+                            className="w-full rounded-xl border border-border bg-bg-primary px-4 py-3 text-sm outline-none focus:border-accent"
+                          />
+                          <select
+                            value={postForm.status}
+                            onChange={(e) =>
+                              setPostForm((prev) => ({
+                                ...prev,
+                                status: e.target.value as PostStatus,
+                              }))
+                            }
+                            className="w-full rounded-xl border border-border bg-bg-primary px-4 py-3 text-sm outline-none focus:border-accent"
+                          >
+                            <option value="draft">draft</option>
+                            <option value="published">published</option>
+                            <option value="archived">archived</option>
+                          </select>
+                        </div>
 
-                <div className="flex items-center gap-3">
-                  <button
-                    type="submit"
-                    disabled={isSaving}
-                    className="rounded-xl bg-accent px-5 py-3 text-sm font-bold text-black disabled:opacity-60"
-                  >
-                    {isSaving
-                      ? "Saving..."
-                      : editingPostId
-                        ? "Update Post"
-                        : "Create Post"}
-                  </button>
-                  {editingPostId && (
-                    <button
-                      type="button"
-                      onClick={clearPostForm}
-                      className="rounded-xl border border-border px-5 py-3 text-sm"
-                    >
-                      Cancel edit
-                    </button>
+                        <textarea
+                          value={postForm.excerpt}
+                          onChange={(e) =>
+                            setPostForm((prev) => ({
+                              ...prev,
+                              excerpt: e.target.value,
+                            }))
+                          }
+                          required
+                          rows={3}
+                          placeholder="Excerpt"
+                          className="w-full rounded-xl border border-border bg-bg-primary px-4 py-3 text-sm outline-none focus:border-accent"
+                        />
+
+                        <textarea
+                          value={postForm.metaDescription}
+                          onChange={(e) =>
+                            setPostForm((prev) => ({
+                              ...prev,
+                              metaDescription: e.target.value,
+                            }))
+                          }
+                          rows={2}
+                          placeholder="Meta description"
+                          className="w-full rounded-xl border border-border bg-bg-primary px-4 py-3 text-sm outline-none focus:border-accent"
+                        />
+
+                        <input
+                          value={postForm.coverImage}
+                          onChange={(e) =>
+                            setPostForm((prev) => ({
+                              ...prev,
+                              coverImage: e.target.value,
+                            }))
+                          }
+                          required
+                          placeholder="Cover image URL"
+                          className="w-full rounded-xl border border-border bg-bg-primary px-4 py-3 text-sm outline-none focus:border-accent"
+                        />
+
+                        <input
+                          value={postForm.coverImageAlt}
+                          onChange={(e) =>
+                            setPostForm((prev) => ({
+                              ...prev,
+                              coverImageAlt: e.target.value,
+                            }))
+                          }
+                          placeholder="Cover image alt"
+                          className="w-full rounded-xl border border-border bg-bg-primary px-4 py-3 text-sm outline-none focus:border-accent"
+                        />
+
+                        <div className="grid gap-4 sm:grid-cols-2">
+                          <select
+                            value={postForm.authorId}
+                            onChange={(e) =>
+                              setPostForm((prev) => ({
+                                ...prev,
+                                authorId: e.target.value,
+                              }))
+                            }
+                            className="w-full rounded-xl border border-border bg-bg-primary px-4 py-3 text-sm outline-none focus:border-accent"
+                          >
+                            {authors.map((author) => (
+                              <option key={author.id} value={author.id}>
+                                {author.name}
+                              </option>
+                            ))}
+                          </select>
+
+                          <select
+                            value={postForm.categoryId}
+                            onChange={(e) =>
+                              setPostForm((prev) => ({
+                                ...prev,
+                                categoryId: e.target.value,
+                              }))
+                            }
+                            className="w-full rounded-xl border border-border bg-bg-primary px-4 py-3 text-sm outline-none focus:border-accent"
+                          >
+                            {categories.map((category) => (
+                              <option key={category.id} value={category.id}>
+                                {category.name}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+
+                        <div className="grid gap-4 sm:grid-cols-3">
+                          <input
+                            type="number"
+                            min={1}
+                            value={postForm.readTime}
+                            onChange={(e) =>
+                              setPostForm((prev) => ({
+                                ...prev,
+                                readTime: Number(e.target.value),
+                              }))
+                            }
+                            className="w-full rounded-xl border border-border bg-bg-primary px-4 py-3 text-sm outline-none focus:border-accent"
+                          />
+
+                          <input
+                            type="datetime-local"
+                            value={postForm.publishDate}
+                            onChange={(e) =>
+                              setPostForm((prev) => ({
+                                ...prev,
+                                publishDate: e.target.value,
+                              }))
+                            }
+                            className="w-full rounded-xl border border-border bg-bg-primary px-4 py-3 text-sm outline-none focus:border-accent"
+                          />
+
+                          <label className="flex items-center gap-2 rounded-xl border border-border bg-bg-primary px-4 py-3 text-sm text-text-secondary">
+                            <input
+                              type="checkbox"
+                              checked={postForm.featured}
+                              onChange={(e) =>
+                                setPostForm((prev) => ({
+                                  ...prev,
+                                  featured: e.target.checked,
+                                }))
+                              }
+                            />
+                            Featured
+                          </label>
+                        </div>
+
+                        <input
+                          value={postForm.relatedPostIdsCsv}
+                          onChange={(e) =>
+                            setPostForm((prev) => ({
+                              ...prev,
+                              relatedPostIdsCsv: e.target.value,
+                            }))
+                          }
+                          placeholder="Related post IDs (comma separated)"
+                          className="w-full rounded-xl border border-border bg-bg-primary px-4 py-3 text-sm outline-none focus:border-accent"
+                        />
+
+                        <input
+                          value={postForm.tagsCsv}
+                          onChange={(e) =>
+                            setPostForm((prev) => ({
+                              ...prev,
+                              tagsCsv: e.target.value,
+                            }))
+                          }
+                          placeholder="Tags by slug or name (comma separated)"
+                          className="w-full rounded-xl border border-border bg-bg-primary px-4 py-3 text-sm outline-none focus:border-accent"
+                        />
+
+                        {tags.length > 0 && (
+                          <div className="rounded-xl border border-border bg-bg-primary p-3">
+                            <p className="text-xs uppercase tracking-[0.14em] text-text-muted mb-2">
+                              Quick tag picker
+                            </p>
+                            <div className="flex flex-wrap gap-2">
+                              {tags.map((tag) => {
+                                const selected = selectedTagSlugs.includes(
+                                  tag.slug,
+                                );
+                                return (
+                                  <button
+                                    key={tag.id}
+                                    type="button"
+                                    onClick={() =>
+                                      selected
+                                        ? removeTagFromPostForm(tag.slug)
+                                        : addTagToPostForm(tag.slug)
+                                    }
+                                    className={`rounded-full border px-3 py-1 text-xs ${
+                                      selected
+                                        ? "border-accent bg-accent text-black"
+                                        : "border-border text-text-secondary"
+                                    }`}
+                                  >
+                                    {tag.name}
+                                  </button>
+                                );
+                              })}
+                            </div>
+                          </div>
+                        )}
+
+                        <textarea
+                          value={postForm.contentJson}
+                          onChange={(e) =>
+                            setPostForm((prev) => ({
+                              ...prev,
+                              contentJson: e.target.value,
+                            }))
+                          }
+                          required
+                          rows={10}
+                          placeholder="Content JSON array"
+                          className="w-full rounded-xl border border-border bg-bg-primary px-4 py-3 text-xs font-mono outline-none focus:border-accent"
+                        />
+
+                        <div className="flex items-center gap-3">
+                          <button
+                            type="submit"
+                            disabled={isSaving}
+                            className="rounded-xl bg-accent px-5 py-3 text-sm font-bold text-black disabled:opacity-60"
+                          >
+                            {isSaving
+                              ? "Saving..."
+                              : editingPostId
+                                ? "Update Post"
+                                : "Create Post"}
+                          </button>
+                          {editingPostId && (
+                            <button
+                              type="button"
+                              onClick={clearPostForm}
+                              className="rounded-xl border border-border px-5 py-3 text-sm"
+                            >
+                              Cancel edit
+                            </button>
+                          )}
+                        </div>
+                      </form>
+                    </>
                   )}
                 </div>
-              </form>
-            </div>
 
-            <div className="rounded-2xl border border-border bg-bg-secondary p-6">
-              <h2 className="text-xl font-bold mb-4">All Posts</h2>
+                <div className="rounded-2xl border border-border bg-bg-secondary p-6">
+                  <div className="mb-4 flex items-center justify-between gap-3">
+                    <h2 className="text-xl font-bold">All Posts</h2>
+                    <Link
+                      to={ROUTES.ADMIN_BLOG_CREATE}
+                      className="rounded-xl border border-border px-4 py-2 text-sm hover:border-accent"
+                    >
+                      + New Post
+                    </Link>
+                  </div>
 
-              <div className="grid gap-3 sm:grid-cols-2 mb-4">
-                <input
-                  value={postSearch}
-                  onChange={(e) => setPostSearch(e.target.value)}
-                  placeholder="Search by title, slug, author, tag"
-                  className="w-full rounded-xl border border-border bg-bg-primary px-4 py-3 text-sm outline-none focus:border-accent"
-                />
-                <select
-                  value={postStatusFilter}
-                  onChange={(e) =>
-                    setPostStatusFilter(e.target.value as "all" | PostStatus)
-                  }
-                  className="w-full rounded-xl border border-border bg-bg-primary px-4 py-3 text-sm outline-none focus:border-accent"
-                >
-                  <option value="all">all status</option>
-                  <option value="draft">draft</option>
-                  <option value="published">published</option>
-                  <option value="archived">archived</option>
-                </select>
+                  <div className="grid gap-3 sm:grid-cols-2 mb-4">
+                    <input
+                      value={postSearch}
+                      onChange={(e) => setPostSearch(e.target.value)}
+                      placeholder="Search by title, slug, author, tag"
+                      className="w-full rounded-xl border border-border bg-bg-primary px-4 py-3 text-sm outline-none focus:border-accent"
+                    />
+                    <select
+                      value={postStatusFilter}
+                      onChange={(e) =>
+                        setPostStatusFilter(
+                          e.target.value as "all" | PostStatus,
+                        )
+                      }
+                      className="w-full rounded-xl border border-border bg-bg-primary px-4 py-3 text-sm outline-none focus:border-accent"
+                    >
+                      <option value="all">all status</option>
+                      <option value="draft">draft</option>
+                      <option value="published">published</option>
+                      <option value="archived">archived</option>
+                    </select>
+                  </div>
+
+                  {isLoading ? (
+                    <p className="text-text-secondary text-sm">
+                      Loading posts...
+                    </p>
+                  ) : filteredPosts.length === 0 ? (
+                    <p className="text-text-secondary text-sm">
+                      No posts found.
+                    </p>
+                  ) : (
+                    <ul className="space-y-3 max-h-[70vh] overflow-auto pr-2">
+                      {filteredPosts.map((post) => {
+                        const status =
+                          (post as { status?: string }).status || "published";
+                        return (
+                          <li
+                            key={post.id}
+                            className="rounded-xl border border-border p-4"
+                          >
+                            <div className="flex items-start justify-between gap-3">
+                              <p className="font-semibold leading-tight">
+                                {post.title}
+                              </p>
+                              <span className="rounded-full border border-border px-2 py-1 text-[10px] uppercase tracking-[0.12em] text-text-muted">
+                                {status}
+                              </span>
+                            </div>
+                            <p className="text-xs text-text-muted mt-1">
+                              /{post.slug}
+                            </p>
+                            <p className="text-xs text-text-muted mt-1">
+                              {post.category.name} - {post.author.name}
+                            </p>
+                            <div className="mt-3 flex items-center gap-3">
+                              <button
+                                type="button"
+                                onClick={() => populatePostForEdit(post)}
+                                className="text-sm text-accent hover:underline"
+                              >
+                                Edit
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => handlePostDelete(post.id)}
+                                className="text-sm text-red-400 hover:underline"
+                              >
+                                Delete
+                              </button>
+                            </div>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  )}
+                </div>
               </div>
-
-              {isLoading ? (
-                <p className="text-text-secondary text-sm">Loading posts...</p>
-              ) : filteredPosts.length === 0 ? (
-                <p className="text-text-secondary text-sm">No posts found.</p>
-              ) : (
-                <ul className="space-y-3 max-h-[70vh] overflow-auto pr-2">
-                  {filteredPosts.map((post) => {
-                    const status =
-                      (post as { status?: string }).status || "published";
-                    return (
-                      <li
-                        key={post.id}
-                        className="rounded-xl border border-border p-4"
-                      >
-                        <div className="flex items-start justify-between gap-3">
-                          <p className="font-semibold leading-tight">
-                            {post.title}
-                          </p>
-                          <span className="rounded-full border border-border px-2 py-1 text-[10px] uppercase tracking-[0.12em] text-text-muted">
-                            {status}
-                          </span>
-                        </div>
-                        <p className="text-xs text-text-muted mt-1">
-                          /{post.slug}
-                        </p>
-                        <p className="text-xs text-text-muted mt-1">
-                          {post.category.name} - {post.author.name}
-                        </p>
-                        <div className="mt-3 flex items-center gap-3">
-                          <button
-                            type="button"
-                            onClick={() => populatePostForEdit(post)}
-                            className="text-sm text-accent hover:underline"
-                          >
-                            Edit
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => handlePostDelete(post.id)}
-                            className="text-sm text-red-400 hover:underline"
-                          >
-                            Delete
-                          </button>
-                        </div>
-                      </li>
-                    );
-                  })}
-                </ul>
-              )}
-            </div>
-          </div>
             )}
 
             {activeSection === "authors" && (
-          <div
-            id="admin-panel-authors"
-            role="region"
-            aria-label="Authors management"
-            className="grid gap-8 lg:grid-cols-2"
-          >
-            <div className="rounded-2xl border border-border bg-bg-secondary p-6">
-              <h2 className="text-xl font-bold mb-4">
-                {editingAuthorId ? "Edit Author" : "Create Author"}
-              </h2>
-              <form onSubmit={handleAuthorSubmit} className="space-y-4">
-                <input
-                  value={authorForm.name}
-                  onChange={(e) =>
-                    setAuthorForm((prev) => ({ ...prev, name: e.target.value }))
-                  }
-                  required
-                  placeholder="Author name"
-                  className="w-full rounded-xl border border-border bg-bg-primary px-4 py-3 text-sm outline-none focus:border-accent"
-                />
-                <input
-                  value={authorForm.slug}
-                  onChange={(e) =>
-                    setAuthorForm((prev) => ({ ...prev, slug: e.target.value }))
-                  }
-                  placeholder="Slug (optional)"
-                  className="w-full rounded-xl border border-border bg-bg-primary px-4 py-3 text-sm outline-none focus:border-accent"
-                />
-                <input
-                  value={authorForm.avatar}
-                  onChange={(e) =>
-                    setAuthorForm((prev) => ({
-                      ...prev,
-                      avatar: e.target.value,
-                    }))
-                  }
-                  placeholder="Avatar URL"
-                  className="w-full rounded-xl border border-border bg-bg-primary px-4 py-3 text-sm outline-none focus:border-accent"
-                />
-                <input
-                  value={authorForm.role}
-                  onChange={(e) =>
-                    setAuthorForm((prev) => ({ ...prev, role: e.target.value }))
-                  }
-                  required
-                  placeholder="Role"
-                  className="w-full rounded-xl border border-border bg-bg-primary px-4 py-3 text-sm outline-none focus:border-accent"
-                />
-                <textarea
-                  value={authorForm.bio}
-                  onChange={(e) =>
-                    setAuthorForm((prev) => ({ ...prev, bio: e.target.value }))
-                  }
-                  rows={4}
-                  placeholder="Bio"
-                  className="w-full rounded-xl border border-border bg-bg-primary px-4 py-3 text-sm outline-none focus:border-accent"
-                />
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <input
-                    value={authorForm.linkedin}
-                    onChange={(e) =>
-                      setAuthorForm((prev) => ({
-                        ...prev,
-                        linkedin: e.target.value,
-                      }))
-                    }
-                    placeholder="LinkedIn URL"
-                    className="w-full rounded-xl border border-border bg-bg-primary px-4 py-3 text-sm outline-none focus:border-accent"
-                  />
-                  <input
-                    value={authorForm.instagram}
-                    onChange={(e) =>
-                      setAuthorForm((prev) => ({
-                        ...prev,
-                        instagram: e.target.value,
-                      }))
-                    }
-                    placeholder="Instagram URL"
-                    className="w-full rounded-xl border border-border bg-bg-primary px-4 py-3 text-sm outline-none focus:border-accent"
-                  />
-                  <input
-                    value={authorForm.twitter}
-                    onChange={(e) =>
-                      setAuthorForm((prev) => ({
-                        ...prev,
-                        twitter: e.target.value,
-                      }))
-                    }
-                    placeholder="Twitter URL"
-                    className="w-full rounded-xl border border-border bg-bg-primary px-4 py-3 text-sm outline-none focus:border-accent"
-                  />
-                  <input
-                    value={authorForm.website}
-                    onChange={(e) =>
-                      setAuthorForm((prev) => ({
-                        ...prev,
-                        website: e.target.value,
-                      }))
-                    }
-                    placeholder="Website URL"
-                    className="w-full rounded-xl border border-border bg-bg-primary px-4 py-3 text-sm outline-none focus:border-accent"
-                  />
+              <div
+                id="admin-panel-authors"
+                role="region"
+                aria-label="Authors management"
+                className="grid gap-8 lg:grid-cols-2"
+              >
+                <div className="rounded-2xl border border-border bg-bg-secondary p-6">
+                  <h2 className="text-xl font-bold mb-4">
+                    {editingAuthorId ? "Edit Author" : "Create Author"}
+                  </h2>
+                  <form onSubmit={handleAuthorSubmit} className="space-y-4">
+                    <input
+                      value={authorForm.name}
+                      onChange={(e) =>
+                        setAuthorForm((prev) => ({
+                          ...prev,
+                          name: e.target.value,
+                        }))
+                      }
+                      required
+                      placeholder="Author name"
+                      className="w-full rounded-xl border border-border bg-bg-primary px-4 py-3 text-sm outline-none focus:border-accent"
+                    />
+                    <input
+                      value={authorForm.slug}
+                      onChange={(e) =>
+                        setAuthorForm((prev) => ({
+                          ...prev,
+                          slug: e.target.value,
+                        }))
+                      }
+                      placeholder="Slug (optional)"
+                      className="w-full rounded-xl border border-border bg-bg-primary px-4 py-3 text-sm outline-none focus:border-accent"
+                    />
+                    <input
+                      value={authorForm.avatar}
+                      onChange={(e) =>
+                        setAuthorForm((prev) => ({
+                          ...prev,
+                          avatar: e.target.value,
+                        }))
+                      }
+                      placeholder="Avatar URL"
+                      className="w-full rounded-xl border border-border bg-bg-primary px-4 py-3 text-sm outline-none focus:border-accent"
+                    />
+                    <input
+                      value={authorForm.role}
+                      onChange={(e) =>
+                        setAuthorForm((prev) => ({
+                          ...prev,
+                          role: e.target.value,
+                        }))
+                      }
+                      required
+                      placeholder="Role"
+                      className="w-full rounded-xl border border-border bg-bg-primary px-4 py-3 text-sm outline-none focus:border-accent"
+                    />
+                    <textarea
+                      value={authorForm.bio}
+                      onChange={(e) =>
+                        setAuthorForm((prev) => ({
+                          ...prev,
+                          bio: e.target.value,
+                        }))
+                      }
+                      rows={4}
+                      placeholder="Bio"
+                      className="w-full rounded-xl border border-border bg-bg-primary px-4 py-3 text-sm outline-none focus:border-accent"
+                    />
+                    <div className="grid gap-4 sm:grid-cols-2">
+                      <input
+                        value={authorForm.linkedin}
+                        onChange={(e) =>
+                          setAuthorForm((prev) => ({
+                            ...prev,
+                            linkedin: e.target.value,
+                          }))
+                        }
+                        placeholder="LinkedIn URL"
+                        className="w-full rounded-xl border border-border bg-bg-primary px-4 py-3 text-sm outline-none focus:border-accent"
+                      />
+                      <input
+                        value={authorForm.instagram}
+                        onChange={(e) =>
+                          setAuthorForm((prev) => ({
+                            ...prev,
+                            instagram: e.target.value,
+                          }))
+                        }
+                        placeholder="Instagram URL"
+                        className="w-full rounded-xl border border-border bg-bg-primary px-4 py-3 text-sm outline-none focus:border-accent"
+                      />
+                      <input
+                        value={authorForm.twitter}
+                        onChange={(e) =>
+                          setAuthorForm((prev) => ({
+                            ...prev,
+                            twitter: e.target.value,
+                          }))
+                        }
+                        placeholder="Twitter URL"
+                        className="w-full rounded-xl border border-border bg-bg-primary px-4 py-3 text-sm outline-none focus:border-accent"
+                      />
+                      <input
+                        value={authorForm.website}
+                        onChange={(e) =>
+                          setAuthorForm((prev) => ({
+                            ...prev,
+                            website: e.target.value,
+                          }))
+                        }
+                        placeholder="Website URL"
+                        className="w-full rounded-xl border border-border bg-bg-primary px-4 py-3 text-sm outline-none focus:border-accent"
+                      />
+                    </div>
+                    <label className="flex items-center gap-2 text-sm text-text-secondary">
+                      <input
+                        type="checkbox"
+                        checked={authorForm.isActive}
+                        onChange={(e) =>
+                          setAuthorForm((prev) => ({
+                            ...prev,
+                            isActive: e.target.checked,
+                          }))
+                        }
+                      />
+                      Active author
+                    </label>
+                    <div className="flex items-center gap-3">
+                      <button
+                        type="submit"
+                        disabled={isSaving}
+                        className="rounded-xl bg-accent px-5 py-3 text-sm font-bold text-black disabled:opacity-60"
+                      >
+                        {isSaving
+                          ? "Saving..."
+                          : editingAuthorId
+                            ? "Update Author"
+                            : "Create Author"}
+                      </button>
+                      {editingAuthorId && (
+                        <button
+                          type="button"
+                          onClick={clearAuthorForm}
+                          className="rounded-xl border border-border px-5 py-3 text-sm"
+                        >
+                          Cancel edit
+                        </button>
+                      )}
+                    </div>
+                  </form>
                 </div>
-                <label className="flex items-center gap-2 text-sm text-text-secondary">
-                  <input
-                    type="checkbox"
-                    checked={authorForm.isActive}
-                    onChange={(e) =>
-                      setAuthorForm((prev) => ({
-                        ...prev,
-                        isActive: e.target.checked,
-                      }))
-                    }
-                  />
-                  Active author
-                </label>
-                <div className="flex items-center gap-3">
-                  <button
-                    type="submit"
-                    disabled={isSaving}
-                    className="rounded-xl bg-accent px-5 py-3 text-sm font-bold text-black disabled:opacity-60"
-                  >
-                    {isSaving
-                      ? "Saving..."
-                      : editingAuthorId
-                        ? "Update Author"
-                        : "Create Author"}
-                  </button>
-                  {editingAuthorId && (
-                    <button
-                      type="button"
-                      onClick={clearAuthorForm}
-                      className="rounded-xl border border-border px-5 py-3 text-sm"
-                    >
-                      Cancel edit
-                    </button>
+
+                <div className="rounded-2xl border border-border bg-bg-secondary p-6">
+                  <h2 className="text-xl font-bold mb-4">All Authors</h2>
+                  {isLoading ? (
+                    <p className="text-text-secondary text-sm">
+                      Loading authors...
+                    </p>
+                  ) : authors.length === 0 ? (
+                    <p className="text-text-secondary text-sm">
+                      No authors found.
+                    </p>
+                  ) : (
+                    <ul className="space-y-3 max-h-[70vh] overflow-auto pr-2">
+                      {authors.map((author) => (
+                        <li
+                          key={author.id}
+                          className="rounded-xl border border-border p-4"
+                        >
+                          <p className="font-semibold">{author.name}</p>
+                          <p className="text-xs text-text-muted mt-1">
+                            /{author.slug}
+                          </p>
+                          <p className="text-xs text-text-muted mt-1">
+                            {author.role}
+                          </p>
+                          <div className="mt-3 flex items-center gap-3">
+                            <button
+                              type="button"
+                              onClick={() => populateAuthorForEdit(author)}
+                              className="text-sm text-accent hover:underline"
+                            >
+                              Edit
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => handleAuthorDelete(author.id)}
+                              className="text-sm text-red-400 hover:underline"
+                            >
+                              Delete
+                            </button>
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
                   )}
                 </div>
-              </form>
-            </div>
-
-            <div className="rounded-2xl border border-border bg-bg-secondary p-6">
-              <h2 className="text-xl font-bold mb-4">All Authors</h2>
-              {isLoading ? (
-                <p className="text-text-secondary text-sm">
-                  Loading authors...
-                </p>
-              ) : authors.length === 0 ? (
-                <p className="text-text-secondary text-sm">No authors found.</p>
-              ) : (
-                <ul className="space-y-3 max-h-[70vh] overflow-auto pr-2">
-                  {authors.map((author) => (
-                    <li
-                      key={author.id}
-                      className="rounded-xl border border-border p-4"
-                    >
-                      <p className="font-semibold">{author.name}</p>
-                      <p className="text-xs text-text-muted mt-1">
-                        /{author.slug}
-                      </p>
-                      <p className="text-xs text-text-muted mt-1">
-                        {author.role}
-                      </p>
-                      <div className="mt-3 flex items-center gap-3">
-                        <button
-                          type="button"
-                          onClick={() => populateAuthorForEdit(author)}
-                          className="text-sm text-accent hover:underline"
-                        >
-                          Edit
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => handleAuthorDelete(author.id)}
-                          className="text-sm text-red-400 hover:underline"
-                        >
-                          Delete
-                        </button>
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </div>
-          </div>
+              </div>
             )}
 
             {activeSection === "categories" && (
-          <div
-            id="admin-panel-categories"
-            role="region"
-            aria-label="Categories management"
-            className="grid gap-8 lg:grid-cols-2"
-          >
-            <div className="rounded-2xl border border-border bg-bg-secondary p-6">
-              <h2 className="text-xl font-bold mb-4">
-                {editingCategoryId ? "Edit Category" : "Create Category"}
-              </h2>
-              <form onSubmit={handleCategorySubmit} className="space-y-4">
-                <input
-                  value={categoryForm.name}
-                  onChange={(e) =>
-                    setCategoryForm((prev) => ({
-                      ...prev,
-                      name: e.target.value,
-                    }))
-                  }
-                  required
-                  placeholder="Category name"
-                  className="w-full rounded-xl border border-border bg-bg-primary px-4 py-3 text-sm outline-none focus:border-accent"
-                />
-                <input
-                  value={categoryForm.slug}
-                  onChange={(e) =>
-                    setCategoryForm((prev) => ({
-                      ...prev,
-                      slug: e.target.value,
-                    }))
-                  }
-                  placeholder="Slug (optional)"
-                  className="w-full rounded-xl border border-border bg-bg-primary px-4 py-3 text-sm outline-none focus:border-accent"
-                />
-                <textarea
-                  value={categoryForm.description}
-                  onChange={(e) =>
-                    setCategoryForm((prev) => ({
-                      ...prev,
-                      description: e.target.value,
-                    }))
-                  }
-                  rows={3}
-                  placeholder="Description"
-                  className="w-full rounded-xl border border-border bg-bg-primary px-4 py-3 text-sm outline-none focus:border-accent"
-                />
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <label className="rounded-xl border border-border bg-bg-primary px-4 py-3 text-sm text-text-secondary">
-                    <span className="block text-xs uppercase tracking-[0.12em] mb-2 text-text-muted">
-                      Color
-                    </span>
+              <div
+                id="admin-panel-categories"
+                role="region"
+                aria-label="Categories management"
+                className="grid gap-8 lg:grid-cols-2"
+              >
+                <div className="rounded-2xl border border-border bg-bg-secondary p-6">
+                  <h2 className="text-xl font-bold mb-4">
+                    {editingCategoryId ? "Edit Category" : "Create Category"}
+                  </h2>
+                  <form onSubmit={handleCategorySubmit} className="space-y-4">
                     <input
-                      type="color"
-                      value={categoryForm.color}
+                      value={categoryForm.name}
                       onChange={(e) =>
                         setCategoryForm((prev) => ({
                           ...prev,
-                          color: e.target.value,
+                          name: e.target.value,
                         }))
                       }
-                      className="h-9 w-full cursor-pointer rounded-md border border-border bg-bg-primary"
+                      required
+                      placeholder="Category name"
+                      className="w-full rounded-xl border border-border bg-bg-primary px-4 py-3 text-sm outline-none focus:border-accent"
                     />
-                  </label>
-                  <input
-                    type="number"
-                    min={1}
-                    value={categoryForm.sortOrder}
-                    onChange={(e) =>
-                      setCategoryForm((prev) => ({
-                        ...prev,
-                        sortOrder: Number(e.target.value),
-                      }))
-                    }
-                    className="w-full rounded-xl border border-border bg-bg-primary px-4 py-3 text-sm outline-none focus:border-accent"
-                  />
+                    <input
+                      value={categoryForm.slug}
+                      onChange={(e) =>
+                        setCategoryForm((prev) => ({
+                          ...prev,
+                          slug: e.target.value,
+                        }))
+                      }
+                      placeholder="Slug (optional)"
+                      className="w-full rounded-xl border border-border bg-bg-primary px-4 py-3 text-sm outline-none focus:border-accent"
+                    />
+                    <textarea
+                      value={categoryForm.description}
+                      onChange={(e) =>
+                        setCategoryForm((prev) => ({
+                          ...prev,
+                          description: e.target.value,
+                        }))
+                      }
+                      rows={3}
+                      placeholder="Description"
+                      className="w-full rounded-xl border border-border bg-bg-primary px-4 py-3 text-sm outline-none focus:border-accent"
+                    />
+                    <div className="grid gap-4 sm:grid-cols-2">
+                      <label className="rounded-xl border border-border bg-bg-primary px-4 py-3 text-sm text-text-secondary">
+                        <span className="block text-xs uppercase tracking-[0.12em] mb-2 text-text-muted">
+                          Color
+                        </span>
+                        <input
+                          type="color"
+                          value={categoryForm.color}
+                          onChange={(e) =>
+                            setCategoryForm((prev) => ({
+                              ...prev,
+                              color: e.target.value,
+                            }))
+                          }
+                          className="h-9 w-full cursor-pointer rounded-md border border-border bg-bg-primary"
+                        />
+                      </label>
+                      <input
+                        type="number"
+                        min={1}
+                        value={categoryForm.sortOrder}
+                        onChange={(e) =>
+                          setCategoryForm((prev) => ({
+                            ...prev,
+                            sortOrder: Number(e.target.value),
+                          }))
+                        }
+                        className="w-full rounded-xl border border-border bg-bg-primary px-4 py-3 text-sm outline-none focus:border-accent"
+                      />
+                    </div>
+                    <label className="flex items-center gap-2 text-sm text-text-secondary">
+                      <input
+                        type="checkbox"
+                        checked={categoryForm.isActive}
+                        onChange={(e) =>
+                          setCategoryForm((prev) => ({
+                            ...prev,
+                            isActive: e.target.checked,
+                          }))
+                        }
+                      />
+                      Active category
+                    </label>
+                    <div className="flex items-center gap-3">
+                      <button
+                        type="submit"
+                        disabled={isSaving}
+                        className="rounded-xl bg-accent px-5 py-3 text-sm font-bold text-black disabled:opacity-60"
+                      >
+                        {isSaving
+                          ? "Saving..."
+                          : editingCategoryId
+                            ? "Update Category"
+                            : "Create Category"}
+                      </button>
+                      {editingCategoryId && (
+                        <button
+                          type="button"
+                          onClick={clearCategoryForm}
+                          className="rounded-xl border border-border px-5 py-3 text-sm"
+                        >
+                          Cancel edit
+                        </button>
+                      )}
+                    </div>
+                  </form>
                 </div>
-                <label className="flex items-center gap-2 text-sm text-text-secondary">
-                  <input
-                    type="checkbox"
-                    checked={categoryForm.isActive}
-                    onChange={(e) =>
-                      setCategoryForm((prev) => ({
-                        ...prev,
-                        isActive: e.target.checked,
-                      }))
-                    }
-                  />
-                  Active category
-                </label>
-                <div className="flex items-center gap-3">
-                  <button
-                    type="submit"
-                    disabled={isSaving}
-                    className="rounded-xl bg-accent px-5 py-3 text-sm font-bold text-black disabled:opacity-60"
-                  >
-                    {isSaving
-                      ? "Saving..."
-                      : editingCategoryId
-                        ? "Update Category"
-                        : "Create Category"}
-                  </button>
-                  {editingCategoryId && (
-                    <button
-                      type="button"
-                      onClick={clearCategoryForm}
-                      className="rounded-xl border border-border px-5 py-3 text-sm"
-                    >
-                      Cancel edit
-                    </button>
+
+                <div className="rounded-2xl border border-border bg-bg-secondary p-6">
+                  <h2 className="text-xl font-bold mb-4">All Categories</h2>
+                  {isLoading ? (
+                    <p className="text-text-secondary text-sm">
+                      Loading categories...
+                    </p>
+                  ) : categories.length === 0 ? (
+                    <p className="text-text-secondary text-sm">
+                      No categories found.
+                    </p>
+                  ) : (
+                    <ul className="space-y-3 max-h-[70vh] overflow-auto pr-2">
+                      {categories.map((category, index) => (
+                        <li
+                          key={category.id}
+                          className="rounded-xl border border-border p-4"
+                        >
+                          <div className="flex items-center justify-between gap-3">
+                            <p className="font-semibold">{category.name}</p>
+                            <span
+                              className="h-4 w-4 rounded-full border border-border"
+                              style={{ backgroundColor: category.color }}
+                            />
+                          </div>
+                          <p className="text-xs text-text-muted mt-1">
+                            /{category.slug}
+                          </p>
+                          <p className="text-xs text-text-muted mt-1">
+                            {category.description}
+                          </p>
+                          <div className="mt-3 flex items-center gap-3">
+                            <button
+                              type="button"
+                              onClick={() =>
+                                populateCategoryForEdit(category, index)
+                              }
+                              className="text-sm text-accent hover:underline"
+                            >
+                              Edit
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => handleCategoryDelete(category.id)}
+                              className="text-sm text-red-400 hover:underline"
+                            >
+                              Delete
+                            </button>
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
                   )}
                 </div>
-              </form>
-            </div>
-
-            <div className="rounded-2xl border border-border bg-bg-secondary p-6">
-              <h2 className="text-xl font-bold mb-4">All Categories</h2>
-              {isLoading ? (
-                <p className="text-text-secondary text-sm">
-                  Loading categories...
-                </p>
-              ) : categories.length === 0 ? (
-                <p className="text-text-secondary text-sm">
-                  No categories found.
-                </p>
-              ) : (
-                <ul className="space-y-3 max-h-[70vh] overflow-auto pr-2">
-                  {categories.map((category, index) => (
-                    <li
-                      key={category.id}
-                      className="rounded-xl border border-border p-4"
-                    >
-                      <div className="flex items-center justify-between gap-3">
-                        <p className="font-semibold">{category.name}</p>
-                        <span
-                          className="h-4 w-4 rounded-full border border-border"
-                          style={{ backgroundColor: category.color }}
-                        />
-                      </div>
-                      <p className="text-xs text-text-muted mt-1">
-                        /{category.slug}
-                      </p>
-                      <p className="text-xs text-text-muted mt-1">
-                        {category.description}
-                      </p>
-                      <div className="mt-3 flex items-center gap-3">
-                        <button
-                          type="button"
-                          onClick={() =>
-                            populateCategoryForEdit(category, index)
-                          }
-                          className="text-sm text-accent hover:underline"
-                        >
-                          Edit
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => handleCategoryDelete(category.id)}
-                          className="text-sm text-red-400 hover:underline"
-                        >
-                          Delete
-                        </button>
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </div>
-          </div>
+              </div>
             )}
 
             {activeSection === "tags" && (
-          <div
-            id="admin-panel-tags"
-            role="region"
-            aria-label="Tags management"
-            className="grid gap-8 lg:grid-cols-2"
-          >
-            <div className="rounded-2xl border border-border bg-bg-secondary p-6">
-              <h2 className="text-xl font-bold mb-4">
-                {editingTagId ? "Edit Tag" : "Create Tag"}
-              </h2>
-              <form onSubmit={handleTagSubmit} className="space-y-4">
-                <input
-                  value={tagForm.name}
-                  onChange={(e) =>
-                    setTagForm((prev) => ({ ...prev, name: e.target.value }))
-                  }
-                  required
-                  placeholder="Tag name"
-                  className="w-full rounded-xl border border-border bg-bg-primary px-4 py-3 text-sm outline-none focus:border-accent"
-                />
-                <input
-                  value={tagForm.slug}
-                  onChange={(e) =>
-                    setTagForm((prev) => ({ ...prev, slug: e.target.value }))
-                  }
-                  placeholder="Slug (optional)"
-                  className="w-full rounded-xl border border-border bg-bg-primary px-4 py-3 text-sm outline-none focus:border-accent"
-                />
-                <label className="flex items-center gap-2 text-sm text-text-secondary">
-                  <input
-                    type="checkbox"
-                    checked={tagForm.isActive}
-                    onChange={(e) =>
-                      setTagForm((prev) => ({
-                        ...prev,
-                        isActive: e.target.checked,
-                      }))
-                    }
-                  />
-                  Active tag
-                </label>
-                <div className="flex items-center gap-3">
-                  <button
-                    type="submit"
-                    disabled={isSaving}
-                    className="rounded-xl bg-accent px-5 py-3 text-sm font-bold text-black disabled:opacity-60"
-                  >
-                    {isSaving
-                      ? "Saving..."
-                      : editingTagId
-                        ? "Update Tag"
-                        : "Create Tag"}
-                  </button>
-                  {editingTagId && (
-                    <button
-                      type="button"
-                      onClick={clearTagForm}
-                      className="rounded-xl border border-border px-5 py-3 text-sm"
-                    >
-                      Cancel edit
-                    </button>
+              <div
+                id="admin-panel-tags"
+                role="region"
+                aria-label="Tags management"
+                className="grid gap-8 lg:grid-cols-2"
+              >
+                <div className="rounded-2xl border border-border bg-bg-secondary p-6">
+                  <h2 className="text-xl font-bold mb-4">
+                    {editingTagId ? "Edit Tag" : "Create Tag"}
+                  </h2>
+                  <form onSubmit={handleTagSubmit} className="space-y-4">
+                    <input
+                      value={tagForm.name}
+                      onChange={(e) =>
+                        setTagForm((prev) => ({
+                          ...prev,
+                          name: e.target.value,
+                        }))
+                      }
+                      required
+                      placeholder="Tag name"
+                      className="w-full rounded-xl border border-border bg-bg-primary px-4 py-3 text-sm outline-none focus:border-accent"
+                    />
+                    <input
+                      value={tagForm.slug}
+                      onChange={(e) =>
+                        setTagForm((prev) => ({
+                          ...prev,
+                          slug: e.target.value,
+                        }))
+                      }
+                      placeholder="Slug (optional)"
+                      className="w-full rounded-xl border border-border bg-bg-primary px-4 py-3 text-sm outline-none focus:border-accent"
+                    />
+                    <label className="flex items-center gap-2 text-sm text-text-secondary">
+                      <input
+                        type="checkbox"
+                        checked={tagForm.isActive}
+                        onChange={(e) =>
+                          setTagForm((prev) => ({
+                            ...prev,
+                            isActive: e.target.checked,
+                          }))
+                        }
+                      />
+                      Active tag
+                    </label>
+                    <div className="flex items-center gap-3">
+                      <button
+                        type="submit"
+                        disabled={isSaving}
+                        className="rounded-xl bg-accent px-5 py-3 text-sm font-bold text-black disabled:opacity-60"
+                      >
+                        {isSaving
+                          ? "Saving..."
+                          : editingTagId
+                            ? "Update Tag"
+                            : "Create Tag"}
+                      </button>
+                      {editingTagId && (
+                        <button
+                          type="button"
+                          onClick={clearTagForm}
+                          className="rounded-xl border border-border px-5 py-3 text-sm"
+                        >
+                          Cancel edit
+                        </button>
+                      )}
+                    </div>
+                  </form>
+                </div>
+
+                <div className="rounded-2xl border border-border bg-bg-secondary p-6">
+                  <h2 className="text-xl font-bold mb-4">All Tags</h2>
+                  {isLoading ? (
+                    <p className="text-text-secondary text-sm">
+                      Loading tags...
+                    </p>
+                  ) : tags.length === 0 ? (
+                    <p className="text-text-secondary text-sm">
+                      No tags found.
+                    </p>
+                  ) : (
+                    <ul className="space-y-3 max-h-[70vh] overflow-auto pr-2">
+                      {tags.map((tag) => (
+                        <li
+                          key={tag.id}
+                          className="rounded-xl border border-border p-4"
+                        >
+                          <p className="font-semibold">{tag.name}</p>
+                          <p className="text-xs text-text-muted mt-1">
+                            /{tag.slug}
+                          </p>
+                          <div className="mt-3 flex items-center gap-3">
+                            <button
+                              type="button"
+                              onClick={() => populateTagForEdit(tag)}
+                              className="text-sm text-accent hover:underline"
+                            >
+                              Edit
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => handleTagDelete(tag.id)}
+                              className="text-sm text-red-400 hover:underline"
+                            >
+                              Delete
+                            </button>
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
                   )}
                 </div>
-              </form>
-            </div>
-
-            <div className="rounded-2xl border border-border bg-bg-secondary p-6">
-              <h2 className="text-xl font-bold mb-4">All Tags</h2>
-              {isLoading ? (
-                <p className="text-text-secondary text-sm">Loading tags...</p>
-              ) : tags.length === 0 ? (
-                <p className="text-text-secondary text-sm">No tags found.</p>
-              ) : (
-                <ul className="space-y-3 max-h-[70vh] overflow-auto pr-2">
-                  {tags.map((tag) => (
-                    <li
-                      key={tag.id}
-                      className="rounded-xl border border-border p-4"
-                    >
-                      <p className="font-semibold">{tag.name}</p>
-                      <p className="text-xs text-text-muted mt-1">
-                        /{tag.slug}
-                      </p>
-                      <div className="mt-3 flex items-center gap-3">
-                        <button
-                          type="button"
-                          onClick={() => populateTagForEdit(tag)}
-                          className="text-sm text-accent hover:underline"
-                        >
-                          Edit
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => handleTagDelete(tag.id)}
-                          className="text-sm text-red-400 hover:underline"
-                        >
-                          Delete
-                        </button>
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </div>
-          </div>
+              </div>
             )}
           </div>
         </div>

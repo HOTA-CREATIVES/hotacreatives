@@ -6,6 +6,7 @@ import { onAuthStateChanged, signOut } from "firebase/auth";
 import { doc, getDoc, serverTimestamp, setDoc } from "firebase/firestore";
 import { ROUTES } from "@/routes";
 import { auth, db } from "@/services/firebase";
+import { uploadProfileImageToCloudinary } from "@/services";
 import AdminSidebar from "@/components/shell/AdminSidebar";
 import {
   Card,
@@ -25,6 +26,7 @@ type AdminProfile = {
   name: string;
   email: string;
   role: string;
+  avatar?: string;
   bio?: string;
   phone?: string;
   website?: string;
@@ -33,6 +35,7 @@ type AdminProfile = {
 
 const initialForm = {
   name: "",
+  avatar: "",
   bio: "",
   phone: "",
   website: "",
@@ -47,6 +50,7 @@ export default function AdminProfilePage() {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
+  const [isUploadingAvatar, setIsUploadingAvatar] = useState(false);
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
   const [profile, setProfile] = useState<AdminProfile | null>(null);
@@ -86,6 +90,7 @@ export default function AdminProfilePage() {
           setProfile(fallbackProfile);
           setForm({
             name: fallbackProfile.name,
+            avatar: user.photoURL || "",
             bio: "",
             phone: "",
             website: "",
@@ -99,6 +104,7 @@ export default function AdminProfilePage() {
           name: data.name || user.displayName || "",
           email: data.email || user.email || "",
           role: data.role || "admin",
+          avatar: data.avatar || user.photoURL || "",
           bio: data.bio || "",
           phone: data.phone || "",
           website: data.website || "",
@@ -108,6 +114,7 @@ export default function AdminProfilePage() {
         setProfile(loaded);
         setForm({
           name: loaded.name,
+          avatar: loaded.avatar || "",
           bio: loaded.bio || "",
           phone: loaded.phone || "",
           website: loaded.website || "",
@@ -158,6 +165,7 @@ export default function AdminProfilePage() {
           role: profile.role,
           authProvider: profile.authProvider || "password",
           name: form.name.trim(),
+          avatar: form.avatar.trim(),
           bio: form.bio.trim(),
           phone: form.phone.trim(),
           website: form.website.trim(),
@@ -172,6 +180,7 @@ export default function AdminProfilePage() {
           ? {
               ...prev,
               name: form.name.trim(),
+              avatar: form.avatar.trim(),
               bio: form.bio.trim(),
               phone: form.phone.trim(),
               website: form.website.trim(),
@@ -194,6 +203,36 @@ export default function AdminProfilePage() {
       );
     } finally {
       setIsSaving(false);
+    }
+  }
+
+  async function handleAvatarUpload(file: File) {
+    if (!file.type.startsWith("image/")) {
+      setError("Please select a valid image file.");
+      return;
+    }
+
+    const maxSizeInBytes = 5 * 1024 * 1024;
+    if (file.size > maxSizeInBytes) {
+      setError("Image size must be under 5MB.");
+      return;
+    }
+
+    setError("");
+    setMessage("");
+    setIsUploadingAvatar(true);
+
+    try {
+      const uploadedUrl = await uploadProfileImageToCloudinary(file);
+      setForm((prev) => ({ ...prev, avatar: uploadedUrl }));
+      setMessage("Profile image uploaded. Save changes to persist it.");
+    } catch (err) {
+      console.error("AdminProfilePage: Avatar upload failed:", err);
+      setError(
+        "Failed to upload image to Cloudinary. Check env credentials and preset.",
+      );
+    } finally {
+      setIsUploadingAvatar(false);
     }
   }
 
@@ -221,10 +260,7 @@ export default function AdminProfilePage() {
             </p>
           </header>
 
-          <section
-            className="max-w-3xl"
-            aria-labelledby="profile-card-title"
-          >
+          <section className="max-w-3xl" aria-labelledby="profile-card-title">
             <Card className="border-border/70 bg-card/80 shadow-xl">
               <form onSubmit={handleSubmit}>
                 <CardHeader>
@@ -234,12 +270,52 @@ export default function AdminProfilePage() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
+                  <div className="space-y-3">
+                    <Label htmlFor="avatar-upload">Profile Photo</Label>
+                    <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+                      <div className="h-20 w-20 overflow-hidden rounded-full border border-border/70 bg-muted">
+                        {form.avatar ? (
+                          <img
+                            src={form.avatar}
+                            alt="Admin profile"
+                            className="h-full w-full object-cover"
+                          />
+                        ) : (
+                          <div className="flex h-full w-full items-center justify-center text-xl font-semibold text-muted-foreground">
+                            {(form.name || profile?.email || "A")
+                              .charAt(0)
+                              .toUpperCase()}
+                          </div>
+                        )}
+                      </div>
+                      <div className="space-y-2">
+                        <Input
+                          id="avatar-upload"
+                          type="file"
+                          accept="image/*"
+                          onChange={(e) => {
+                            const selected = e.target.files?.[0];
+                            if (selected) {
+                              void handleAvatarUpload(selected);
+                            }
+                            e.currentTarget.value = "";
+                          }}
+                          disabled={isUploadingAvatar}
+                        />
+                        <p className="text-xs text-muted-foreground">
+                          JPG, PNG, WEBP up to 5MB.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
                   <div className="space-y-2">
                     <Label htmlFor="name">Name</Label>
                     <Input
                       id="name"
                       value={form.name}
-                      onChange={(e) => setForm({ ...form, name: e.target.value })}
+                      onChange={(e) =>
+                        setForm({ ...form, name: e.target.value })
+                      }
                       required
                     />
                   </div>
@@ -252,7 +328,9 @@ export default function AdminProfilePage() {
                     <Textarea
                       id="bio"
                       value={form.bio}
-                      onChange={(e) => setForm({ ...form, bio: e.target.value })}
+                      onChange={(e) =>
+                        setForm({ ...form, bio: e.target.value })
+                      }
                       placeholder="Tell us a little about yourself"
                       rows={4}
                     />
@@ -297,8 +375,15 @@ export default function AdminProfilePage() {
                       </p>
                     )}
                   </div>
-                  <Button type="submit" disabled={isSaving}>
-                    {isSaving ? "Saving..." : "Save Changes"}
+                  <Button
+                    type="submit"
+                    disabled={isSaving || isUploadingAvatar}
+                  >
+                    {isSaving
+                      ? "Saving..."
+                      : isUploadingAvatar
+                        ? "Uploading Image..."
+                        : "Save Changes"}
                   </Button>
                 </CardFooter>
               </form>
