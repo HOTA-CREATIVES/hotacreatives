@@ -9,7 +9,9 @@ import {
   X,
 } from "lucide-react";
 import { NavBar as TubeLightNavBar } from "@/components/shell/tube-light-navbar";
-import logoImage from "@/assets/RENAME.jpeg";
+
+const logoImage =
+  "https://res.cloudinary.com/diiyy6bar/image/upload/v1775361777/WhatsApp_Image_2026-03-17_at_9.07.36_PM-removebg-preview_xvv4dn.png";
 
 const navLinks = [
   { name: "Home", path: "/", icon: Home },
