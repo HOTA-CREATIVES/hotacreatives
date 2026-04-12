@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import { Navigate } from "react-router-dom";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "@/services/firebase";
+import { hasAdminAccess } from "@/services/admin-auth.service";
 import { ROUTES } from "@/routes";
 
 type Props = {
@@ -11,12 +12,23 @@ type Props = {
 
 export default function AdminProtectedRoute({ children }: Props) {
   const [isLoading, setIsLoading] = useState(true);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthorized, setIsAuthorized] = useState(false);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setIsAuthenticated(Boolean(user));
-      setIsLoading(false);
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        setIsAuthorized(false);
+        setIsLoading(false);
+        return;
+      }
+
+      try {
+        setIsAuthorized(await hasAdminAccess(user.uid));
+      } catch {
+        setIsAuthorized(false);
+      } finally {
+        setIsLoading(false);
+      }
     });
 
     return () => unsubscribe();
@@ -30,7 +42,7 @@ export default function AdminProtectedRoute({ children }: Props) {
     );
   }
 
-  if (!isAuthenticated) {
+  if (!isAuthorized) {
     return <Navigate to={ROUTES.ADMIN_LOGIN} replace />;
   }
 

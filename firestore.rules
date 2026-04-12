@@ -19,11 +19,16 @@ service cloud.firestore {
         currentAdminDoc().data.isActive != false;
     }
 
-    // Admin profiles: users can manage own profile, admins can view/update all admin profiles.
+    // Admin profiles are read/updated by admins only.
     match /admins/{uid} {
-      allow read: if isOwnAdminProfile(uid) || isAdmin();
-      allow create: if isOwnAdminProfile(uid) && request.resource.data.uid == uid;
-      allow update: if (isOwnAdminProfile(uid) && request.resource.data.uid == uid) || isAdmin();
+      allow read: if isAdmin();
+      // Admin identities must be provisioned out-of-band (Firebase Console or trusted server scripts).
+      allow create: if false;
+      // Prevent role/isActive escalation from client-side writes.
+      allow update: if isAdmin() &&
+        request.resource.data.uid == uid &&
+        request.resource.data.role == resource.data.role &&
+        request.resource.data.isActive == resource.data.isActive;
       allow delete: if false;
     }
 

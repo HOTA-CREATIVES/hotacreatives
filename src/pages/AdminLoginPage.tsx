@@ -4,14 +4,13 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import {
-  createUserWithEmailAndPassword,
   onAuthStateChanged,
   signInWithEmailAndPassword,
-  type User,
+  signOut,
 } from "firebase/auth";
-import { doc, getDoc, serverTimestamp, setDoc } from "firebase/firestore";
-import { auth, db } from "@/services/firebase";
+import { auth } from "@/services/firebase";
 import { ROUTES } from "@/routes";
+import { hasAdminAccess } from "@/services/admin-auth.service";
 
 import {
   Card,
@@ -22,12 +21,6 @@ import {
 } from "@/components/base/card";
 import { Input } from "@/components/base/input";
 import { Button } from "@/components/base/button";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/components/base/tabs";
 import {
   Form,
   FormControl,
@@ -42,79 +35,31 @@ const signinSchema = z.object({
   password: z.string().min(1, { message: "Password is required." }),
 });
 
-const signupSchema = z
-  .object({
-    name: z.string().min(2, { message: "Name must be at least 2 characters." }),
-    email: z.string().email({ message: "Invalid email address." }),
-    password: z
-      .string()
-      .min(6, { message: "Password must be at least 6 characters." }),
-    confirmPassword: z
-      .string()
-      .min(6, { message: "Confirm password is required." }),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords do not match.",
-    path: ["confirmPassword"],
-  });
-
 export default function AdminLoginPage() {
   const navigate = useNavigate();
   const [signinError, setSigninError] = useState("");
-  const [signupError, setSignupError] = useState("");
   const [isSigniningIn, setIsSigniningIn] = useState(false);
-  const [isSigningUp, setIsSigningUp] = useState(false);
 
   useEffect(() => {
-    const unsub = onAuthStateChanged(auth, (user) => {
-      if (user) {
+    const unsub = onAuthStateChanged(auth, async (user) => {
+      if (!user) return;
+
+      const allowed = await hasAdminAccess(user.uid);
+      if (allowed) {
         navigate(ROUTES.ADMIN_DASHBOARD, { replace: true });
+      } else {
+        await signOut(auth);
       }
     });
 
     return () => unsub();
   }, [navigate]);
 
-  async function upsertAdminProfile(user: User, fullName?: string) {
-    const adminRef = doc(db, "admins", user.uid);
-    const existing = await getDoc(adminRef);
-
-    const payload = {
-      uid: user.uid,
-      email: user.email || "",
-      name: fullName?.trim() || user.displayName || "",
-      role: "admin",
-      authProvider: "password",
-      updatedAt: serverTimestamp(),
-      lastLoginAt: serverTimestamp(),
-    };
-
-    if (!existing.exists()) {
-      await setDoc(adminRef, {
-        ...payload,
-        createdAt: serverTimestamp(),
-      });
-      return;
-    }
-
-    await setDoc(adminRef, payload, { merge: true });
-  }
-
   const signinForm = useForm<z.infer<typeof signinSchema>>({
     resolver: zodResolver(signinSchema),
     defaultValues: {
       email: "",
       password: "",
-    },
-  });
-
-  const signupForm = useForm<z.infer<typeof signupSchema>>({
-    resolver: zodResolver(signupSchema),
-    defaultValues: {
-      name: "",
-      email: "",
-      password: "",
-      confirmPassword: "",
     },
   });
 
@@ -128,34 +73,19 @@ export default function AdminLoginPage() {
         normalizedEmail,
         values.password,
       );
-      await upsertAdminProfile(credential.user);
+
+      const allowed = await hasAdminAccess(credential.user.uid);
+      if (!allowed) {
+        await signOut(auth);
+        setSigninError("Account is not authorized for admin access.");
+        return;
+      }
+
       navigate(ROUTES.ADMIN_DASHBOARD, { replace: true });
     } catch {
       setSigninError("Invalid admin credentials. Please try again.");
     } finally {
       setIsSigniningIn(false);
-    }
-  }
-
-  async function onSubmitSignup(values: z.infer<typeof signupSchema>) {
-    setSignupError("");
-    setIsSigningUp(true);
-
-    try {
-      const normalizedEmail = values.email.trim().toLowerCase();
-      const credential = await createUserWithEmailAndPassword(
-        auth,
-        normalizedEmail,
-        values.password,
-      );
-      await upsertAdminProfile(credential.user, values.name);
-      navigate(ROUTES.ADMIN_DASHBOARD, { replace: true });
-    } catch {
-      setSignupError(
-        "Failed to create admin account. Check Firebase auth configuration.",
-      );
-    } finally {
-      setIsSigningUp(false);
     }
   }
 
@@ -189,191 +119,75 @@ export default function AdminLoginPage() {
 
         <div>
           <h1 className="mb-4 text-2xl font-black md:hidden">Admin Access</h1>
-          <Tabs defaultValue="signin" className="w-full">
-            <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="signin">Sign In</TabsTrigger>
-              <TabsTrigger value="signup">Sign Up</TabsTrigger>
-            </TabsList>
-            <TabsContent value="signin">
-              <Card className="border-border/70 bg-card/80">
-                <CardHeader>
-                  <CardTitle>Sign In</CardTitle>
-                  <CardDescription>
-                    Sign in to manage blog posts directly in Firebase.
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <Form {...signinForm}>
-                    <form
-                      onSubmit={signinForm.handleSubmit(onSubmitSignin)}
-                      className="space-y-4"
-                      aria-describedby={
-                        signinError ? "signin-error" : undefined
-                      }
+          <Card className="border-border/70 bg-card/80">
+            <CardHeader>
+              <CardTitle>Sign In</CardTitle>
+              <CardDescription>
+                Sign in with your pre-provisioned admin account.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Form {...signinForm}>
+                <form
+                  onSubmit={signinForm.handleSubmit(onSubmitSignin)}
+                  className="space-y-4"
+                  aria-describedby={signinError ? "signin-error" : undefined}
+                >
+                  <FormField
+                    control={signinForm.control}
+                    name="email"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Email</FormLabel>
+                        <FormControl>
+                          <Input
+                            type="email"
+                            placeholder="admin@hota.com"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={signinForm.control}
+                    name="password"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Password</FormLabel>
+                        <FormControl>
+                          <Input
+                            type="password"
+                            placeholder="Enter password"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  {signinError && (
+                    <p
+                      id="signin-error"
+                      role="alert"
+                      aria-live="assertive"
+                      className="rounded-md border border-destructive/50 bg-destructive/10 px-3 py-2 text-sm text-destructive"
                     >
-                      <FormField
-                        control={signinForm.control}
-                        name="email"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Email</FormLabel>
-                            <FormControl>
-                              <Input
-                                type="email"
-                                placeholder="admin@hota.com"
-                                {...field}
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={signinForm.control}
-                        name="password"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Password</FormLabel>
-                            <FormControl>
-                              <Input
-                                type="password"
-                                placeholder="Enter password"
-                                {...field}
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      {signinError && (
-                        <p
-                          id="signin-error"
-                          role="alert"
-                          aria-live="assertive"
-                          className="rounded-md border border-destructive/50 bg-destructive/10 px-3 py-2 text-sm text-destructive"
-                        >
-                          {signinError}
-                        </p>
-                      )}
-                      <Button
-                        type="submit"
-                        disabled={isSigniningIn}
-                        className="w-full"
-                      >
-                        {isSigniningIn ? "Signing in..." : "Sign in"}
-                      </Button>
-                    </form>
-                  </Form>
-                </CardContent>
-              </Card>
-            </TabsContent>
-            <TabsContent value="signup">
-              <Card className="border-border/70 bg-card/80">
-                <CardHeader>
-                  <CardTitle>Sign Up</CardTitle>
-                  <CardDescription>
-                    Create an email-password admin user and save profile in
-                    admins collection.
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <Form {...signupForm}>
-                    <form
-                      onSubmit={signupForm.handleSubmit(onSubmitSignup)}
-                      className="space-y-4"
-                      aria-describedby={
-                        signupError ? "signup-error" : undefined
-                      }
-                    >
-                      <FormField
-                        control={signupForm.control}
-                        name="name"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Admin Name</FormLabel>
-                            <FormControl>
-                              <Input placeholder="Your name" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={signupForm.control}
-                        name="email"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Email</FormLabel>
-                            <FormControl>
-                              <Input
-                                type="email"
-                                placeholder="admin@hota.com"
-                                {...field}
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={signupForm.control}
-                        name="password"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Password</FormLabel>
-                            <FormControl>
-                              <Input
-                                type="password"
-                                placeholder="Enter password"
-                                {...field}
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={signupForm.control}
-                        name="confirmPassword"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Confirm Password</FormLabel>
-                            <FormControl>
-                              <Input
-                                type="password"
-                                placeholder="Confirm password"
-                                {...field}
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      {signupError && (
-                        <p
-                          id="signup-error"
-                          role="alert"
-                          aria-live="assertive"
-                          className="rounded-md border border-destructive/50 bg-destructive/10 px-3 py-2 text-sm text-destructive"
-                        >
-                          {signupError}
-                        </p>
-                      )}
-                      <Button
-                        type="submit"
-                        disabled={isSigningUp}
-                        className="w-full"
-                      >
-                        {isSigningUp
-                          ? "Creating account..."
-                          : "Create admin account"}
-                      </Button>
-                    </form>
-                  </Form>
-                </CardContent>
-              </Card>
-            </TabsContent>
-          </Tabs>
+                      {signinError}
+                    </p>
+                  )}
+                  <Button
+                    type="submit"
+                    disabled={isSigniningIn}
+                    className="w-full"
+                  >
+                    {isSigniningIn ? "Signing in..." : "Sign in"}
+                  </Button>
+                </form>
+              </Form>
+            </CardContent>
+          </Card>
         </div>
       </section>
       <div className="relative mx-auto mt-6 w-full max-w-5xl text-center">

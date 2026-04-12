@@ -102,14 +102,6 @@ function App() {
               </AdminProtectedRoute>
             }
           />
-          <Route
-            path="/blogs"
-            element={
-              <AdminProtectedRoute>
-                <AdminBlogsPage />
-              </AdminProtectedRoute>
-            }
-          />
           <Route element={<MainLayout />}>
             <Route path={ROUTES.HOME} element={<HomePage />} />
             <Route path={ROUTES.SERVICES} element={<ServicesPage />} />
