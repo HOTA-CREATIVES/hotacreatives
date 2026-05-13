@@ -11,7 +11,7 @@ export default function AuthorBioCard({ author }: AuthorBioCardProps) {
     <div className="flex flex-col sm:flex-row items-start gap-6 p-6 sm:p-8 bg-bg-card rounded-2xl border border-border">
       <Link to={`/blog/author/${author.slug}`} className="shrink-0">
         <img
-          src={author.avatar}
+          src={author.photoURL || author.avatar}
           alt={author.name}
           className="w-20 h-20 rounded-full object-cover ring-2 ring-accent/30 hover:ring-accent transition-all duration-300"
         />

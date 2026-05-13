@@ -14,6 +14,8 @@ export const BLOG_AUTHORS: BlogAuthor[] = [
     slug: "chinni-suryan",
     avatar:
       "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop&crop=face",
+    photoURL:
+      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop&crop=face",
     role: "Founder of HOTA",
     bio: "Chinni is the founder of HOTA, a creative growth agency focused on positioning brands for dominance.",
     socialLinks: {

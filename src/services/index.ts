@@ -16,6 +16,7 @@ export {
   getBlogAuthorsForAdmin,
   getBlogCategoriesForAdmin,
   getBlogTagsForAdmin,
+  syncBlogAuthorAvatarFromProfile,
   createBlogPostFromAdmin,
   updateBlogPostFromAdmin,
   deleteBlogPostFromAdmin,

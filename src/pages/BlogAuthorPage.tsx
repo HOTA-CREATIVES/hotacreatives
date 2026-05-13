@@ -90,7 +90,7 @@ export default function BlogAuthorPage() {
           {/* Author profile */}
           <div className="flex flex-col sm:flex-row items-center sm:items-start gap-8 mb-16">
             <img
-              src={author.avatar}
+              src={author.photoURL || author.avatar}
               alt={author.name}
               className="w-28 h-28 rounded-full object-cover ring-4 ring-accent/20"
             />

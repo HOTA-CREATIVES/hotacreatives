@@ -6,6 +6,7 @@ import {
   query,
   serverTimestamp,
   setDoc,
+  writeBatch,
   updateDoc,
   where,
   orderBy,
@@ -49,11 +50,14 @@ function toIsoDate(value: unknown): string {
 }
 
 function mapAuthor(raw: any): BlogAuthor {
+  const photoURL = raw?.photoURL || raw?.avatar || "";
+
   return {
     id: raw?.id || "author-1",
     name: raw?.name || "Chinni Suryan",
     slug: raw?.slug || "chinni-suryan",
-    avatar: raw?.avatar || "",
+    avatar: photoURL,
+    photoURL,
     role: raw?.role || "Founder of HOTA",
     bio: raw?.bio || "",
     socialLinks: raw?.socialLinks || {},
@@ -302,6 +306,7 @@ function toFirestorePost(payload: AdminBlogPayload) {
       name: payload.author.name,
       slug: payload.author.slug,
       avatar: payload.author.avatar,
+      photoURL: payload.author.avatar,
       role: payload.author.role,
     },
     categorySnapshot: {
@@ -506,6 +511,51 @@ export async function getBlogAuthorsForAdmin(): Promise<BlogAuthor[]> {
         ? [BLOG_POSTS[0].author]
         : [];
   }
+}
+
+export async function syncBlogAuthorAvatarFromProfile(
+  authorName: string,
+  avatarUrl: string,
+) {
+  const normalizedAvatarUrl = avatarUrl.trim();
+  if (!normalizedAvatarUrl) return;
+
+  const authorSlug = slugify(authorName);
+  const [authorsSnapshot, postsSnapshot] = await Promise.all([
+    getDocs(
+      query(collection(db, "blog_authors"), where("slug", "==", authorSlug)),
+    ),
+    getDocs(
+      query(
+        collection(db, "blog_posts"),
+        where("authorSlug", "==", authorSlug),
+      ),
+    ),
+  ]);
+
+  if (authorsSnapshot.empty && postsSnapshot.empty) return;
+
+  const batch = writeBatch(db);
+
+  authorsSnapshot.docs.forEach((snapshot) => {
+    batch.update(snapshot.ref, {
+      avatar: normalizedAvatarUrl,
+      photoURL: normalizedAvatarUrl,
+      updatedAt: serverTimestamp(),
+    });
+  });
+
+  postsSnapshot.docs.forEach((snapshot) => {
+    batch.update(snapshot.ref, {
+      "author.avatar": normalizedAvatarUrl,
+      "author.photoURL": normalizedAvatarUrl,
+      "authorSnapshot.avatar": normalizedAvatarUrl,
+      "authorSnapshot.photoURL": normalizedAvatarUrl,
+      updatedAt: serverTimestamp(),
+    });
+  });
+
+  await batch.commit();
 }
 
 export async function getBlogCategoriesForAdmin(): Promise<BlogCategory[]> {

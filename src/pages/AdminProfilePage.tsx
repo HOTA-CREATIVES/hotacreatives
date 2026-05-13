@@ -6,7 +6,10 @@ import { onAuthStateChanged, signOut } from "firebase/auth";
 import { doc, getDoc, serverTimestamp, setDoc } from "firebase/firestore";
 import { ROUTES } from "@/routes";
 import { auth, db } from "@/services/firebase";
-import { uploadProfileImageToCloudinary } from "@/services";
+import {
+  syncBlogAuthorAvatarFromProfile,
+  uploadProfileImageToCloudinary,
+} from "@/services";
 import AdminSidebar from "@/components/shell/AdminSidebar";
 import {
   Card,
@@ -173,6 +176,11 @@ export default function AdminProfilePage() {
           lastLoginAt: serverTimestamp(),
         },
         { merge: true },
+      );
+
+      await syncBlogAuthorAvatarFromProfile(
+        form.name.trim() || profile.name,
+        form.avatar.trim() || profile.avatar || user.photoURL || "",
       );
 
       setProfile((prev) =>
