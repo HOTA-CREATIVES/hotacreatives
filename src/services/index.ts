@@ -16,7 +16,6 @@ export {
   getBlogAuthorsForAdmin,
   getBlogCategoriesForAdmin,
   getBlogTagsForAdmin,
-  syncBlogAuthorAvatarFromProfile,
   createBlogPostFromAdmin,
   updateBlogPostFromAdmin,
   deleteBlogPostFromAdmin,
@@ -35,15 +34,3 @@ export {
   uploadProfileImageToCloudinary,
   uploadBlogImageToCloudinary,
 } from "./cloudinary.service";
-
-export {
-  DEFAULT_ADMIN_SETTINGS,
-  getAdminSettings,
-  saveAdminSettings,
-  type AdminSettings,
-} from "./admin-settings.service";
-
-export {
-  logAdminAuditEvent,
-  type AdminAuditEvent,
-} from "./admin-audit.service";

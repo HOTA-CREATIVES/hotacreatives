@@ -5,7 +5,6 @@ export interface BlogAuthor {
   name: string;
   slug: string;
   avatar: string;
-  photoURL?: string;
   role: string;
   bio: string;
   socialLinks?: {

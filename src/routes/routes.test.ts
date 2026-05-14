@@ -15,19 +15,4 @@ describe("ROUTES", () => {
 
     expect(new Set(publicRoutes).size).toBe(publicRoutes.length);
   });
-
-  it("keeps admin routes in /admin namespace", () => {
-    const adminRoutes = [
-      ROUTES.ADMIN_DASHBOARD,
-      ROUTES.ADMIN_BLOGS,
-      ROUTES.ADMIN_BLOG_CREATE,
-      ROUTES.ADMIN_PROFILE,
-      ROUTES.ADMIN_SETTINGS,
-      ROUTES.ADMIN_USERS,
-    ];
-
-    for (const route of adminRoutes) {
-      expect(route.startsWith("/admin")).toBe(true);
-    }
-  });
 });

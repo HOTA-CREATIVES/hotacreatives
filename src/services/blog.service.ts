@@ -50,14 +50,13 @@ function toIsoDate(value: unknown): string {
 }
 
 function mapAuthor(raw: any): BlogAuthor {
-  const photoURL = raw?.photoURL || raw?.avatar || "";
+  const avatar = raw?.avatar || "";
 
   return {
     id: raw?.id || "author-1",
     name: raw?.name || "Chinni Suryan",
     slug: raw?.slug || "chinni-suryan",
-    avatar: photoURL,
-    photoURL,
+    avatar,
     role: raw?.role || "Founder of HOTA",
     bio: raw?.bio || "",
     socialLinks: raw?.socialLinks || {},
@@ -306,7 +305,6 @@ function toFirestorePost(payload: AdminBlogPayload) {
       name: payload.author.name,
       slug: payload.author.slug,
       avatar: payload.author.avatar,
-      photoURL: payload.author.avatar,
       role: payload.author.role,
     },
     categorySnapshot: {
@@ -321,7 +319,9 @@ function toFirestorePost(payload: AdminBlogPayload) {
       slug: tag.slug,
     })),
 
-    author: payload.author,
+    author: {
+      ...payload.author,
+    },
     category: payload.category,
     tags: payload.tags,
 
@@ -540,7 +540,6 @@ export async function syncBlogAuthorAvatarFromProfile(
   authorsSnapshot.docs.forEach((snapshot) => {
     batch.update(snapshot.ref, {
       avatar: normalizedAvatarUrl,
-      photoURL: normalizedAvatarUrl,
       updatedAt: serverTimestamp(),
     });
   });
@@ -548,9 +547,7 @@ export async function syncBlogAuthorAvatarFromProfile(
   postsSnapshot.docs.forEach((snapshot) => {
     batch.update(snapshot.ref, {
       "author.avatar": normalizedAvatarUrl,
-      "author.photoURL": normalizedAvatarUrl,
       "authorSnapshot.avatar": normalizedAvatarUrl,
-      "authorSnapshot.photoURL": normalizedAvatarUrl,
       updatedAt: serverTimestamp(),
     });
   });

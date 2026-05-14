@@ -67,7 +67,7 @@ export default function BlogCard({ post, variant = "default" }: BlogCardProps) {
 
             <div className="flex items-center gap-4">
               <img
-                src={post.author.photoURL || post.author.avatar}
+                src={post.author.avatar}
                 alt={post.author.name}
                 className="w-10 h-10 rounded-full object-cover ring-2 ring-border"
               />
@@ -99,7 +99,10 @@ export default function BlogCard({ post, variant = "default" }: BlogCardProps) {
       className="group block overflow-hidden rounded-xl border border-border bg-bg-card hover:border-border-hover hover:bg-bg-card-hover transition-all duration-500"
     >
       {/* Image */}
-      <div className="relative overflow-hidden" style={{ aspectRatio: "16 / 10" }}>
+      <div
+        className="relative overflow-hidden"
+        style={{ aspectRatio: "16 / 10" }}
+      >
         <img
           src={post.coverImage}
           alt={post.coverImageAlt}
@@ -129,7 +132,7 @@ export default function BlogCard({ post, variant = "default" }: BlogCardProps) {
 
         <div className="flex items-center gap-3">
           <img
-            src={post.author.photoURL || post.author.avatar}
+            src={post.author.avatar}
             alt={post.author.name}
             className="w-8 h-8 rounded-full object-cover ring-2 ring-border"
           />

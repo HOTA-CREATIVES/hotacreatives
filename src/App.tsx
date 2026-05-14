@@ -3,7 +3,6 @@ import { lazy, Suspense } from "react";
 import { Toaster } from "sonner";
 import { MainLayout } from "@/layouts";
 import { ROUTES } from "@/routes/routes";
-import AdminProtectedRoute from "@/components/common/AdminProtectedRoute";
 
 // Lazy load pages for better code splitting
 const HomePage = lazy(() => import("@/pages/HomePage"));
@@ -16,13 +15,6 @@ const BlogListingPage = lazy(() => import("@/pages/BlogListingPage"));
 const BlogArticlePage = lazy(() => import("@/pages/BlogArticlePage"));
 const BlogAuthorPage = lazy(() => import("@/pages/BlogAuthorPage"));
 const BlogCategoryPage = lazy(() => import("@/pages/BlogCategoryPage"));
-const AdminLoginPage = lazy(() => import("@/pages/AdminLoginPage"));
-const AdminDashboardPage = lazy(() => import("@/pages/AdminDashboardPage"));
-const AdminBlogsPage = lazy(() => import("@/pages/AdminBlogsPage"));
-const AdminPostCreatePage = lazy(() => import("@/pages/AdminPostCreatePage"));
-const AdminProfilePage = lazy(() => import("@/pages/AdminProfilePage"));
-const AdminSettingsPage = lazy(() => import("@/pages/AdminSettingsPage"));
-const AdminUsersPage = lazy(() => import("@/pages/AdminUsersPage"));
 const NotFoundPage = lazy(() => import("@/pages/NotFoundPage"));
 
 // Loading fallback component
@@ -53,55 +45,6 @@ function App() {
       />
       <Suspense fallback={<PageLoader />}>
         <Routes>
-          <Route path={ROUTES.ADMIN_LOGIN} element={<AdminLoginPage />} />
-          <Route
-            path={ROUTES.ADMIN_DASHBOARD}
-            element={
-              <AdminProtectedRoute>
-                <AdminDashboardPage />
-              </AdminProtectedRoute>
-            }
-          />
-          <Route
-            path={ROUTES.ADMIN_BLOGS}
-            element={
-              <AdminProtectedRoute>
-                <AdminBlogsPage />
-              </AdminProtectedRoute>
-            }
-          />
-          <Route
-            path={ROUTES.ADMIN_BLOG_CREATE}
-            element={
-              <AdminProtectedRoute>
-                <AdminPostCreatePage />
-              </AdminProtectedRoute>
-            }
-          />
-          <Route
-            path={ROUTES.ADMIN_SETTINGS}
-            element={
-              <AdminProtectedRoute>
-                <AdminSettingsPage />
-              </AdminProtectedRoute>
-            }
-          />
-          <Route
-            path={ROUTES.ADMIN_PROFILE}
-            element={
-              <AdminProtectedRoute>
-                <AdminProfilePage />
-              </AdminProtectedRoute>
-            }
-          />
-          <Route
-            path={ROUTES.ADMIN_USERS}
-            element={
-              <AdminProtectedRoute>
-                <AdminUsersPage />
-              </AdminProtectedRoute>
-            }
-          />
           <Route element={<MainLayout />}>
             <Route path={ROUTES.HOME} element={<HomePage />} />
             <Route path={ROUTES.SERVICES} element={<ServicesPage />} />

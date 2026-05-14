@@ -166,7 +166,7 @@ export default function BlogArticlePage() {
             <div className="flex items-center justify-center gap-4">
               <Link to={`/blog/author/${post.author.slug}`}>
                 <img
-                  src={post.author.photoURL || post.author.avatar}
+                  src={post.author.avatar}
                   alt={post.author.name}
                   className="w-12 h-12 rounded-full object-cover ring-2 ring-border hover:ring-accent transition-all duration-300"
                 />

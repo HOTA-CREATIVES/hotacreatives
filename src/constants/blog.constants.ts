@@ -7,15 +7,14 @@ import type {
 } from "@/interfaces/blog.interfaces";
 
 // ── Authors ─────────────────────────────────────────────────────────────
+
 export const BLOG_AUTHORS: BlogAuthor[] = [
   {
     id: "author-1",
     name: "Chinni Suryan",
     slug: "chinni-suryan",
     avatar:
-      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop&crop=face",
-    photoURL:
-      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop&crop=face",
+      "https://res.cloudinary.com/diiyy6bar/image/upload/v1778660479/WhatsApp_Image_2026-04-24_at_11.24.35_PM_c4ewol.jpg",
     role: "Founder of HOTA",
     bio: "Chinni is the founder of HOTA, a creative growth agency focused on positioning brands for dominance.",
     socialLinks: {
