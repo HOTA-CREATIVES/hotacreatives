@@ -29,3 +29,11 @@ dist-ssr
 *firebase-adminsdk*.json
 .secrets/
 secrets/
+
+# Environment files
+.env
+src/.env
+
+# Local Database Backups
+firestore-backup.json
+

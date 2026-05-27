@@ -10,7 +10,7 @@ export function useScrollDirection() {
 
   useEffect(() => {
     const toggleScrollDirection = () => {
-      let scrollY = window.scrollY;
+      const scrollY = window.scrollY;
       if (scrollY === 0) {
         setScrollDirection("up");
       }

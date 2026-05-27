@@ -46,22 +46,22 @@ service cloud.firestore {
 
     // Public blog data can be read by anyone.
     // Only authenticated admins can create/update/delete.
-    match /blog_posts/{postId} {
+    match /posts/{postId} {
       allow read: if true;
       allow write: if isAdmin();
     }
 
-    match /blog_authors/{authorId} {
+    match /authors/{authorId} {
       allow read: if true;
       allow write: if isAdmin();
     }
 
-    match /blog_categories/{categoryId} {
+    match /categories/{categoryId} {
       allow read: if true;
       allow write: if isAdmin();
     }
 
-    match /blog_tags/{tagId} {
+    match /tags/{tagId} {
       allow read: if true;
       allow write: if isAdmin();
     }

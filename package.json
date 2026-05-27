@@ -7,9 +7,12 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
+    "format": "prettier --write .",
+    "type-check": "tsc --noEmit",
     "preview": "vite preview",
     "test": "vitest",
-    "test:run": "vitest run"
+    "test:run": "vitest run",
+    "analyze": "node scripts/analyze-repo.js"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",

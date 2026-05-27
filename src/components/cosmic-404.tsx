@@ -36,7 +36,7 @@ export function Globe({ className, config = GLOBE_CONFIG }: GlobeProps) {
   const phiRef = useRef(0);
   const widthRef = useRef(0);
 
-  const onRender = useCallback((state: Record<string, any>) => {
+  const onRender = useCallback((state: Record<string, number>) => {
     phiRef.current += 0.005; 
     state.phi = phiRef.current;
     state.width = widthRef.current * 2;

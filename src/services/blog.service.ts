@@ -49,7 +49,60 @@ function toIsoDate(value: unknown): string {
   return new Date().toISOString();
 }
 
-function mapAuthor(raw: any): BlogAuthor {
+interface RawAuthor {
+  id?: string;
+  name?: string;
+  slug?: string;
+  avatar?: string;
+  role?: string;
+  bio?: string;
+  socialLinks?: BlogAuthor["socialLinks"];
+}
+
+interface RawCategory {
+  id?: string;
+  name?: string;
+  slug?: string;
+  description?: string;
+  color?: string;
+}
+
+interface RawTag {
+  id?: string;
+  name?: string;
+  slug?: string;
+}
+
+interface RawPost {
+  id?: string;
+  title?: string;
+  slug?: string;
+  metaDescription?: string;
+  excerpt?: string;
+  coverImage?: string;
+  coverImageAlt?: string;
+  authorSnapshot?: RawAuthor;
+  author?: RawAuthor;
+  authorId?: string;
+  authorSlug?: string;
+  authorName?: string;
+  categorySnapshot?: RawCategory;
+  category?: RawCategory;
+  categoryId?: string;
+  categorySlug?: string;
+  categoryName?: string;
+  tagSnapshots?: RawTag[];
+  tags?: RawTag[];
+  publishedAt?: unknown;
+  publishDate?: unknown;
+  updatedAt?: unknown;
+  readTime?: number;
+  featured?: boolean;
+  content?: BlogPost["content"];
+  relatedPostIds?: string[];
+}
+
+function mapAuthor(raw: RawAuthor): BlogAuthor {
   const avatar =
     raw?.avatar ||
     "https://res.cloudinary.com/diiyy6bar/image/upload/v1778660479/WhatsApp_Image_2026-04-24_at_11.24.35_PM_c4ewol.jpg";
@@ -65,7 +118,7 @@ function mapAuthor(raw: any): BlogAuthor {
   };
 }
 
-function mapCategory(raw: any): BlogCategory {
+function mapCategory(raw: RawCategory): BlogCategory {
   return {
     id: raw?.id || "cat-unknown",
     name: raw?.name || "Uncategorized",
@@ -75,7 +128,7 @@ function mapCategory(raw: any): BlogCategory {
   };
 }
 
-function mapTag(raw: any): BlogTag {
+function mapTag(raw: RawTag): BlogTag {
   return {
     id: raw?.id || "tag-unknown",
     name: raw?.name || "General",
@@ -110,7 +163,7 @@ function generateSearchTokens(...values: string[]): string[] {
   return Array.from(tokenSet);
 }
 
-function mapPost(docId: string, raw: any): BlogPost {
+function mapPost(docId: string, raw: RawPost): BlogPost {
   const author = mapAuthor(
     raw.authorSnapshot ||
       raw.author || {
@@ -342,7 +395,7 @@ function toFirestorePost(payload: AdminBlogPayload) {
 export async function getPublishedBlogPosts(): Promise<BlogPost[]> {
   try {
     const q = query(
-      collection(db, "blog_posts"),
+      collection(db, "posts"),
       where("status", "==", "published"),
       orderBy("publishDate", "desc"),
     );
@@ -357,7 +410,7 @@ export async function getPublishedBlogPosts(): Promise<BlogPost[]> {
 export async function getFeaturedBlogPost(): Promise<BlogPost | null> {
   try {
     const q = query(
-      collection(db, "blog_posts"),
+      collection(db, "posts"),
       where("status", "==", "published"),
       where("featured", "==", true),
       orderBy("publishDate", "desc"),
@@ -378,7 +431,7 @@ export async function getBlogPostBySlugFromDb(
 ): Promise<BlogPost | null> {
   try {
     const q = query(
-      collection(db, "blog_posts"),
+      collection(db, "posts"),
       where("status", "==", "published"),
       where("slug", "==", slug),
       limit(1),
@@ -401,7 +454,7 @@ export async function getRelatedPostsFromDb(
   try {
     const ids = post.relatedPostIds.slice(0, 10);
     const q = query(
-      collection(db, "blog_posts"),
+      collection(db, "posts"),
       where(documentId(), "in", ids),
     );
     const snapshot = await getDocs(q);
@@ -417,7 +470,7 @@ export async function getRelatedPostsFromDb(
 
 export async function getBlogCategoriesFromDb(): Promise<BlogCategory[]> {
   try {
-    const snapshot = await getDocs(collection(db, "blog_categories"));
+    const snapshot = await getDocs(collection(db, "categories"));
     return snapshot.docs.map((d) => mapCategory({ id: d.id, ...d.data() }));
   } catch {
     return BLOG_CATEGORIES;
@@ -429,7 +482,7 @@ export async function getBlogAuthorBySlugFromDb(
 ): Promise<BlogAuthor | null> {
   try {
     const q = query(
-      collection(db, "blog_authors"),
+      collection(db, "authors"),
       where("slug", "==", slug),
       limit(1),
     );
@@ -447,7 +500,7 @@ export async function getPostsByAuthorSlugFromDb(
 ): Promise<BlogPost[]> {
   try {
     const q = query(
-      collection(db, "blog_posts"),
+      collection(db, "posts"),
       where("status", "==", "published"),
       where("authorSlug", "==", slug),
       orderBy("publishDate", "desc"),
@@ -466,7 +519,7 @@ export async function getPostsByCategorySlugFromDb(
 ): Promise<BlogPost[]> {
   try {
     const q = query(
-      collection(db, "blog_posts"),
+      collection(db, "posts"),
       where("status", "==", "published"),
       where("categorySlug", "==", slug),
       orderBy("publishDate", "desc"),
@@ -480,7 +533,7 @@ export async function getPostsByCategorySlugFromDb(
 
 export async function getBlogPostsForAdmin(): Promise<BlogPost[]> {
   try {
-    const snapshot = await getDocs(collection(db, "blog_posts"));
+    const snapshot = await getDocs(collection(db, "posts"));
     return snapshot.docs
       .map((item) => mapPost(item.id, item.data()))
       .sort(
@@ -494,7 +547,7 @@ export async function getBlogPostsForAdmin(): Promise<BlogPost[]> {
 
 export async function getBlogAuthorsForAdmin(): Promise<BlogAuthor[]> {
   try {
-    const snapshot = await getDocs(collection(db, "blog_authors"));
+    const snapshot = await getDocs(collection(db, "authors"));
     if (snapshot.empty) {
       return BLOG_AUTHORS.length > 0
         ? BLOG_AUTHORS
@@ -525,11 +578,11 @@ export async function syncBlogAuthorAvatarFromProfile(
   const authorSlug = slugify(authorName);
   const [authorsSnapshot, postsSnapshot] = await Promise.all([
     getDocs(
-      query(collection(db, "blog_authors"), where("slug", "==", authorSlug)),
+      query(collection(db, "authors"), where("slug", "==", authorSlug)),
     ),
     getDocs(
       query(
-        collection(db, "blog_posts"),
+        collection(db, "posts"),
         where("authorSlug", "==", authorSlug),
       ),
     ),
@@ -559,7 +612,7 @@ export async function syncBlogAuthorAvatarFromProfile(
 
 export async function getBlogCategoriesForAdmin(): Promise<BlogCategory[]> {
   try {
-    const snapshot = await getDocs(collection(db, "blog_categories"));
+    const snapshot = await getDocs(collection(db, "categories"));
     if (snapshot.empty) {
       return BLOG_CATEGORIES;
     }
@@ -574,7 +627,7 @@ export async function getBlogCategoriesForAdmin(): Promise<BlogCategory[]> {
 
 export async function getBlogTagsForAdmin(): Promise<BlogTag[]> {
   try {
-    const snapshot = await getDocs(collection(db, "blog_tags"));
+    const snapshot = await getDocs(collection(db, "tags"));
     if (snapshot.empty) {
       return BLOG_TAGS;
     }
@@ -586,7 +639,7 @@ export async function getBlogTagsForAdmin(): Promise<BlogTag[]> {
 }
 
 export async function createBlogPostFromAdmin(payload: AdminBlogPayload) {
-  const ref = doc(db, "blog_posts", payload.id);
+  const ref = doc(db, "posts", payload.id);
   await setDoc(ref, toFirestorePost(payload));
 }
 
@@ -594,7 +647,7 @@ export async function updateBlogPostFromAdmin(
   postId: string,
   payload: AdminBlogPayload,
 ) {
-  const ref = doc(db, "blog_posts", postId);
+  const ref = doc(db, "posts", postId);
   const { createdAt, ...data } = toFirestorePost(payload);
   void createdAt;
   await updateDoc(ref, {
@@ -604,13 +657,13 @@ export async function updateBlogPostFromAdmin(
 }
 
 export async function deleteBlogPostFromAdmin(postId: string) {
-  const ref = doc(db, "blog_posts", postId);
+  const ref = doc(db, "posts", postId);
   await deleteDoc(ref);
 }
 
 export async function createBlogAuthorFromAdmin(payload: AdminAuthorPayload) {
   const id = payload.id || `author-${slugify(payload.slug || payload.name)}`;
-  const ref = doc(db, "blog_authors", id);
+  const ref = doc(db, "authors", id);
   await setDoc(ref, toFirestoreAuthor({ ...payload, id }));
 }
 
@@ -618,7 +671,7 @@ export async function updateBlogAuthorFromAdmin(
   authorId: string,
   payload: AdminAuthorPayload,
 ) {
-  const ref = doc(db, "blog_authors", authorId);
+  const ref = doc(db, "authors", authorId);
   const { createdAt, ...data } = toFirestoreAuthor(payload);
   void createdAt;
   await updateDoc(ref, {
@@ -628,7 +681,7 @@ export async function updateBlogAuthorFromAdmin(
 }
 
 export async function deleteBlogAuthorFromAdmin(authorId: string) {
-  const ref = doc(db, "blog_authors", authorId);
+  const ref = doc(db, "authors", authorId);
   await deleteDoc(ref);
 }
 
@@ -636,7 +689,7 @@ export async function createBlogCategoryFromAdmin(
   payload: AdminCategoryPayload,
 ) {
   const id = payload.id || `cat-${slugify(payload.slug || payload.name)}`;
-  const ref = doc(db, "blog_categories", id);
+  const ref = doc(db, "categories", id);
   await setDoc(ref, toFirestoreCategory({ ...payload, id }));
 }
 
@@ -644,7 +697,7 @@ export async function updateBlogCategoryFromAdmin(
   categoryId: string,
   payload: AdminCategoryPayload,
 ) {
-  const ref = doc(db, "blog_categories", categoryId);
+  const ref = doc(db, "categories", categoryId);
   const { createdAt, ...data } = toFirestoreCategory(payload);
   void createdAt;
   await updateDoc(ref, {
@@ -654,13 +707,13 @@ export async function updateBlogCategoryFromAdmin(
 }
 
 export async function deleteBlogCategoryFromAdmin(categoryId: string) {
-  const ref = doc(db, "blog_categories", categoryId);
+  const ref = doc(db, "categories", categoryId);
   await deleteDoc(ref);
 }
 
 export async function createBlogTagFromAdmin(payload: AdminTagPayload) {
   const id = payload.id || `tag-${slugify(payload.slug || payload.name)}`;
-  const ref = doc(db, "blog_tags", id);
+  const ref = doc(db, "tags", id);
   await setDoc(ref, toFirestoreTag({ ...payload, id }));
 }
 
@@ -668,7 +721,7 @@ export async function updateBlogTagFromAdmin(
   tagId: string,
   payload: AdminTagPayload,
 ) {
-  const ref = doc(db, "blog_tags", tagId);
+  const ref = doc(db, "tags", tagId);
   const { createdAt, ...data } = toFirestoreTag(payload);
   void createdAt;
   await updateDoc(ref, {
@@ -678,6 +731,6 @@ export async function updateBlogTagFromAdmin(
 }
 
 export async function deleteBlogTagFromAdmin(tagId: string) {
-  const ref = doc(db, "blog_tags", tagId);
+  const ref = doc(db, "tags", tagId);
   await deleteDoc(ref);
 }

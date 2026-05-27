@@ -111,7 +111,7 @@ export default function ContactPage() {
           style: { background: "#ef4444", color: "#fff" },
         });
       }
-    } catch (err) {
+    } catch {
       const msg =
         "Network error \u2013 please check your connection and try again.";
       setErrorMsg(msg);
