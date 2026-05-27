@@ -19,18 +19,18 @@ import {
   TrendingUp,
 } from "lucide-react";
 import { toast } from "sonner";
-import { useSEO } from "@/components/shell/SEO";
+import { useSEO } from "@/components/shared/SEO";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/base/card";
-import { Button } from "@/components/base/button";
-import { Input } from "@/components/base/input";
-import { Textarea } from "@/components/base/textarea";
-import { InteractiveHoverButton } from "@/components/composite/interactive-hover-button";
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { InteractiveHoverButton } from "@/components/ui/interactive-hover-button";
 import { socialLinks } from "@/constants";
 import {
   Form,
@@ -39,7 +39,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/base/form";
+} from "@/components/ui/form";
 
 const AUDIT_APPS_SCRIPT_URL =
   "https://script.google.com/macros/s/AKfycbwnlKBfblE-gXXulkmIrmmdYT2eqjAJMdWjamtlxP7QLMtZ-NJcRPyxDgHF40h4SfmW/exec";

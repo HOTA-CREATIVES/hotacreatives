@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { motion, type Variants } from "framer-motion";
-import HomeCTAButton from "@/components/composite/HomeCTAButton";
-import Hero3DBackground from "@/components/composite/Hero3DBackground";
+import HomeCTAButton from "@/components/ui/HomeCTAButton";
+import Hero3DBackground from "@/components/visual-effects/Hero3DBackground";
 
 const containerVariants: Variants = {
   hidden: { opacity: 0 },

@@ -18,12 +18,12 @@ import { getFirestore, Timestamp } from "firebase-admin/firestore";
 
 // ── Firebase Config ─────────────────────────────────────────────────────
 const firebaseConfig = {
-  apiKey: "AIzaSyDrYywtTJYG1dJdpwMQVQEy6nNw98vzNdA",
-  authDomain: "hota-creatives.firebaseapp.com",
-  projectId: "hota-creatives",
-  storageBucket: "hota-creatives.firebasestorage.app",
-  messagingSenderId: "376861675756",
-  appId: "1:376861675756:web:d610c170580e680f4f55c9",
+  apiKey: process.env.VITE_FIREBASE_API_KEY || "AIzaSyDrYywtTJYG1dJdpwMQVQEy6nNw98vzNdA",
+  authDomain: process.env.VITE_FIREBASE_AUTH_DOMAIN || "hota-creatives.firebaseapp.com",
+  projectId: process.env.VITE_FIREBASE_PROJECT_ID || "hota-creatives",
+  storageBucket: process.env.VITE_FIREBASE_STORAGE_BUCKET || "hota-creatives.firebasestorage.app",
+  messagingSenderId: process.env.VITE_FIREBASE_MESSAGING_SENDER_ID || "376861675756",
+  appId: process.env.VITE_FIREBASE_APP_ID || "1:376861675756:web:d610c170580e680f4f55c9",
 };
 
 function getAdminCredential() {

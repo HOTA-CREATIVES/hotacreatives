@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
-import type { BlogHeading } from "@/interfaces/blog.interfaces";
+import type { BlogHeading } from "@/types/blog.interfaces";
 
 interface TableOfContentsProps {
   headings: BlogHeading[];

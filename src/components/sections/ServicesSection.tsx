@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
-import { Button } from "@/components/base/button";
-import LottieAnimation from "@/components/composite/LottieAnimation";
+import { Button } from "@/components/ui/button";
+import LottieAnimation from "@/components/ui/LottieAnimation";
 import { LOTTIE_ANIMATIONS } from "../../constants";
 
 /* ------------------------------------------------------------------ */

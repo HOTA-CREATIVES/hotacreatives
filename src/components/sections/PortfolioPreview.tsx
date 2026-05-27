@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { ArrowRight, ExternalLink } from "lucide-react";
 import { motion } from "framer-motion";
-import { Button } from "@/components/base/button";
+import { Button } from "@/components/ui/button";
 
 const portfolioItems = [
   {

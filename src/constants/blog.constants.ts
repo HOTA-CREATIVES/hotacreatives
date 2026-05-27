@@ -4,7 +4,7 @@ import type {
   BlogCategory,
   BlogTag,
   BlogPost,
-} from "@/interfaces/blog.interfaces";
+} from "@/types/blog.interfaces";
 
 // ── Authors ─────────────────────────────────────────────────────────────
 

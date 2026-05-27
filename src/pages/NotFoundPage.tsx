@@ -2,7 +2,7 @@ import { AnimatePresence, motion, type Variants } from "framer-motion";
 import { ArrowLeftIcon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Globe } from "@/components/cosmic-404";
-import { Button } from "@/components/base/button";
+import { Button } from "@/components/ui/button";
 import { ROUTES } from "@/routes";
 
 const fadeUp: Variants = {

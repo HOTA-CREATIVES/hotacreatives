@@ -18,26 +18,26 @@ import {
   ArrowRight,
 } from "lucide-react";
 import { toast } from "sonner";
-import { useSEO } from "@/components/shell/SEO";
+import { useSEO } from "@/components/shared/SEO";
 import { contact, socialLinks, LOTTIE_ANIMATIONS } from "../constants";
-import LottieAnimation from "@/components/composite/LottieAnimation";
-import { Button } from "@/components/base/button";
-import { Input } from "@/components/base/input";
-import { Textarea } from "@/components/base/textarea";
+import LottieAnimation from "@/components/ui/LottieAnimation";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/base/card";
+} from "@/components/ui/card";
 import {
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
-} from "@/components/base/tabs";
-import { InteractiveHoverButton } from "@/components/composite/interactive-hover-button";
+} from "@/components/ui/tabs";
+import { InteractiveHoverButton } from "@/components/ui/interactive-hover-button";
 import {
   Form,
   FormControl,
@@ -45,7 +45,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/base/form";
+} from "@/components/ui/form";
 
 const formSchema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters." }),

@@ -1,5 +1,5 @@
 import { Info, AlertTriangle, Lightbulb, StickyNote } from "lucide-react";
-import type { BlogContentBlock } from "@/interfaces/blog.interfaces";
+import type { BlogContentBlock } from "@/types/blog.interfaces";
 
 interface BlogArticleContentProps {
   content: BlogContentBlock[];

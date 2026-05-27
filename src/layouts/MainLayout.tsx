@@ -1,8 +1,8 @@
 import { Outlet } from "react-router-dom";
-import Navbar from "@/components/shell/Navbar";
-import Footer from "@/components/shell/Footer";
-import WhatsAppFAB from "@/components/shell/WhatsAppFAB";
-import CustomCursor from "@/components/shell/CustomCursor";
+import Navbar from "@/components/shared/Navbar";
+import Footer from "@/components/shared/Footer";
+import WhatsAppFAB from "@/components/shared/WhatsAppFAB";
+import CustomCursor from "@/components/shared/CustomCursor";
 
 export default function MainLayout() {
   return (

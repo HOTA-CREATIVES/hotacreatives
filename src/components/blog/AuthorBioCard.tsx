@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { Linkedin, Twitter, Globe, Instagram } from "lucide-react";
-import type { BlogAuthor } from "@/interfaces/blog.interfaces";
+import type { BlogAuthor } from "@/types/blog.interfaces";
 
 interface AuthorBioCardProps {
   author: BlogAuthor;

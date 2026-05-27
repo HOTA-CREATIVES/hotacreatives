@@ -1,4 +1,4 @@
-import type { BlogCategory } from "@/interfaces/blog.interfaces";
+import type { BlogCategory } from "@/types/blog.interfaces";
 
 interface BlogCategoryFilterProps {
   categories: BlogCategory[];

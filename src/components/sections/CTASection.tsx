@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import HomeCTAButton from "@/components/composite/HomeCTAButton";
+import HomeCTAButton from "@/components/ui/HomeCTAButton";
 
 const ctaBullets = [
   "Brand positioning audit",

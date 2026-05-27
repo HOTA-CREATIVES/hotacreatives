@@ -11,10 +11,10 @@ const PackagesPage = lazy(() => import("@/pages/PackagesPage"));
 const PortfolioPage = lazy(() => import("@/pages/PortfolioPage"));
 const ContactPage = lazy(() => import("@/pages/ContactPage"));
 const FreeAuditPage = lazy(() => import("@/pages/FreeAuditPage"));
-const BlogListingPage = lazy(() => import("@/pages/BlogListingPage"));
-const BlogArticlePage = lazy(() => import("@/pages/BlogArticlePage"));
-const BlogAuthorPage = lazy(() => import("@/pages/BlogAuthorPage"));
-const BlogCategoryPage = lazy(() => import("@/pages/BlogCategoryPage"));
+const BlogListingPage = lazy(() => import("@/pages/blog/BlogListingPage"));
+const BlogArticlePage = lazy(() => import("@/pages/blog/BlogArticlePage"));
+const BlogAuthorPage = lazy(() => import("@/pages/blog/BlogAuthorPage"));
+const BlogCategoryPage = lazy(() => import("@/pages/blog/BlogCategoryPage"));
 const NotFoundPage = lazy(() => import("@/pages/NotFoundPage"));
 
 // Loading fallback component

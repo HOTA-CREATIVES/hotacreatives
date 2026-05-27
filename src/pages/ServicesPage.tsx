@@ -14,21 +14,21 @@ import {
   Target,
   Video,
 } from "lucide-react";
-import HomeCTAButton from "@/components/composite/HomeCTAButton";
-import { Button } from "@/components/base/button";
+import HomeCTAButton from "@/components/ui/HomeCTAButton";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/base/card";
+} from "@/components/ui/card";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components/base/tooltip";
+} from "@/components/ui/tooltip";
 import { ROUTES } from "@/routes";
 
 type Service = {

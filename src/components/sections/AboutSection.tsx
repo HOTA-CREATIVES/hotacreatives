@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { ArrowRight, Target, TrendingUp, Zap } from "lucide-react";
-import { Button } from "@/components/base/button";
-import LottieAnimation from "@/components/composite/LottieAnimation";
+import { Button } from "@/components/ui/button";
+import LottieAnimation from "@/components/ui/LottieAnimation";
 import { LOTTIE_ANIMATIONS } from "../../constants";
 
 const aboutPoints = [

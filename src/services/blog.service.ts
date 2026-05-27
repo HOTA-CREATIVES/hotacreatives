@@ -14,7 +14,7 @@ import {
   documentId,
 } from "firebase/firestore";
 import { db } from "@/services/firebase";
-import type { BlogAuthor, BlogCategory, BlogPost, BlogTag } from "@/interfaces";
+import type { BlogAuthor, BlogCategory, BlogPost, BlogTag } from "@/types";
 import {
   BLOG_AUTHORS,
   BLOG_CATEGORIES,

@@ -1,9 +1,9 @@
 // Barrel export for all components
-export { default as Navbar } from "@/components/shell/Navbar";
-export { default as Footer } from "@/components/shell/Footer";
-export { default as WhatsAppFAB } from "@/components/shell/WhatsAppFAB";
-export { default as CustomCursor } from "@/components/shell/CustomCursor";
-export { default as LottieAnimation } from "@/components/composite/LottieAnimation";
+export { default as Navbar } from "@/components/shared/Navbar";
+export { default as Footer } from "@/components/shared/Footer";
+export { default as WhatsAppFAB } from "@/components/shared/WhatsAppFAB";
+export { default as CustomCursor } from "@/components/shared/CustomCursor";
+export { default as LottieAnimation } from "@/components/ui/LottieAnimation";
 // SEO is no longer exported from ./common/SEO
 
 // Blog components
