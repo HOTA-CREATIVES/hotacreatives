@@ -6,7 +6,11 @@ import BlogCategoryFilter from "@/components/blog/BlogCategoryFilter";
 import BlogSEO from "@/components/blog/BlogSEO";
 import NewsletterCTA from "@/components/blog/NewsletterCTA";
 import { useInView } from "@/hooks/useInView";
-import { getBlogCategoriesFromDb, getPublishedBlogPosts } from "@/services";
+import {
+  getBlogCategoriesFromDb,
+  getPublishedBlogPosts,
+  getFeaturedBlogPost,
+} from "@/services";
 import type { BlogPost, BlogCategory } from "@/interfaces";
 
 export default function BlogListingPage() {
@@ -15,6 +19,7 @@ export default function BlogListingPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [categories, setCategories] = useState<BlogCategory[]>([]);
+  const [featuredPost, setFeaturedPost] = useState<BlogPost | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -41,7 +46,24 @@ export default function BlogListingPage() {
     };
   }, []);
 
-  const featuredPost = posts.find((p) => p.featured);
+  // Fetch featured post separately to ensure fallback is used when DB has no featured flag
+  useEffect(() => {
+    let isMounted = true;
+    async function loadFeatured() {
+      try {
+        const fp = await getFeaturedBlogPost();
+        if (!isMounted) return;
+        setFeaturedPost(fp);
+      } catch {
+        if (isMounted) setFeaturedPost(null);
+      }
+    }
+
+    loadFeatured();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   const filteredPosts = useMemo(() => {
     let result = categoryParam
@@ -59,7 +81,7 @@ export default function BlogListingPage() {
       );
     }
 
-    // Don't show featured post in grid if no filters are active
+    // Don't show featured post in grid if hero is displayed
     if (!categoryParam && !searchQuery.trim() && featuredPost) {
       result = result.filter((p) => p.id !== featuredPost.id);
     }
@@ -107,14 +129,7 @@ export default function BlogListingPage() {
 
           {/* Featured Hero Article */}
           {showFeaturedHero && featuredPost && (
-            <div
-              ref={heroRef}
-              className={`mb-16 transition-all duration-700 ${
-                heroInView
-                  ? "opacity-100 translate-y-0"
-                  : "opacity-0 translate-y-8"
-              }`}
-            >
+            <div ref={heroRef} className="mb-16">
               <BlogCard post={featuredPost} variant="hero" />
             </div>
           )}
