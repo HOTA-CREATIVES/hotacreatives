@@ -50,7 +50,9 @@ function toIsoDate(value: unknown): string {
 }
 
 function mapAuthor(raw: any): BlogAuthor {
-  const avatar = raw?.avatar || "";
+  const avatar =
+    raw?.avatar ||
+    "https://res.cloudinary.com/diiyy6bar/image/upload/v1778660479/WhatsApp_Image_2026-04-24_at_11.24.35_PM_c4ewol.jpg";
 
   return {
     id: raw?.id || "author-1",
