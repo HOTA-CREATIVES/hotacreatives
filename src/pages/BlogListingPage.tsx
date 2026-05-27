@@ -97,7 +97,7 @@ export default function BlogListingPage() {
     }
   };
 
-  const { ref: heroRef, inView: heroInView } = useInView({ threshold: 0.1 });
+  const { ref: heroRef } = useInView({ threshold: 0.1 });
   const { ref: filterRef, inView: filterInView } = useInView({
     threshold: 0.1,
   });
