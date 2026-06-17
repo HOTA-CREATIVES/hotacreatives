@@ -31,7 +31,7 @@ export default function HeroSection() {
   const navigate = useNavigate();
 
   return (
-    <section className="relative -mt-20 flex min-h-[calc(100vh+5rem)] w-full flex-col justify-start overflow-hidden bg-bg-primary md:justify-start">
+    <section className="relative -mt-20 flex w-full flex-col justify-end overflow-hidden bg-bg-primary min-h-[70vh] md:min-h-[calc(100vh+5rem)] md:justify-start">
       <div
         className="absolute inset-0 z-[1] pointer-events-none"
         aria-hidden="true"
@@ -41,16 +41,8 @@ export default function HeroSection() {
       <div className="absolute inset-0 z-[2] bg-[radial-gradient(circle_at_top_left,rgba(244,194,13,0.16),transparent_32%),radial-gradient(circle_at_75%_20%,rgba(244,194,13,0.08),transparent_25%),linear-gradient(180deg,rgba(0,0,0,0.2),rgba(0,0,0,0.72)_48%,rgba(0,0,0,0.96)_100%)] pointer-events-none" />
       <div className="absolute inset-0 z-[3] bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-size-[40px_40px] opacity-40 pointer-events-none" />
 
-      <div className="relative z-10 mx-auto w-full max-w-7xl px-4 pt-22 sm:px-6 md:pt-20 lg:px-6 lg:pt-24">
-        <motion.div
-          initial="hidden"
-          animate="visible"
-          variants={containerVariants}
-          className="max-w-4xl"
-        />
-      </div>
 
-      <div className="relative z-10 mx-auto w-full max-w-7xl px-4 pb-12 pt-4 sm:px-6 sm:pb-24 md:pt-6 lg:px-6 lg:pb-28">
+      <div className="relative z-10 mx-auto w-full max-w-7xl px-4 pb-12 pt-28 sm:px-6 sm:pb-20 md:pt-44 md:pb-24 lg:px-6 lg:pb-28">
         <motion.div
           initial="hidden"
           animate="visible"

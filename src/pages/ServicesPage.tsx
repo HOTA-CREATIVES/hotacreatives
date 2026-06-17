@@ -1,5 +1,5 @@
-import { useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useMemo, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
   ArrowRight,
   BarChart3,
@@ -216,7 +216,18 @@ const metricHints = [
 
 export default function ServicesPage() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [activeServiceId, setActiveServiceId] = useState(services[0].id);
+
+  useEffect(() => {
+    const state = location.state as { serviceId?: string } | null;
+    if (state?.serviceId) {
+      const exists = services.some((s) => s.id === state.serviceId);
+      if (exists) {
+        setActiveServiceId(state.serviceId);
+      }
+    }
+  }, [location.state]);
 
   const activeService = useMemo(
     () => services.find((service) => service.id === activeServiceId) ?? services[0],
