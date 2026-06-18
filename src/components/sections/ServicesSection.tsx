@@ -143,7 +143,7 @@ function ServiceCard({ service }: { service: Service }) {
 /* ------------------------------------------------------------------ */
 export default function ServicesSection() {
   return (
-    <section className="relative overflow-hidden py-24 bg-bg-secondary">
+    <section className="relative overflow-hidden py-14 md:py-24 bg-bg-secondary">
       <div className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-accent/20 to-transparent" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

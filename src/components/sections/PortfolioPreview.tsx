@@ -5,29 +5,32 @@ import { Button } from "@/components/ui/button";
 
 const portfolioItems = [
   {
-    title: "Fashion Brand Concept",
-    category: "Sample Direction",
+    title: "Haanav Eviors",
+    category: "Luxury Events & Interior Architecture",
     description:
-      "Conceptual creative direction for a D2C fashion brand across content, visual identity, and positioning.",
+      "A premium brand website for a luxury event production and interior architecture firm — combining bespoke high-end event management with modern minimalist design.",
     image:
-      "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=600&h=400&fit=crop",
-  },
-  // Adding placeholder items to demonstrate the grid animation since there's only one.
-  {
-    title: "Eco-Friendly Packaging",
-    category: "Brand Design",
-    description:
-      "Sustainable packing materials for a modern skincare line emphasizing minimal impact.",
-    image:
-      "https://images.unsplash.com/photo-1610461888750-10bfc601b874?w=600&h=400&fit=crop",
+      "https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=600&h=400&fit=crop",
+    url: "https://www.haanaveviors.com/",
   },
   {
-    title: "Tech Startup Campaign",
-    category: "Growth Strategy",
+    title: "FitGym Elite",
+    category: "Fitness & SaaS Platform",
     description:
-      "A complete digital overhaul for a SaaS platform leading to 300% increased conversion.",
-    image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600&h=400&fit=crop",
-  }
+      "A high-performance gym and fitness SaaS platform featuring workout trackers, diet planners, gamified challenges, and premium membership flows.",
+    image:
+      "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=600&h=400&fit=crop",
+    url: "https://fit-gym-rosy-sigma.vercel.app/",
+  },
+  {
+    title: "Grand Occasion",
+    category: "Event Venue Booking",
+    description:
+      "A premium banquet hall booking platform with real-time availability, seamless reservation management, and elegant event coordination.",
+    image:
+      "https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=600&h=400&fit=crop",
+    url: "https://grand-occassion.vercel.app/",
+  },
 ];
 
 const containerVariants = {
@@ -109,11 +112,14 @@ export default function PortfolioPreview() {
           className="grid gap-8 lg:grid-cols-3"
         >
           {portfolioItems.map((item) => (
-            <motion.div
+            <motion.a
               variants={itemVariants}
               whileHover={{ y: -8 }}
               key={item.title}
-              className="group relative overflow-hidden rounded-[2.5rem] border border-white/5 bg-black/40 shadow-2xl transition-all duration-500 hover:border-accent/40 hover:shadow-[0_8px_30px_rgba(244,194,13,0.15)]"
+              href={item.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group relative overflow-hidden rounded-[2.5rem] border border-white/5 bg-black/40 shadow-2xl transition-all duration-500 hover:border-accent/40 hover:shadow-[0_8px_30px_rgba(244,194,13,0.15)] block cursor-pointer"
             >
               <div className="aspect-4/5 overflow-hidden">
                 <img
@@ -141,7 +147,7 @@ export default function PortfolioPreview() {
                   />
                 </div>
               </div>
-            </motion.div>
+            </motion.a>
           ))}
         </motion.div>
       </div>

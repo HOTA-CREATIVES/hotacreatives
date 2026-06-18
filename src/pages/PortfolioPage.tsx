@@ -3,13 +3,34 @@ import { ExternalLink } from "lucide-react";
 
 const portfolioItems = [
   {
-    title: "Restaurant Web application ",
-    category: "Food & Beverage",
+    title: "Haanav Eviors",
+    category: "Luxury Events & Interior Architecture",
     description:
-      "A fully responsive web application for a restaurant chain, featuring menu browsing, online ordering, and reservation management.",
+      "A premium brand website for a luxury event production and interior architecture firm — combining bespoke high-end event management with modern minimalist design language.",
     image:
-      "https://res.cloudinary.com/diiyy6bar/image/upload/v1772165721/Screenshot_2025-11-12_151018_v1va6o.png",
-    results: "Improved customer engagement and streamlined operations",
+      "https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=800&h=450&fit=crop",
+    results: "Premium brand positioning & digital presence",
+    url: "https://www.haanaveviors.com/",
+  },
+  {
+    title: "FitGym Elite",
+    category: "Fitness & SaaS Platform",
+    description:
+      "A high-performance gym and fitness SaaS platform featuring workout trackers, diet planners, gamified challenges, and premium membership flows.",
+    image:
+      "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=800&h=450&fit=crop",
+    results: "Full-stack SaaS web application with interactive UI",
+    url: "https://fit-gym-rosy-sigma.vercel.app/",
+  },
+  {
+    title: "Grand Occasion",
+    category: "Event Venue Booking",
+    description:
+      "A premium banquet hall booking platform with real-time availability, seamless reservation management, and elegant event coordination for weddings and corporate events.",
+    image:
+      "https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=800&h=450&fit=crop",
+    results: "Streamlined booking flow & venue management",
+    url: "https://grand-occassion.vercel.app/",
   },
 ];
 
@@ -37,14 +58,17 @@ export default function PortfolioPage() {
       {/* Grid */}
       <section className="py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-2xl mx-auto">
+          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
             {portfolioItems.map((item) => (
-              <div
+              <a
                 key={item.title}
-                className="group relative overflow-hidden rounded-3xl bg-bg-card border border-border hover:border-accent/30 transition-all duration-500"
+                href={item.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group relative overflow-hidden rounded-3xl bg-bg-card border border-border hover:border-accent/30 transition-all duration-500 flex flex-col h-full cursor-pointer hover:shadow-[0_8px_30px_rgba(244,194,13,0.1)]"
               >
                 {/* Image */}
-                <div className="aspect-[16/9] overflow-hidden">
+                <div className="aspect-[16/9] overflow-hidden relative">
                   <img
                     src={item.image}
                     alt={item.title}
@@ -54,27 +78,27 @@ export default function PortfolioPage() {
                 </div>
 
                 {/* Content */}
-                <div className="p-8">
+                <div className="p-6 sm:p-8 flex flex-col flex-1">
                   <span className="text-xs font-semibold uppercase tracking-wider text-accent">
                     {item.category}
                   </span>
-                  <h3 className="text-2xl font-bold mt-2 mb-3 group-hover:text-accent transition-colors duration-300">
+                  <h3 className="text-xl sm:text-2xl font-bold mt-2 mb-3 group-hover:text-accent transition-colors duration-300">
                     {item.title}
                   </h3>
-                  <p className="text-text-secondary text-base leading-relaxed mb-4">
+                  <p className="text-text-secondary text-sm sm:text-base leading-relaxed mb-6 flex-1">
                     {item.description}
                   </p>
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm font-bold text-accent bg-accent/10 px-4 py-2 rounded-full">
+                  <div className="flex items-center justify-between gap-3 mt-auto">
+                    <span className="text-xs sm:text-sm font-bold text-accent bg-accent/10 px-3 sm:px-4 py-2 rounded-full">
                       {item.results}
                     </span>
                     <ExternalLink
                       size={18}
-                      className="text-text-muted group-hover:text-accent transition-colors duration-300"
+                      className="text-text-muted group-hover:text-accent transition-colors duration-300 shrink-0"
                     />
                   </div>
                 </div>
-              </div>
+              </a>
             ))}
           </div>
         </div>

@@ -1,7 +1,11 @@
 import { useCallback, useEffect, useRef } from "react";
 import createGlobe from "cobe";
 
-export default function Hero3DBackground() {
+interface Hero3DBackgroundProps {
+  inline?: boolean;
+}
+
+export default function Hero3DBackground({ inline = false }: Hero3DBackgroundProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const phiRef = useRef(0);
   const widthRef = useRef(0);
@@ -83,6 +87,23 @@ export default function Hero3DBackground() {
       phiRef.current = delta / 220; // adjust drag sensitivity
     }
   };
+
+  if (inline) {
+    return (
+      <div className="w-full h-full flex items-center justify-center select-none">
+        <div className="w-full h-full aspect-square relative opacity-70">
+          <canvas
+            ref={canvasRef}
+            onPointerDown={onPointerDown}
+            onPointerUp={onPointerUp}
+            onPointerOut={onPointerUp}
+            onPointerMove={onPointerMove}
+            className="w-full h-full [contain:layout_paint_size] pointer-events-auto cursor-grab transition-all duration-300"
+          />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="absolute inset-0 flex items-center justify-center lg:justify-end lg:pr-12 pointer-events-none overflow-hidden select-none">

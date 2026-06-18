@@ -36,7 +36,7 @@ export default function CTASection() {
   const navigate = useNavigate();
 
   return (
-    <section className="relative overflow-hidden bg-bg-secondary py-24">
+    <section className="relative overflow-hidden bg-bg-secondary py-14 md:py-24">
       <div className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-accent/20 to-transparent" />
       <div className="absolute inset-0">
         <div className="absolute left-1/2 top-1/2 h-144 w-[40rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent/5 blur-[120px]" />
