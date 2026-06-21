@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Star, ChevronLeft, ChevronRight, Quote } from "lucide-react";
+import { Star, ChevronLeft, ChevronRight, Quote, User, ExternalLink } from "lucide-react";
 
 interface Testimonial {
   name: string;
@@ -9,35 +9,19 @@ interface Testimonial {
   content: string;
   rating: number;
   avatar: string;
+  websiteUrl?: string;
 }
 
 const testimonials: Testimonial[] = [
   {
-    name: "Rahul Sharma",
+    name: "Navadeep",
     role: "Founder & CEO",
     company: "Haanav Eviors",
     content:
       "Hota Creatives didn't just build us a website — they crafted an entire digital identity. The luxury positioning, the visual language, everything feels premium and intentional. Our client inquiries doubled within the first month of launch.",
     rating: 5,
-    avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=120&h=120&fit=crop&crop=face",
-  },
-  {
-    name: "Priya Menon",
-    role: "Marketing Head",
-    company: "FitGym Elite",
-    content:
-      "Working with Hota was a game-changer for our fitness brand. They understood the high-performance aesthetic we needed and delivered a SaaS platform that our members absolutely love. The UI/UX is leagues ahead of competitors.",
-    rating: 5,
-    avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=120&h=120&fit=crop&crop=face",
-  },
-  {
-    name: "Arjun Reddy",
-    role: "Managing Director",
-    company: "Grand Occasion",
-    content:
-      "From strategy to execution, the Hota team was phenomenal. They built us a booking platform that actually converts visitors into leads. The design feels premium and the user experience is seamless across every device.",
-    rating: 5,
-    avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=120&h=120&fit=crop&crop=face",
+    avatar: "",
+    websiteUrl: "https://www.haanaveviors.com/",
   },
 ];
 
@@ -160,20 +144,38 @@ export default function TestimonialsSection() {
 
               {/* Author */}
               <div className="flex items-center gap-4 pt-8 border-t border-white/10">
-                <img
-                  src={current.avatar}
-                  alt={current.name}
-                  className="w-14 h-14 rounded-2xl object-cover border-2 border-accent/20"
-                />
+                {current.avatar ? (
+                  <img
+                    src={current.avatar}
+                    alt={current.name}
+                    className="w-14 h-14 rounded-2xl object-cover border-2 border-accent/20"
+                  />
+                ) : (
+                  <div className="w-14 h-14 rounded-2xl border-2 border-accent/20 bg-accent/5 flex items-center justify-center text-accent/50">
+                    <User size={24} />
+                  </div>
+                )}
                 <div>
                   <p className="text-base font-bold text-text-primary">
                     {current.name}
                   </p>
                   <p className="text-sm text-text-secondary">
                     {current.role},{" "}
-                    <span className="text-accent font-semibold">
-                      {current.company}
-                    </span>
+                    {current.websiteUrl ? (
+                      <a
+                        href={current.websiteUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-accent font-semibold hover:underline inline-flex items-center gap-1 group/link"
+                      >
+                        {current.company}
+                        <ExternalLink size={12} className="opacity-60 group-hover/link:opacity-100 transition-opacity" />
+                      </a>
+                    ) : (
+                      <span className="text-accent font-semibold">
+                        {current.company}
+                      </span>
+                    )}
                   </p>
                 </div>
               </div>
@@ -181,41 +183,43 @@ export default function TestimonialsSection() {
           </AnimatePresence>
 
           {/* Navigation Arrows */}
-          <div className="flex items-center justify-center gap-6 mt-10">
-            <button
-              onClick={() => paginate(-1)}
-              className="flex items-center justify-center w-12 h-12 rounded-full border border-white/10 bg-black/40 backdrop-blur-md text-text-secondary hover:text-accent hover:border-accent/40 transition-all duration-300 cursor-pointer"
-              aria-label="Previous testimonial"
-            >
-              <ChevronLeft size={20} />
-            </button>
+          {testimonials.length > 1 && (
+            <div className="flex items-center justify-center gap-6 mt-10">
+              <button
+                onClick={() => paginate(-1)}
+                className="flex items-center justify-center w-12 h-12 rounded-full border border-white/10 bg-black/40 backdrop-blur-md text-text-secondary hover:text-accent hover:border-accent/40 transition-all duration-300 cursor-pointer"
+                aria-label="Previous testimonial"
+              >
+                <ChevronLeft size={20} />
+              </button>
 
-            {/* Dots */}
-            <div className="flex gap-2">
-              {testimonials.map((_, index) => (
-                <button
-                  key={index}
-                  onClick={() =>
-                    setCurrentIndex([index, index > currentIndex ? 1 : -1])
-                  }
-                  className={`h-2 rounded-full transition-all duration-500 cursor-pointer ${
-                    index === currentIndex
-                      ? "w-8 bg-accent"
-                      : "w-2 bg-white/20 hover:bg-white/40"
-                  }`}
-                  aria-label={`Go to testimonial ${index + 1}`}
-                />
-              ))}
+              {/* Dots */}
+              <div className="flex gap-2">
+                {testimonials.map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() =>
+                      setCurrentIndex([index, index > currentIndex ? 1 : -1])
+                    }
+                    className={`h-2 rounded-full transition-all duration-500 cursor-pointer ${
+                      index === currentIndex
+                        ? "w-8 bg-accent"
+                        : "w-2 bg-white/20 hover:bg-white/40"
+                    }`}
+                    aria-label={`Go to testimonial ${index + 1}`}
+                  />
+                ))}
+              </div>
+
+              <button
+                onClick={() => paginate(1)}
+                className="flex items-center justify-center w-12 h-12 rounded-full border border-white/10 bg-black/40 backdrop-blur-md text-text-secondary hover:text-accent hover:border-accent/40 transition-all duration-300 cursor-pointer"
+                aria-label="Next testimonial"
+              >
+                <ChevronRight size={20} />
+              </button>
             </div>
-
-            <button
-              onClick={() => paginate(1)}
-              className="flex items-center justify-center w-12 h-12 rounded-full border border-white/10 bg-black/40 backdrop-blur-md text-text-secondary hover:text-accent hover:border-accent/40 transition-all duration-300 cursor-pointer"
-              aria-label="Next testimonial"
-            >
-              <ChevronRight size={20} />
-            </button>
-          </div>
+          )}
         </div>
       </div>
     </section>
