@@ -10,7 +10,7 @@ const portfolioItems = [
     description:
       "A premium brand website for a luxury event production and interior architecture firm — combining bespoke high-end event management with modern minimalist design.",
     image:
-      "https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=600&h=400&fit=crop",
+      "/images/haanav-eviors.jpg",
     url: "https://www.haanaveviors.com/",
   },
   {
