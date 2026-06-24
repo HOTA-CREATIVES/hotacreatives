@@ -1,6 +1,5 @@
 import { useParams, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { Linkedin, Twitter, Instagram, Globe } from "lucide-react";
 import BlogCard from "@/components/blog/BlogCard";
 import BlogSEO from "@/components/blog/BlogSEO";
 import {
@@ -103,15 +102,16 @@ export default function BlogAuthorPage() {
                 {author.bio}
               </p>
               {author.socialLinks && (
-                <div className="flex items-center gap-3 justify-center sm:justify-start">
+                <div className="flex items-center gap-4 justify-center sm:justify-start">
                   {author.socialLinks.linkedin && (
                     <a
                       href={author.socialLinks.linkedin}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-text-muted hover:text-accent transition-colors duration-300"
+                      className="text-text-muted hover:text-accent transition-colors duration-300 text-lg"
+                      aria-label="LinkedIn"
                     >
-                      <Linkedin size={20} />
+                      <i className="fa-brands fa-linkedin-in"></i>
                     </a>
                   )}
                   {author.socialLinks.twitter && (
@@ -119,9 +119,10 @@ export default function BlogAuthorPage() {
                       href={author.socialLinks.twitter}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-text-muted hover:text-accent transition-colors duration-300"
+                      className="text-text-muted hover:text-accent transition-colors duration-300 text-lg"
+                      aria-label="Twitter / X"
                     >
-                      <Twitter size={20} />
+                      <i className="fa-brands fa-x-twitter"></i>
                     </a>
                   )}
                   {author.socialLinks.instagram && (
@@ -129,9 +130,10 @@ export default function BlogAuthorPage() {
                       href={author.socialLinks.instagram}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-text-muted hover:text-accent transition-colors duration-300"
+                      className="text-text-muted hover:text-accent transition-colors duration-300 text-lg"
+                      aria-label="Instagram"
                     >
-                      <Instagram size={20} />
+                      <i className="fa-brands fa-instagram"></i>
                     </a>
                   )}
                   {author.socialLinks.website && (
@@ -139,9 +141,10 @@ export default function BlogAuthorPage() {
                       href={author.socialLinks.website}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-text-muted hover:text-accent transition-colors duration-300"
+                      className="text-text-muted hover:text-accent transition-colors duration-300 text-lg"
+                      aria-label="Website"
                     >
-                      <Globe size={20} />
+                      <i className="fa-solid fa-globe"></i>
                     </a>
                   )}
                 </div>

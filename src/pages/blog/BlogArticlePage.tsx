@@ -1,5 +1,4 @@
 import { useParams, Link } from "react-router-dom";
-import { Calendar, Clock, ArrowLeft } from "lucide-react";
 import { useMemo, useState, useEffect } from "react";
 import ReadingProgressBar from "@/components/blog/ReadingProgressBar";
 import TableOfContents from "@/components/blog/TableOfContents";
@@ -137,7 +136,7 @@ export default function BlogArticlePage() {
             to="/blog"
             className="inline-flex items-center gap-2 text-sm text-text-muted hover:text-accent transition-colors duration-200 mb-6"
           >
-            <ArrowLeft size={16} />
+            <i className="fa-solid fa-arrow-left text-xs"></i>
             Back to blog
           </Link>
 
@@ -178,13 +177,13 @@ export default function BlogArticlePage() {
                 >
                   {post.author.name}
                 </Link>
-                <div className="flex items-center gap-3 text-xs text-text-muted">
-                  <span className="flex items-center gap-1">
-                    <Calendar size={12} />
+                <div className="flex items-center gap-3 text-xs text-text-muted mt-1">
+                  <span className="flex items-center gap-1.5">
+                    <i className="fa-regular fa-calendar text-[10px]"></i>
                     {formatDate(post.publishDate)}
                   </span>
-                  <span className="flex items-center gap-1">
-                    <Clock size={12} />
+                  <span className="flex items-center gap-1.5">
+                    <i className="fa-regular fa-clock text-[10px]"></i>
                     {post.readTime} min read
                   </span>
                 </div>

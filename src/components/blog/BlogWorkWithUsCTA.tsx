@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import { ArrowRight } from "lucide-react";
 
 /**
  * "Work with us" CTA component shown at the end of every blog article.
@@ -24,10 +23,7 @@ export default function BlogWorkWithUsCTA() {
           className="inline-flex items-center gap-2 bg-accent hover:bg-accent-hover text-black font-bold text-sm px-8 py-3.5 rounded-full transition-all duration-300 hover:scale-105 group"
         >
           Work with Us
-          <ArrowRight
-            size={16}
-            className="transition-transform duration-300 group-hover:translate-x-1"
-          />
+          <i className="fa-solid fa-arrow-right text-xs transition-transform duration-300 group-hover:translate-x-1"></i>
         </Link>
       </div>
     </div>

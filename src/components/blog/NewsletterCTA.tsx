@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { Send } from "lucide-react";
 
 interface NewsletterCTAProps {
   variant?: "inline" | "slide";
@@ -48,7 +47,7 @@ export default function NewsletterCTA({
               type="submit"
               className="px-4 py-2.5 bg-accent text-black font-bold text-sm rounded-lg hover:bg-accent-hover transition-all duration-300 cursor-pointer"
             >
-              <Send size={16} />
+              <i className="fa-regular fa-paper-plane"></i>
             </button>
           </form>
         )}
@@ -87,7 +86,7 @@ export default function NewsletterCTA({
             className="px-6 py-3 bg-accent text-black font-bold text-sm rounded-xl hover:bg-accent-hover transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer"
           >
             Subscribe
-            <Send size={14} />
+            <i className="fa-regular fa-paper-plane text-xs"></i>
           </button>
         </form>
       )}

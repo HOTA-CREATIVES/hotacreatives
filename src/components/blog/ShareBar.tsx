@@ -1,4 +1,3 @@
-import { Twitter, Linkedin, Link as LinkIcon, Facebook } from "lucide-react";
 import { useState } from "react";
 
 interface ShareBarProps {
@@ -22,17 +21,17 @@ export default function ShareBar({
   const shareLinks = [
     {
       name: "Twitter",
-      icon: <Twitter size={18} />,
+      iconClass: "fa-brands fa-x-twitter",
       href: `https://twitter.com/intent/tweet?text=${encodedTitle}&url=${encodedUrl}`,
     },
     {
       name: "LinkedIn",
-      icon: <Linkedin size={18} />,
+      iconClass: "fa-brands fa-linkedin-in",
       href: `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`,
     },
     {
       name: "Facebook",
-      icon: <Facebook size={18} />,
+      iconClass: "fa-brands fa-facebook-f",
       href: `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`,
     },
   ];
@@ -57,17 +56,17 @@ export default function ShareBar({
             target="_blank"
             rel="noopener noreferrer"
             title={`Share on ${link.name}`}
-            className="w-10 h-10 rounded-full bg-bg-card border border-border flex items-center justify-center text-text-muted hover:text-accent hover:border-accent transition-all duration-300"
+            className="w-10 h-10 rounded-full bg-bg-card border border-border flex items-center justify-center text-text-muted hover:text-accent hover:border-accent transition-all duration-300 text-sm"
           >
-            {link.icon}
+            <i className={link.iconClass}></i>
           </a>
         ))}
         <button
           onClick={handleCopy}
           title="Copy link"
-          className="w-10 h-10 rounded-full bg-bg-card border border-border flex items-center justify-center text-text-muted hover:text-accent hover:border-accent transition-all duration-300 cursor-pointer"
+          className="w-10 h-10 rounded-full bg-bg-card border border-border flex items-center justify-center text-text-muted hover:text-accent hover:border-accent transition-all duration-300 cursor-pointer text-sm"
         >
-          <LinkIcon size={18} />
+          <i className="fa-solid fa-link"></i>
         </button>
         {copied && (
           <span className="absolute -right-16 top-1/2 -translate-y-1/2 text-xs text-accent font-medium whitespace-nowrap">
@@ -91,17 +90,17 @@ export default function ShareBar({
           target="_blank"
           rel="noopener noreferrer"
           title={`Share on ${link.name}`}
-          className="w-9 h-9 rounded-full bg-bg-card border border-border flex items-center justify-center text-text-muted hover:text-accent hover:border-accent transition-all duration-300"
+          className="w-9 h-9 rounded-full bg-bg-card border border-border flex items-center justify-center text-text-muted hover:text-accent hover:border-accent transition-all duration-300 text-xs"
         >
-          {link.icon}
+          <i className={link.iconClass}></i>
         </a>
       ))}
       <button
         onClick={handleCopy}
         title="Copy link"
-        className="w-9 h-9 rounded-full bg-bg-card border border-border flex items-center justify-center text-text-muted hover:text-accent hover:border-accent transition-all duration-300 cursor-pointer"
+        className="w-9 h-9 rounded-full bg-bg-card border border-border flex items-center justify-center text-text-muted hover:text-accent hover:border-accent transition-all duration-300 cursor-pointer text-xs"
       >
-        <LinkIcon size={18} />
+        <i className="fa-solid fa-link"></i>
       </button>
       {copied && (
         <span className="text-xs text-accent font-medium">Copied!</span>

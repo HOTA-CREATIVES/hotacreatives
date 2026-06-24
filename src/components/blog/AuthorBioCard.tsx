@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import { Linkedin, Twitter, Globe, Instagram } from "lucide-react";
 import type { BlogAuthor } from "@/types/blog.interfaces";
 
 interface AuthorBioCardProps {
@@ -32,16 +31,16 @@ export default function AuthorBioCard({ author }: AuthorBioCardProps) {
         </p>
 
         {author.socialLinks && (
-          <div className="flex items-center gap-3 mt-4">
+          <div className="flex items-center gap-4 mt-4">
             {author.socialLinks.linkedin && (
               <a
                 href={author.socialLinks.linkedin}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-text-muted hover:text-accent transition-colors duration-300"
+                className="text-text-muted hover:text-accent transition-colors duration-300 text-base"
                 aria-label={`${author.name} on LinkedIn`}
               >
-                <Linkedin size={18} />
+                <i className="fa-brands fa-linkedin-in"></i>
               </a>
             )}
             {author.socialLinks.twitter && (
@@ -49,10 +48,10 @@ export default function AuthorBioCard({ author }: AuthorBioCardProps) {
                 href={author.socialLinks.twitter}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-text-muted hover:text-accent transition-colors duration-300"
+                className="text-text-muted hover:text-accent transition-colors duration-300 text-base"
                 aria-label={`${author.name} on Twitter`}
               >
-                <Twitter size={18} />
+                <i className="fa-brands fa-x-twitter"></i>
               </a>
             )}
             {author.socialLinks.instagram && (
@@ -60,10 +59,10 @@ export default function AuthorBioCard({ author }: AuthorBioCardProps) {
                 href={author.socialLinks.instagram}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-text-muted hover:text-accent transition-colors duration-300"
+                className="text-text-muted hover:text-accent transition-colors duration-300 text-base"
                 aria-label={`${author.name} on Instagram`}
               >
-                <Instagram size={18} />
+                <i className="fa-brands fa-instagram"></i>
               </a>
             )}
             {author.socialLinks.website && (
@@ -71,10 +70,10 @@ export default function AuthorBioCard({ author }: AuthorBioCardProps) {
                 href={author.socialLinks.website}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-text-muted hover:text-accent transition-colors duration-300"
+                className="text-text-muted hover:text-accent transition-colors duration-300 text-base"
                 aria-label={`${author.name}'s website`}
               >
-                <Globe size={18} />
+                <i className="fa-solid fa-globe"></i>
               </a>
             )}
           </div>

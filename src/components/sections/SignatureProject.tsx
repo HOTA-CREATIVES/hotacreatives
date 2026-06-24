@@ -66,7 +66,7 @@ export default function SignatureProject() {
               className="absolute inset-0 w-full h-[120%]"
             >
               <img
-                src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1200&h=800&fit=crop"
+                src="/images/haanav-eviors.jpg"
                 alt="Haanav Eviors Showcase"
                 className="w-full h-full object-cover opacity-75 group-hover:scale-105 transition-transform duration-700 ease-out"
               />

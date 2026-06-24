@@ -1,4 +1,3 @@
-import { Info, AlertTriangle, Lightbulb, StickyNote } from "lucide-react";
 import type { BlogContentBlock } from "@/types/blog.interfaces";
 
 interface BlogArticleContentProps {
@@ -7,25 +6,25 @@ interface BlogArticleContentProps {
 
 const calloutConfig = {
   info: {
-    icon: <Info size={20} />,
+    iconClass: "fa-solid fa-circle-info",
     borderColor: "border-blue-500/50",
     bgColor: "bg-blue-500/5",
     iconColor: "text-blue-400",
   },
   warning: {
-    icon: <AlertTriangle size={20} />,
+    iconClass: "fa-solid fa-triangle-exclamation",
     borderColor: "border-amber-500/50",
     bgColor: "bg-amber-500/5",
     iconColor: "text-amber-400",
   },
   tip: {
-    icon: <Lightbulb size={20} />,
+    iconClass: "fa-solid fa-lightbulb",
     borderColor: "border-green-500/50",
     bgColor: "bg-green-500/5",
     iconColor: "text-green-400",
   },
   note: {
-    icon: <StickyNote size={20} />,
+    iconClass: "fa-solid fa-note-sticky",
     borderColor: "border-purple-500/50",
     bgColor: "bg-purple-500/5",
     iconColor: "text-purple-400",
@@ -124,8 +123,8 @@ export default function BlogArticleContent({
                 key={index}
                 className={`my-8 p-5 rounded-xl border-l-4 ${config.borderColor} ${config.bgColor} flex gap-4`}
               >
-                <span className={`${config.iconColor} mt-0.5 shrink-0`}>
-                  {config.icon}
+                <span className={`${config.iconColor} mt-0.5 shrink-0 text-lg`}>
+                  <i className={config.iconClass}></i>
                 </span>
                 <p className="text-sm text-text-secondary leading-relaxed">
                   {block.content}

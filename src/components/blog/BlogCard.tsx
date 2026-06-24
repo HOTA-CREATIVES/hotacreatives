@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import { Calendar, Clock } from "lucide-react";
 import type { BlogPost } from "@/types/blog.interfaces";
 
 interface BlogCardProps {
@@ -75,13 +74,13 @@ export default function BlogCard({ post, variant = "default" }: BlogCardProps) {
                 <p className="text-sm font-semibold text-text-primary">
                   {post.author.name}
                 </p>
-                <div className="flex items-center gap-3 text-xs text-text-muted">
-                  <span className="flex items-center gap-1">
-                    <Calendar size={12} />
+                <div className="flex items-center gap-3 text-xs text-text-muted mt-1">
+                  <span className="flex items-center gap-1.5">
+                    <i className="fa-regular fa-calendar text-[10px]"></i>
                     {formatDate(post.publishDate)}
                   </span>
-                  <span className="flex items-center gap-1">
-                    <Clock size={12} />
+                  <span className="flex items-center gap-1.5">
+                    <i className="fa-regular fa-clock text-[10px]"></i>
                     {post.readTime} min read
                   </span>
                 </div>
@@ -140,13 +139,13 @@ export default function BlogCard({ post, variant = "default" }: BlogCardProps) {
             <p className="text-xs font-semibold text-text-primary">
               {post.author.name}
             </p>
-            <div className="flex items-center gap-3 text-xs text-text-muted">
-              <span className="flex items-center gap-1">
-                <Calendar size={11} />
+            <div className="flex items-center gap-3 text-xs text-text-muted mt-1">
+              <span className="flex items-center gap-1.5">
+                <i className="fa-regular fa-calendar text-[10px]"></i>
                 {formatDate(post.publishDate)}
               </span>
-              <span className="flex items-center gap-1">
-                <Clock size={11} />
+              <span className="flex items-center gap-1.5">
+                <i className="fa-regular fa-clock text-[10px]"></i>
                 {post.readTime} min
               </span>
             </div>
