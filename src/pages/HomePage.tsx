@@ -1,19 +1,17 @@
 import HeroSection from "@/components/sections/HeroSection";
-import AboutSection from "@/components/sections/AboutSection";
 import ServicesSection from "@/components/sections/ServicesSection";
-// import PackagesPreview from "@/components/sections/PackagesPreview";
-import CTASection from "@/components/sections/CTASection";
+import SignatureProject from "@/components/sections/SignatureProject";
+import PortfolioPreview from "@/components/sections/PortfolioPreview";
 import TestimonialsSection from "@/components/sections/TestimonialsSection";
-// import { SEO } from "@/components";
+import CTASection from "@/components/sections/CTASection";
 
 export default function HomePage() {
   return (
     <>
-      {/* SEO removed */}
       <HeroSection />
-      <AboutSection />
       <ServicesSection />
-      {/* <PackagesPreview /> */}
+      <SignatureProject />
+      <PortfolioPreview />
       <TestimonialsSection />
       <CTASection />
     </>

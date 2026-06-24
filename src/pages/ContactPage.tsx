@@ -2,21 +2,6 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import {
-  Mail,
-  Phone,
-  MapPin,
-  Instagram,
-  Linkedin,
-  MessageCircle,
-  Send,
-  Clock,
-  Loader2,
-  Sparkles,
-  ShieldCheck,
-  Rocket,
-  ArrowRight,
-} from "lucide-react";
 import { toast } from "sonner";
 import { useSEO } from "@/components/shared/SEO";
 import { contact, socialLinks, LOTTIE_ANIMATIONS } from "../constants";
@@ -113,7 +98,7 @@ export default function ContactPage() {
       }
     } catch {
       const msg =
-        "Network error \u2013 please check your connection and try again.";
+        "Network error – please check your connection and try again.";
       setErrorMsg(msg);
       toast.error("Network error", {
         description: msg,
@@ -123,6 +108,7 @@ export default function ContactPage() {
       setIsLoading(false);
     }
   };
+
   useSEO({
     title: "Contact Us",
     description:
@@ -131,6 +117,7 @@ export default function ContactPage() {
       "contact creative agency India, digital marketing consultation, brand growth agency contact, Mumbai agency contact",
     canonicalUrl: "https://hotacreatives.in/contact",
   });
+
   return (
     <>
       <section className="relative overflow-hidden border-b border-border/60 bg-bg-secondary py-24">
@@ -143,7 +130,7 @@ export default function ContactPage() {
         <div className="relative z-10 mx-auto grid max-w-7xl gap-8 px-4 sm:px-6 lg:grid-cols-5 lg:px-8">
           <div className="lg:col-span-3">
             <span className="inline-flex items-center gap-2 rounded-full border border-accent/40 bg-accent/10 px-3 py-1 text-xs font-bold uppercase tracking-[0.2em] text-accent">
-              <Sparkles size={14} />
+              <i className="fa-solid fa-wand-magic-sparkles text-xs"></i>
               Contact HOTA
             </span>
             <h1 className="mt-6 text-4xl font-black leading-tight tracking-tight sm:text-5xl lg:text-6xl">
@@ -159,16 +146,16 @@ export default function ContactPage() {
 
             <div className="mt-8 grid gap-3 sm:grid-cols-3">
               {[
-                { icon: ShieldCheck, label: "Trusted delivery" },
-                { icon: Rocket, label: "Execution focused" },
-                { icon: Clock, label: "24h response" },
-              ].map(({ icon: Icon, label }) => (
+                { icon: "fa-solid fa-shield-halved", label: "Trusted delivery" },
+                { icon: "fa-solid fa-rocket", label: "Execution focused" },
+                { icon: "fa-regular fa-clock", label: "24h response" },
+              ].map(({ icon, label }) => (
                 <div
                   key={label}
                   className="rounded-xl border border-border bg-bg-card/80 px-4 py-3"
                 >
                   <div className="flex items-center gap-2 text-sm font-semibold text-text-primary">
-                    <Icon size={16} className="text-accent" />
+                    <i className={`${icon} text-accent`}></i>
                     {label}
                   </div>
                 </div>
@@ -433,12 +420,12 @@ export default function ContactPage() {
                   >
                     {isLoading ? (
                       <>
-                        <Loader2 size={18} className="animate-spin" />
+                        <i className="fa-solid fa-spinner animate-spin text-sm mr-2"></i>
                         Sending...
                       </>
                     ) : (
                       <>
-                        <Send size={18} />
+                        <i className="fa-regular fa-paper-plane mr-2"></i>
                         Send Message
                       </>
                     )}
@@ -472,7 +459,7 @@ export default function ContactPage() {
                     >
                       <div className="flex items-center gap-3">
                         <div className="rounded-lg bg-accent/10 p-2">
-                          <Mail size={18} className="text-accent" />
+                          <i className="fa-regular fa-envelope text-accent text-lg"></i>
                         </div>
                         <div>
                           <p className="text-xs uppercase tracking-wider text-text-muted">
@@ -483,7 +470,7 @@ export default function ContactPage() {
                           </p>
                         </div>
                       </div>
-                      <ArrowRight size={16} className="text-text-muted" />
+                      <i className="fa-solid fa-arrow-right text-text-muted"></i>
                     </a>
 
                     <a
@@ -492,7 +479,7 @@ export default function ContactPage() {
                     >
                       <div className="flex items-center gap-3">
                         <div className="rounded-lg bg-accent/10 p-2">
-                          <Phone size={18} className="text-accent" />
+                          <i className="fa-solid fa-phone text-accent text-lg"></i>
                         </div>
                         <div>
                           <p className="text-xs uppercase tracking-wider text-text-muted">
@@ -503,13 +490,13 @@ export default function ContactPage() {
                           </p>
                         </div>
                       </div>
-                      <ArrowRight size={16} className="text-text-muted" />
+                      <i className="fa-solid fa-arrow-right text-text-muted"></i>
                     </a>
 
                     <div className="rounded-xl border border-border bg-bg-card p-4">
                       <div className="flex items-start gap-3">
                         <div className="rounded-lg bg-accent/10 p-2">
-                          <MapPin size={18} className="text-accent" />
+                          <i className="fa-solid fa-location-dot text-accent text-lg"></i>
                         </div>
                         <div>
                           <p className="text-xs uppercase tracking-wider text-text-muted">
@@ -533,7 +520,7 @@ export default function ContactPage() {
                       rel="noopener noreferrer"
                       className="flex items-center gap-3 rounded-xl border border-[#25D366]/40 bg-[#25D366]/10 p-4 text-[#25D366] transition-colors hover:bg-[#25D366]/20"
                     >
-                      <MessageCircle size={20} />
+                      <i className="fa-brands fa-whatsapp text-lg"></i>
                       <span className="text-sm font-semibold">
                         Chat on WhatsApp
                       </span>
@@ -545,7 +532,7 @@ export default function ContactPage() {
                       rel="noopener noreferrer"
                       className="flex items-center gap-3 rounded-xl border border-pink-500/40 bg-pink-500/10 p-4 text-pink-400 transition-colors hover:bg-pink-500/20"
                     >
-                      <Instagram size={20} />
+                      <i className="fa-brands fa-instagram text-lg"></i>
                       <span className="text-sm font-semibold">
                         Follow on Instagram
                       </span>
@@ -557,7 +544,7 @@ export default function ContactPage() {
                       rel="noopener noreferrer"
                       className="flex items-center gap-3 rounded-xl border border-blue-500/40 bg-blue-500/10 p-4 text-blue-400 transition-colors hover:bg-blue-500/20"
                     >
-                      <Linkedin size={20} />
+                      <i className="fa-brands fa-linkedin-in text-lg"></i>
                       <span className="text-sm font-semibold">
                         Connect on LinkedIn
                       </span>

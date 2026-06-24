@@ -1,5 +1,5 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
-import { ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import LottieAnimation from "@/components/ui/LottieAnimation";
@@ -98,14 +98,38 @@ const itemVariants = {
 /* ServiceCard                                                        */
 /* ------------------------------------------------------------------ */
 function ServiceCard({ service }: { service: Service }) {
+  const [coords, setCoords] = useState({ x: 0, y: 0 });
+  const [isHovered, setIsHovered] = useState(false);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    setCoords({
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top,
+    });
+  };
+
   return (
     <motion.div
       variants={itemVariants}
       whileHover={{ y: -5 }}
+      onMouseMove={handleMouseMove}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
       className={`group relative overflow-hidden rounded-[1.75rem] border border-border bg-black/40 p-8 backdrop-blur-md transition-all duration-500 hover:border-accent/40 hover:bg-black/60 shadow-[0_8px_30px_rgb(0,0,0,0.12)] hover:shadow-[0_8px_30px_rgba(244,194,13,0.12)] flex flex-col justify-center ${service.className || ""}`}
     >
       <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-accent/40 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
       <div className="absolute inset-0 bg-linear-to-br from-accent/5 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+
+      {/* Spotlight Hover Glow Effect */}
+      {isHovered && (
+        <div
+          className="pointer-events-none absolute -inset-px rounded-[1.75rem] opacity-100 transition-opacity duration-300 z-[1]"
+          style={{
+            background: `radial-gradient(350px circle at ${coords.x}px ${coords.y}px, rgba(244, 194, 13, 0.09), transparent 80%)`,
+          }}
+        />
+      )}
 
       <div className="relative z-10 flex flex-col gap-6 h-full">
         <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-[1.25rem] bg-accent/10 transition-colors duration-300 group-hover:bg-accent/20">
@@ -113,12 +137,12 @@ function ServiceCard({ service }: { service: Service }) {
             <img
               src={service.image}
               alt={service.title}
-              className="w-10 h-10 object-contain"
+              className="w-10 h-10 object-contain transition-transform duration-500 group-hover:scale-110"
             />
           ) : (
             <LottieAnimation
               src={service.animation!}
-              className="w-12 h-12"
+              className="w-12 h-12 transition-transform duration-500 group-hover:scale-110"
               loop
               autoplay
             />
@@ -126,10 +150,10 @@ function ServiceCard({ service }: { service: Service }) {
         </div>
 
         <div className="flex-1 min-w-0 flex flex-col justify-center">
-          <h3 className="mb-3 text-2xl font-bold tracking-tight">
+          <h3 className="mb-3 text-2xl font-bold tracking-tight group-hover:text-accent transition-colors duration-300 3xl:text-3xl">
             {service.title}
           </h3>
-          <p className="text-text-secondary text-base leading-relaxed">
+          <p className="text-text-secondary text-base leading-relaxed 3xl:text-lg">
             {service.description}
           </p>
         </div>
@@ -146,7 +170,7 @@ export default function ServicesSection() {
     <section className="relative overflow-hidden py-14 md:py-24 bg-bg-secondary">
       <div className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-accent/20 to-transparent" />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl 3xl:max-w-[1600px] 4xl:max-w-[2000px] 5xl:max-w-[2800px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-16 grid items-center gap-10 lg:grid-cols-[0.95fr_1.05fr]">
           <motion.div
             initial={{ opacity: 0, x: -50 }}
@@ -157,12 +181,12 @@ export default function ServicesSection() {
             <span className="text-xs font-bold uppercase tracking-[0.28em] text-accent">
               What We Do
             </span>
-            <h2 className="mt-4 text-4xl font-black tracking-tight sm:text-5xl lg:text-6xl">
+            <h2 className="mt-4 text-4xl font-black tracking-tight sm:text-5xl lg:text-6xl 3xl:text-7xl 4xl:text-8xl">
               Service architecture
               <br className="hidden md:block" />
               <span className="text-accent"> built for growth</span>
             </h2>
-            <p className="mt-6 max-w-2xl text-lg text-text-secondary leading-relaxed">
+            <p className="mt-6 max-w-2xl 3xl:max-w-4xl text-lg 3xl:text-xl 4xl:text-2xl text-text-secondary leading-relaxed">
               Our motive is simple: build a clear growth engine for your brand.
               This service stack is structured to move from positioning to
               execution so every creative and campaign contributes to long-term
@@ -175,7 +199,7 @@ export default function ServicesSection() {
               >
                 <Link to="/services" className="inline-flex items-center gap-2">
                   View full service stack
-                  <ArrowRight size={18} />
+                  <i className="fa-solid fa-arrow-right"></i>
                 </Link>
               </Button>
             </div>
@@ -217,7 +241,7 @@ export default function ServicesSection() {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: "-100px" }}
-          className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[minmax(250px,auto)]"
+          className="grid grid-cols-1 md:grid-cols-3 gap-6 3xl:gap-8 auto-rows-[minmax(250px,auto)] 3xl:auto-rows-[minmax(300px,auto)]"
         >
           {services.map((service) => (
             <ServiceCard key={service.title} service={service} />

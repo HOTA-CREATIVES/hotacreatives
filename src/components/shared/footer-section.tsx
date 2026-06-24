@@ -7,14 +7,6 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import {
-  ArrowRight,
-  Instagram,
-  Linkedin,
-  Mail,
-  MapPin,
-  Phone,
-} from "lucide-react";
 import { contact, socialLinks } from "@/constants";
 
 const quickLinks = [
@@ -64,7 +56,7 @@ export default function FooterSection() {
                 size="icon"
                 className="absolute right-1.5 top-1.5 h-8 w-8 rounded-full bg-accent text-black transition-transform hover:scale-105 hover:bg-accent-hover"
               >
-                <ArrowRight className="h-4 w-4" />
+                <i className="fa-solid fa-arrow-right text-xs"></i>
                 <span className="sr-only">Subscribe</span>
               </Button>
             </form>
@@ -104,18 +96,18 @@ export default function FooterSection() {
                 href={`mailto:${contact.email}`}
                 className="flex items-center gap-2 transition-colors hover:text-accent"
               >
-                <Mail className="h-4 w-4" />
+                <i className="fa-regular fa-envelope text-xs"></i>
                 {contact.email}
               </a>
               <a
                 href={`tel:+${contact.phoneRaw}`}
                 className="flex items-center gap-2 transition-colors hover:text-accent"
               >
-                <Phone className="h-4 w-4" />
+                <i className="fa-solid fa-phone text-xs"></i>
                 {contact.phone}
               </a>
               <p className="flex items-center gap-2">
-                <MapPin className="h-4 w-4" />
+                <i className="fa-solid fa-location-dot text-xs"></i>
                 {contact.locationShort}
               </p>
             </div>
@@ -135,7 +127,7 @@ export default function FooterSection() {
                         target="_blank"
                         rel="noopener noreferrer"
                       >
-                        <Instagram className="h-4 w-4" />
+                        <i className="fa-brands fa-instagram text-xs"></i>
                         <span className="sr-only">Instagram</span>
                       </a>
                     </Button>
@@ -160,7 +152,7 @@ export default function FooterSection() {
                         target="_blank"
                         rel="noopener noreferrer"
                       >
-                        <Linkedin className="h-4 w-4" />
+                        <i className="fa-brands fa-linkedin-in text-xs"></i>
                         <span className="sr-only">LinkedIn</span>
                       </a>
                     </Button>

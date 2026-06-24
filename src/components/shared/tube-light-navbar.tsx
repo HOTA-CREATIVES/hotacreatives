@@ -1,10 +1,9 @@
 import { Link, useLocation } from "react-router-dom";
-import type { LucideIcon } from "lucide-react";
 
 interface TubeNavItem {
   name: string;
   url: string;
-  icon: LucideIcon;
+  icon: string;
 }
 
 interface NavBarProps {
@@ -28,7 +27,6 @@ export function NavBar({ items }: NavBarProps) {
         <div className="pointer-events-none absolute inset-0 rounded-full bg-linear-to-r from-transparent via-accent/15 to-transparent" />
         <div className="relative flex items-center gap-1.5">
           {items.map((item) => {
-            const Icon = item.icon;
             const active = isActivePath(location.pathname, item.url);
 
             return (
@@ -41,7 +39,7 @@ export function NavBar({ items }: NavBarProps) {
                     : "text-text-secondary hover:bg-bg-card-hover hover:text-text-primary"
                 }`}
               >
-                <Icon size={14} />
+                <i className={`${item.icon} text-[14px]`}></i>
                 <span>{item.name}</span>
               </Link>
             );

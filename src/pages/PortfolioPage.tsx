@@ -1,6 +1,3 @@
-import { ExternalLink } from "lucide-react";
-// import { SEO } from "@/components";
-
 const portfolioItems = [
   {
     title: "Haanav Eviors",
@@ -37,7 +34,6 @@ const portfolioItems = [
 export default function PortfolioPage() {
   return (
     <>
-      {/* SEO removed */}
       {/* Hero */}
       <section className="py-24 bg-bg-secondary">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -92,10 +88,7 @@ export default function PortfolioPage() {
                     <span className="text-xs sm:text-sm font-bold text-accent bg-accent/10 px-3 sm:px-4 py-2 rounded-full">
                       {item.results}
                     </span>
-                    <ExternalLink
-                      size={18}
-                      className="text-text-muted group-hover:text-accent transition-colors duration-300 shrink-0"
-                    />
+                    <i className="fa-solid fa-arrow-up-right-from-square text-text-muted group-hover:text-accent transition-colors duration-300 shrink-0 text-sm"></i>
                   </div>
                 </div>
               </a>

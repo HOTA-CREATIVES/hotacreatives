@@ -1,6 +1,5 @@
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ArrowRight } from "lucide-react";
 import HomeCTAButton from "@/components/ui/HomeCTAButton";
 import { Button } from "@/components/ui/button";
 import { ROUTES } from "@/routes";
@@ -53,7 +52,7 @@ export default function ServicesHero() {
               className="rounded-full border border-white/20 bg-white/10 px-6 py-6 text-sm font-bold text-white hover:bg-white/20"
             >
               Discuss your scope
-              <ArrowRight className="ml-2 h-4 w-4" />
+              <i className="fa-solid fa-arrow-right ml-2 text-xs"></i>
             </Button>
           </motion.div>
         </motion.div>

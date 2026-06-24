@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import { ArrowRight, ExternalLink } from "lucide-react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 
@@ -98,7 +97,7 @@ export default function PortfolioPreview() {
             >
               <Link to="/portfolio" className="inline-flex items-center gap-2">
                 View all work
-                <ArrowRight size={18} />
+                <i className="fa-solid fa-arrow-right"></i>
               </Link>
             </Button>
           </motion.div>
@@ -141,10 +140,7 @@ export default function PortfolioPreview() {
                   {item.description}
                 </p>
                 <div className="absolute right-8 top-8 flex h-10 w-10 items-center justify-center rounded-full bg-black/50 backdrop-blur-md opacity-0 transition-all duration-500 group-hover:opacity-100 transform translate-x-4 group-hover:translate-x-0">
-                   <ExternalLink
-                    size={18}
-                    className="text-white transition-colors duration-300 group-hover:text-accent"
-                  />
+                  <i className="fa-solid fa-arrow-up-right-from-square text-white transition-colors duration-300 group-hover:text-accent text-sm"></i>
                 </div>
               </div>
             </motion.a>

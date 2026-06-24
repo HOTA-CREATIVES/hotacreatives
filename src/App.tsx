@@ -7,7 +7,6 @@ import { ROUTES } from "@/routes/routes";
 // Lazy load pages for better code splitting
 const HomePage = lazy(() => import("@/pages/HomePage"));
 const ServicesPage = lazy(() => import("@/pages/ServicesPage"));
-const PackagesPage = lazy(() => import("@/pages/PackagesPage"));
 const PortfolioPage = lazy(() => import("@/pages/PortfolioPage"));
 const ContactPage = lazy(() => import("@/pages/ContactPage"));
 const FreeAuditPage = lazy(() => import("@/pages/FreeAuditPage"));
@@ -48,7 +47,6 @@ function App() {
           <Route element={<MainLayout />}>
             <Route path={ROUTES.HOME} element={<HomePage />} />
             <Route path={ROUTES.SERVICES} element={<ServicesPage />} />
-            <Route path={ROUTES.PACKAGES} element={<PackagesPage />} />
             <Route path={ROUTES.PORTFOLIO} element={<PortfolioPage />} />
             <Route path={ROUTES.BLOG} element={<BlogListingPage />} />
             <Route path={ROUTES.BLOG_ARTICLE} element={<BlogArticlePage />} />

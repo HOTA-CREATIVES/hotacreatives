@@ -4,7 +4,6 @@
 export const ROUTES = {
   HOME: "/",
   SERVICES: "/services",
-  PACKAGES: "/packages",
   PORTFOLIO: "/portfolio",
   BLOG: "/blog",
   BLOG_ARTICLE: "/blog/:slug",

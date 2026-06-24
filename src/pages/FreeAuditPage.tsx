@@ -4,20 +4,6 @@ import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import {
-  BarChart3,
-  Globe,
-  Instagram,
-  Sparkles,
-  ArrowRight,
-  CheckCircle,
-  Upload,
-  FileText,
-  Image as ImageIcon,
-  X,
-  Loader2,
-  TrendingUp,
-} from "lucide-react";
 import { toast } from "sonner";
 import { useSEO } from "@/components/shared/SEO";
 import {
@@ -61,18 +47,18 @@ const industries = [
 ];
 
 const revenueRanges = [
-  "Under ?5 Lakh / month",
-  "?5 � ?25 Lakh / month",
-  "?25 � ?75 Lakh / month",
-  "?75 Lakh � ?2 Crore / month",
-  "?2 Crore+ / month",
+  "Under ₹5 Lakh / month",
+  "₹5 – ₹25 Lakh / month",
+  "₹25 – ₹75 Lakh / month",
+  "₹75 Lakh – ₹2 Crore / month",
+  "₹2 Crore+ / month",
   "Prefer not to say",
 ];
 
 const steps = [
-  { icon: Sparkles, text: "We analyze your current brand presence" },
-  { icon: BarChart3, text: "We benchmark against your category leaders" },
-  { icon: Globe, text: "We send a practical 48-hour growth roadmap" },
+  { icon: "fa-solid fa-wand-magic-sparkles", text: "We analyze your current brand presence" },
+  { icon: "fa-solid fa-chart-line", text: "We benchmark against your category leaders" },
+  { icon: "fa-solid fa-globe", text: "We send a practical 48-hour growth roadmap" },
 ];
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024;
@@ -251,7 +237,7 @@ export default function FreeAuditPage() {
         <Card className="relative z-10 mx-auto w-full max-w-2xl border-green-500/30 bg-bg-card/85 text-center backdrop-blur-sm">
           <CardHeader>
             <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-green-500/10">
-              <CheckCircle size={40} className="text-green-400" />
+              <i className="fa-solid fa-circle-check text-4xl text-green-400"></i>
             </div>
             <CardTitle className="text-4xl font-black">
               You&apos;re In!
@@ -272,7 +258,7 @@ export default function FreeAuditPage() {
             >
               <Link to="/" className="inline-flex items-center gap-2">
                 Back to Home
-                <ArrowRight size={16} />
+                <i className="fa-solid fa-arrow-right"></i>
               </Link>
             </Button>
           </CardContent>
@@ -288,7 +274,7 @@ export default function FreeAuditPage() {
         <div className="relative z-10 mx-auto grid max-w-7xl gap-8 px-4 sm:px-6 lg:grid-cols-5 lg:px-8">
           <div className="lg:col-span-3">
             <span className="inline-flex items-center gap-2 rounded-full border border-accent/30 bg-accent/10 px-3 py-1 text-xs font-bold uppercase tracking-[0.2em] text-accent">
-              <Sparkles size={14} />
+              <i className="fa-solid fa-wand-magic-sparkles"></i>
               100% Free Strategic Audit
             </span>
             <h1 className="mt-6 text-4xl font-black leading-tight tracking-tight sm:text-5xl lg:text-6xl">
@@ -306,7 +292,7 @@ export default function FreeAuditPage() {
                 <Card key={i} className="border-border/80 bg-bg-card/75 py-4">
                   <CardContent className="flex items-start gap-3 px-4">
                     <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-accent/10">
-                      <step.icon size={18} className="text-accent" />
+                      <i className={`${step.icon} text-accent text-sm`}></i>
                     </div>
                     <p className="text-xs leading-relaxed text-text-secondary">
                       {step.text}
@@ -336,10 +322,7 @@ export default function FreeAuditPage() {
                   key={item}
                   className="flex items-start gap-2 rounded-lg border border-border bg-bg-card px-3 py-2"
                 >
-                  <CheckCircle
-                    size={16}
-                    className="mt-0.5 shrink-0 text-accent"
-                  />
+                  <i className="fa-solid fa-circle-check text-accent mt-0.5 shrink-0"></i>
                   <span className="text-sm text-text-secondary">{item}</span>
                 </div>
               ))}
@@ -503,7 +486,7 @@ export default function FreeAuditPage() {
                         render={({ field }) => (
                           <FormItem>
                             <FormLabel className="mb-2 flex items-center gap-2 text-text-secondary">
-                              <Globe size={14} /> Website URL
+                              <i className="fa-solid fa-globe text-xs"></i> Website URL
                             </FormLabel>
                             <FormControl>
                               <Input
@@ -519,31 +502,31 @@ export default function FreeAuditPage() {
                       />
                       <div className="grid gap-4 sm:grid-cols-3">
                         <FormField
-                          control={form.control}
-                          name="instagram"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel className="mb-2 flex items-center gap-2 text-text-secondary">
-                                <Instagram size={14} /> Instagram
-                              </FormLabel>
-                              <FormControl>
-                                <Input
-                                  className="h-12 rounded-xl border-border bg-black/20"
-                                  placeholder="@yourbrand"
-                                  {...field}
-                                />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
+                           control={form.control}
+                           name="instagram"
+                           render={({ field }) => (
+                             <FormItem>
+                               <FormLabel className="mb-2 flex items-center gap-2 text-text-secondary">
+                                 <i className="fa-brands fa-instagram text-xs"></i> Instagram
+                               </FormLabel>
+                               <FormControl>
+                                 <Input
+                                   className="h-12 rounded-xl border-border bg-black/20"
+                                   placeholder="@yourbrand"
+                                   {...field}
+                                 />
+                               </FormControl>
+                               <FormMessage />
+                             </FormItem>
+                           )}
+                         />
                         <FormField
                           control={form.control}
                           name="facebook"
                           render={({ field }) => (
                             <FormItem>
                               <FormLabel className="mb-2 flex items-center gap-2 text-text-secondary">
-                                Facebook
+                                <i className="fa-brands fa-facebook text-xs"></i> Facebook
                               </FormLabel>
                               <FormControl>
                                 <Input
@@ -562,7 +545,7 @@ export default function FreeAuditPage() {
                           render={({ field }) => (
                             <FormItem>
                               <FormLabel className="mb-2 flex items-center gap-2 text-text-secondary">
-                                LinkedIn
+                                <i className="fa-brands fa-linkedin text-xs"></i> LinkedIn
                               </FormLabel>
                               <FormControl>
                                 <Input
@@ -680,12 +663,9 @@ export default function FreeAuditPage() {
                           : "border-border bg-bg-card hover:border-accent/50"
                       }`}
                     >
-                      <Upload
-                        size={32}
-                        className={`transition-colors duration-300 ${
-                          isDragOver ? "text-accent" : "text-text-muted"
-                        }`}
-                      />
+                      <i className={`fa-solid fa-cloud-arrow-up text-3xl transition-colors duration-300 ${
+                        isDragOver ? "text-accent" : "text-text-muted"
+                      }`}></i>
                       <div className="text-center">
                         <p className="text-sm font-semibold text-text-primary">
                           Drag and drop files here or{" "}
@@ -713,15 +693,9 @@ export default function FreeAuditPage() {
                             className="flex items-center gap-3 rounded-xl border border-border bg-bg-card px-4 py-3"
                           >
                             {file.type.startsWith("image/") ? (
-                              <ImageIcon
-                                size={18}
-                                className="shrink-0 text-accent"
-                              />
+                              <i className="fa-regular fa-image shrink-0 text-accent text-sm"></i>
                             ) : (
-                              <FileText
-                                size={18}
-                                className="shrink-0 text-accent"
-                              />
+                              <i className="fa-regular fa-file-lines shrink-0 text-accent text-sm"></i>
                             )}
                             <span className="flex-1 truncate text-sm text-text-primary">
                               {file.name}
@@ -735,7 +709,7 @@ export default function FreeAuditPage() {
                               className="rounded-lg p-1 transition-colors hover:bg-red-500/10"
                               aria-label={`Remove ${file.name}`}
                             >
-                              <X size={16} className="text-red-400" />
+                              <i className="fa-solid fa-xmark text-red-400 text-sm"></i>
                             </button>
                           </div>
                         ))}
@@ -757,16 +731,13 @@ export default function FreeAuditPage() {
                     >
                       {isLoading ? (
                         <>
-                          <Loader2 size={20} className="animate-spin" />
+                          <i className="fa-solid fa-spinner animate-spin text-sm mr-2"></i>
                           Submitting...
                         </>
                       ) : (
                         <>
                           Get Your Free Brand Growth Audit
-                          <ArrowRight
-                            size={20}
-                            className="transition-transform group-hover:translate-x-1"
-                          />
+                          <i className="fa-solid fa-arrow-right transition-transform group-hover:translate-x-1 ml-2"></i>
                         </>
                       )}
                     </Button>
@@ -802,7 +773,7 @@ export default function FreeAuditPage() {
                     key={item}
                     className="flex items-center gap-2 rounded-lg border border-border bg-bg-card px-3 py-2"
                   >
-                    <CheckCircle size={15} className="text-accent" />
+                    <i className="fa-solid fa-circle-check text-accent text-sm"></i>
                     <span className="text-sm text-text-secondary">{item}</span>
                   </div>
                 ))}
@@ -817,15 +788,15 @@ export default function FreeAuditPage() {
               </CardHeader>
               <CardContent className="space-y-2 text-sm text-text-secondary">
                 <p className="flex items-center gap-2">
-                  <TrendingUp size={15} className="text-accent" />
+                  <i className="fa-solid fa-arrow-trend-up text-accent text-sm"></i>
                   Add your current revenue range for better recommendations.
                 </p>
                 <p className="flex items-center gap-2">
-                  <BarChart3 size={15} className="text-accent" />
+                  <i className="fa-solid fa-chart-line text-accent text-sm"></i>
                   Upload screenshots to improve audit precision.
                 </p>
                 <p className="flex items-center gap-2">
-                  <Sparkles size={15} className="text-accent" />
+                  <i className="fa-solid fa-wand-magic-sparkles text-accent text-sm"></i>
                   Mention one major challenge to prioritize the roadmap.
                 </p>
               </CardContent>

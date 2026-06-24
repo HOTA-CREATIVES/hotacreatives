@@ -1,5 +1,3 @@
-import { Search } from "lucide-react";
-
 interface BlogSearchProps {
   value: string;
   onChange: (value: string) => void;
@@ -13,10 +11,7 @@ export default function BlogSearch({
 }: BlogSearchProps) {
   return (
     <div className="relative w-full max-w-md">
-      <Search
-        size={18}
-        className="absolute left-4 top-1/2 -translate-y-1/2 text-text-muted"
-      />
+      <i className="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-text-muted text-sm"></i>
       <input
         type="text"
         value={value}

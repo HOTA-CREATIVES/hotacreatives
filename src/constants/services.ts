@@ -1,23 +1,9 @@
-import {
-  BarChart3,
-  Globe,
-  Megaphone,
-  Palette,
-  PenTool,
-  Video,
-  Target,
-  Rocket,
-  Sparkles,
-  LineChart,
-  type LucideIcon,
-} from "lucide-react";
-
 export type Service = {
   id: string;
   title: string;
   tagline: string;
   description: string;
-  icon: LucideIcon;
+  icon: string;
   features: string[];
   deliverables: string[];
   outcome: string;
@@ -26,7 +12,7 @@ export type Service = {
 export type WorkflowStep = {
   title: string;
   detail: string;
-  icon: LucideIcon;
+  icon: string;
 };
 
 export type MetricCard = {
@@ -42,7 +28,7 @@ export const services: Service[] = [
     tagline: "Build a loyal brand community",
     description:
       "From strategy to posting to engagement, we operate your social channels as one consistent growth system.",
-    icon: Megaphone,
+    icon: "fa-solid fa-bullhorn",
     features: [
       "Monthly content and publishing plan",
       "Channel-specific content formatting",
@@ -64,7 +50,7 @@ export const services: Service[] = [
     tagline: "Creative that people remember",
     description:
       "We produce audience-first content that balances trend relevance with your long-term brand story.",
-    icon: PenTool,
+    icon: "fa-solid fa-pen-nib",
     features: [
       "Reel and carousel ideation",
       "Brand-aligned design execution",
@@ -85,7 +71,7 @@ export const services: Service[] = [
     tagline: "Make ad spend accountable",
     description:
       "We run paid campaigns with structured testing, clean tracking, and sharp optimization loops.",
-    icon: BarChart3,
+    icon: "fa-solid fa-chart-line",
     features: [
       "Audience and offer architecture",
       "Conversion tracking setup",
@@ -106,7 +92,7 @@ export const services: Service[] = [
     tagline: "Look premium and stay recognizable",
     description:
       "We build visual systems that make your brand feel intentional and consistent across every touchpoint.",
-    icon: Palette,
+    icon: "fa-solid fa-palette",
     features: [
       "Logo and identity exploration",
       "Color and type system",
@@ -127,7 +113,7 @@ export const services: Service[] = [
     tagline: "Move people from attention to trust",
     description:
       "We create platform-ready videos designed for retention, trust-building, and conversion.",
-    icon: Video,
+    icon: "fa-solid fa-video",
     features: [
       "Concept and shot planning",
       "Narrative edit structure",
@@ -148,7 +134,7 @@ export const services: Service[] = [
     tagline: "Turn traffic into qualified action",
     description:
       "We design conversion-first web journeys that remove friction and guide users toward action.",
-    icon: Globe,
+    icon: "fa-solid fa-globe",
     features: [
       "Page and funnel mapping",
       "UX and copy alignment",
@@ -169,24 +155,24 @@ export const workflow: WorkflowStep[] = [
   {
     title: "Audit & Direction",
     detail: "We map goals, current bottlenecks, and growth constraints first.",
-    icon: Target,
+    icon: "fa-solid fa-crosshairs",
   },
   {
     title: "System Build",
     detail:
       "Creative, distribution, and paid channels are connected as one engine.",
-    icon: Rocket,
+    icon: "fa-solid fa-rocket",
   },
   {
     title: "Creative Sprints",
     detail:
       "Fast weekly execution cycles to ship assets without quality drops.",
-    icon: Sparkles,
+    icon: "fa-solid fa-wand-magic-sparkles",
   },
   {
     title: "Scale by Signal",
     detail: "We double down on what works and trim what does not.",
-    icon: LineChart,
+    icon: "fa-solid fa-chart-line",
   },
 ];
 

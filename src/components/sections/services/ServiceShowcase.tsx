@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { CheckCircle2, Sparkles, ChevronDown } from "lucide-react";
 import { services } from "@/constants/services";
 
 const containerVariants = {
@@ -68,7 +67,6 @@ export default function ServiceShowcase() {
           className="grid gap-6 md:grid-cols-2 lg:grid-cols-3"
         >
           {services.map((service) => {
-            const Icon = service.icon;
             const isExpanded = expandedId === service.id;
 
             return (
@@ -91,14 +89,14 @@ export default function ServiceShowcase() {
                   {/* Header */}
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-accent/10 text-accent transition-colors duration-300 group-hover:bg-accent/20">
-                      <Icon size={26} />
+                      <i className={`${service.icon} text-xl`}></i>
                     </div>
                     <motion.div
                       animate={{ rotate: isExpanded ? 180 : 0 }}
                       transition={{ duration: 0.3 }}
                       className="mt-1 text-text-muted"
                     >
-                      <ChevronDown size={18} />
+                      <i className="fa-solid fa-chevron-down text-sm"></i>
                     </motion.div>
                   </div>
 
@@ -134,7 +132,7 @@ export default function ServiceShowcase() {
                                   key={feature}
                                   className="flex items-start gap-2 text-sm"
                                 >
-                                  <CheckCircle2 className="mt-0.5 h-3.5 w-3.5 shrink-0 text-accent" />
+                                  <i className="fa-solid fa-circle-check text-accent mt-0.5 shrink-0 text-[11px]"></i>
                                   <span className="text-text-secondary">
                                     {feature}
                                   </span>
@@ -154,7 +152,7 @@ export default function ServiceShowcase() {
                                   key={item}
                                   className="flex items-start gap-2 text-sm"
                                 >
-                                  <Sparkles className="mt-0.5 h-3.5 w-3.5 shrink-0 text-accent" />
+                                  <i className="fa-solid fa-wand-magic-sparkles text-accent mt-0.5 shrink-0 text-[11px]"></i>
                                   <span className="text-text-secondary">
                                     {item}
                                   </span>

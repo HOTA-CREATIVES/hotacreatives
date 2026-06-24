@@ -1,6 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Star, ChevronLeft, ChevronRight, Quote, User, ExternalLink } from "lucide-react";
 
 interface Testimonial {
   name: string;
@@ -123,17 +122,13 @@ export default function TestimonialsSection() {
             >
               {/* Quote icon */}
               <div className="flex items-center justify-center w-14 h-14 rounded-2xl bg-accent/10 mb-8">
-                <Quote size={28} className="text-accent" />
+                <i className="fa-solid fa-quote-left text-2xl text-accent"></i>
               </div>
 
               {/* Rating */}
               <div className="flex gap-1 mb-6">
                 {Array.from({ length: current.rating }).map((_, i) => (
-                  <Star
-                    key={i}
-                    size={18}
-                    className="text-accent fill-accent"
-                  />
+                  <i key={i} className="fa-solid fa-star text-sm text-accent"></i>
                 ))}
               </div>
 
@@ -152,7 +147,7 @@ export default function TestimonialsSection() {
                   />
                 ) : (
                   <div className="w-14 h-14 rounded-2xl border-2 border-accent/20 bg-accent/5 flex items-center justify-center text-accent/50">
-                    <User size={24} />
+                    <i className="fa-solid fa-user text-xl"></i>
                   </div>
                 )}
                 <div>
@@ -169,7 +164,7 @@ export default function TestimonialsSection() {
                         className="text-accent font-semibold hover:underline inline-flex items-center gap-1 group/link"
                       >
                         {current.company}
-                        <ExternalLink size={12} className="opacity-60 group-hover/link:opacity-100 transition-opacity" />
+                        <i className="fa-solid fa-arrow-up-right-from-square text-[10px] opacity-60 group-hover/link:opacity-100 transition-opacity"></i>
                       </a>
                     ) : (
                       <span className="text-accent font-semibold">
@@ -190,7 +185,7 @@ export default function TestimonialsSection() {
                 className="flex items-center justify-center w-12 h-12 rounded-full border border-white/10 bg-black/40 backdrop-blur-md text-text-secondary hover:text-accent hover:border-accent/40 transition-all duration-300 cursor-pointer"
                 aria-label="Previous testimonial"
               >
-                <ChevronLeft size={20} />
+                <i className="fa-solid fa-chevron-left"></i>
               </button>
 
               {/* Dots */}
@@ -216,7 +211,7 @@ export default function TestimonialsSection() {
                 className="flex items-center justify-center w-12 h-12 rounded-full border border-white/10 bg-black/40 backdrop-blur-md text-text-secondary hover:text-accent hover:border-accent/40 transition-all duration-300 cursor-pointer"
                 aria-label="Next testimonial"
               >
-                <ChevronRight size={20} />
+                <i className="fa-solid fa-chevron-right"></i>
               </button>
             </div>
           )}

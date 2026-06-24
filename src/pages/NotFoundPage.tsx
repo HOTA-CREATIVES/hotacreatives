@@ -1,5 +1,4 @@
 import { AnimatePresence, motion, type Variants } from "framer-motion";
-import { ArrowLeftIcon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Globe } from "@/components/cosmic-404";
 import { Button } from "@/components/ui/button";
@@ -116,7 +115,7 @@ export default function NotFoundPage({
               onClick={handleBack}
               className="cursor-pointer gap-2 transition-all duration-500 hover:scale-105"
             >
-              <ArrowLeftIcon className="h-5 w-5" />
+              <i className="fa-solid fa-arrow-left text-sm mr-1"></i>
               {backText}
             </Button>
           </motion.div>

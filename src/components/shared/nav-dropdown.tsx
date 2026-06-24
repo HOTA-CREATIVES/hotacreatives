@@ -1,14 +1,12 @@
 import { useState, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import type { LucideIcon } from "lucide-react";
-import { ChevronDown } from "lucide-react";
 
 export interface NavDropdownItem {
   name: string;
   description?: string;
   url: string;
-  icon?: LucideIcon;
+  icon?: string;
   state?: Record<string, unknown>;
 }
 
@@ -39,7 +37,7 @@ export function NavDropdown({
   const handleMouseLeave = () => {
     timeoutRef.current = setTimeout(() => {
       setIsOpen(false);
-    }, 150); // slight delay to prevent accidental closing
+    }, 150);
   };
 
   const handleItemClick = (item: NavDropdownItem) => {
@@ -63,9 +61,8 @@ export function NavDropdown({
         }`}
       >
         <span>{label}</span>
-        <ChevronDown
-          size={12}
-          className={`transition-transform duration-300 ${
+        <i
+          className={`fa-solid fa-chevron-down text-[10px] transition-transform duration-300 ${
             isOpen ? "rotate-180" : ""
           } ${isActive ? "text-black" : "text-text-secondary group-hover:text-text-primary"}`}
         />
@@ -93,17 +90,15 @@ export function NavDropdown({
               }`}
             >
               {items.map((item) => {
-                const Icon = item.icon;
-
                 return (
                   <button
                     key={item.url + JSON.stringify(item.state || {})}
                     onClick={() => handleItemClick(item)}
                     className="flex text-left items-start gap-3 p-3 rounded-xl hover:bg-white/5 border border-transparent hover:border-border/30 transition-all duration-200 group/item"
                   >
-                    {Icon && (
-                      <div className="flex items-center justify-center p-2 rounded-lg bg-accent/10 text-accent group-hover/item:bg-accent group-hover/item:text-black transition-all duration-300 shrink-0">
-                        <Icon size={16} />
+                    {item.icon && (
+                      <div className="flex items-center justify-center p-2 rounded-lg bg-accent/10 text-accent group-hover/item:bg-accent group-hover/item:text-black transition-all duration-300 shrink-0 w-8 h-8">
+                        <i className={`${item.icon} text-sm`}></i>
                       </div>
                     )}
                     <div>

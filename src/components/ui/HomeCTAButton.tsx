@@ -1,5 +1,4 @@
 import type { ButtonHTMLAttributes } from "react";
-import { ArrowRight } from "lucide-react";
 import { cn } from "@/utils/utils";
 
 type HomeCTAButtonVariant = "primary" | "secondary";
@@ -31,10 +30,7 @@ export default function HomeCTAButton({
       {...props}
     >
       <span>{children}</span>
-      <ArrowRight
-        size={18}
-        className="transition-transform duration-300 group-hover:translate-x-1"
-      />
+      <i className="fa-solid fa-arrow-right text-[15px] transition-transform duration-300 group-hover:translate-x-1" />
     </button>
   );
 }

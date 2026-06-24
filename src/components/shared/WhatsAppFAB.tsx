@@ -1,4 +1,3 @@
-import { MessageCircle } from "lucide-react";
 import { socialLinks } from "@/constants";
 
 export default function WhatsAppFAB() {
@@ -11,7 +10,7 @@ export default function WhatsAppFAB() {
       aria-label="Chat on WhatsApp"
     >
       <span className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-[#25D366] text-white shadow-inner shadow-black/20 transition-colors duration-300 group-hover:bg-[#20BD5A]">
-        <MessageCircle size={20} />
+        <i className="fa-brands fa-whatsapp text-xl"></i>
       </span>
       <span className="hidden sm:inline text-sm font-semibold tracking-wide text-text-secondary transition-colors duration-300 group-hover:text-text-primary">
         Chat

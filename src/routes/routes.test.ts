@@ -6,7 +6,6 @@ describe("ROUTES", () => {
     const publicRoutes = [
       ROUTES.HOME,
       ROUTES.SERVICES,
-      ROUTES.PACKAGES,
       ROUTES.PORTFOLIO,
       ROUTES.BLOG,
       ROUTES.CONTACT,

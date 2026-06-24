@@ -1,22 +1,6 @@
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  BriefcaseBusiness,
-  Home,
-  Menu,
-  Phone,
-  X,
-  ChevronDown,
-  ChevronUp,
-  Megaphone,
-  PenTool,
-  BarChart3,
-  Palette,
-  Video,
-  Globe,
-  BookOpen,
-} from "lucide-react";
 import { NavDropdown } from "@/components/shared/nav-dropdown";
 
 const logoImage =
@@ -41,42 +25,42 @@ export default function Navbar() {
       name: "Social Media Management",
       description: "Build a loyal brand community and consistent growth.",
       url: "/services",
-      icon: Megaphone,
+      icon: "fa-solid fa-bullhorn",
       state: { serviceId: "social-media" },
     },
     {
       name: "Content Creation",
       description: "Produce audience-first creative that people remember.",
       url: "/services",
-      icon: PenTool,
+      icon: "fa-solid fa-pen-nib",
       state: { serviceId: "content-creation" },
     },
     {
       name: "Performance Marketing",
       description: "Paid campaigns with structured testing and optimization.",
       url: "/services",
-      icon: BarChart3,
+      icon: "fa-solid fa-chart-line",
       state: { serviceId: "performance" },
     },
     {
       name: "Brand Identity & Design",
       description: "Visual systems to make your brand recognizable and premium.",
       url: "/services",
-      icon: Palette,
+      icon: "fa-solid fa-palette",
       state: { serviceId: "brand-identity" },
     },
     {
       name: "Video Production",
       description: "Platform-ready videos designed for retention and trust.",
       url: "/services",
-      icon: Video,
+      icon: "fa-solid fa-video",
       state: { serviceId: "video-production" },
     },
     {
       name: "Website & Funnel Design",
       description: "Conversion-first web journeys to turn traffic into action.",
       url: "/services",
-      icon: Globe,
+      icon: "fa-solid fa-globe",
       state: { serviceId: "website-funnel" },
     },
   ];
@@ -110,7 +94,7 @@ export default function Navbar() {
                       : "text-text-secondary hover:bg-bg-card-hover hover:text-text-primary"
                   }`}
                 >
-                  <Home size={14} />
+                  <i className="fa-solid fa-house text-[14px]"></i>
                   <span>Home</span>
                 </Link>
 
@@ -132,7 +116,7 @@ export default function Navbar() {
                       : "text-text-secondary hover:bg-bg-card-hover hover:text-text-primary"
                   }`}
                 >
-                  <BriefcaseBusiness size={14} />
+                  <i className="fa-solid fa-briefcase text-[14px]"></i>
                   <span>Portfolio</span>
                 </Link>
 
@@ -145,7 +129,7 @@ export default function Navbar() {
                       : "text-text-secondary hover:bg-bg-card-hover hover:text-text-primary"
                   }`}
                 >
-                  <BookOpen size={14} />
+                  <i className="fa-solid fa-book-open text-[14px]"></i>
                   <span>Blog</span>
                 </Link>
 
@@ -158,7 +142,7 @@ export default function Navbar() {
                       : "text-text-secondary hover:bg-bg-card-hover hover:text-text-primary"
                   }`}
                 >
-                  <Phone size={14} />
+                  <i className="fa-solid fa-phone text-[14px]"></i>
                   <span>Contact</span>
                 </Link>
               </div>
@@ -180,7 +164,7 @@ export default function Navbar() {
               className="md:hidden text-text-primary p-2 hover:bg-white/5 rounded-lg transition-colors"
               aria-label="Toggle menu"
             >
-              {isOpen ? <X size={24} /> : <Menu size={24} />}
+              {isOpen ? <i className="fa-solid fa-xmark text-xl"></i> : <i className="fa-solid fa-bars text-xl"></i>}
             </button>
           </div>
         </div>
@@ -219,7 +203,11 @@ export default function Navbar() {
                   }`}
                 >
                   <span>Services</span>
-                  {mobileServicesOpen ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
+                  {mobileServicesOpen ? (
+                    <i className="fa-solid fa-chevron-up text-sm"></i>
+                  ) : (
+                    <i className="fa-solid fa-chevron-down text-sm"></i>
+                  )}
                 </button>
                 <AnimatePresence>
                   {mobileServicesOpen && (
@@ -239,7 +227,7 @@ export default function Navbar() {
                           }}
                           className="flex items-center gap-2 text-sm text-text-secondary hover:text-accent py-1.5 w-full text-left transition-colors"
                         >
-                          {item.icon && <item.icon size={14} className="text-accent" />}
+                          {item.icon && <i className={`${item.icon} text-accent text-xs`}></i>}
                           <span>{item.name}</span>
                         </button>
                       ))}

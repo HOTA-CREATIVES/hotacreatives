@@ -13,7 +13,7 @@ interface SEOProps {
 const defaultSEO = {
   title: "HOTA — India's Creative Growth Agency",
   description:
-    "HOTA is India's creative growth agency. We position brands with strategic social media management, content creation, performance marketing, and brand design. Packages from ₹50,000/month.",
+    "HOTA is India's creative growth agency. We position brands with strategic social media management, content creation, performance marketing, and brand design.",
   keywords:
     "creative agency India, social media agency Mumbai, brand growth agency, performance marketing India, digital marketing India",
   ogImage: "https://hotacreatives.in/hota-logo.png",
