@@ -57,7 +57,7 @@ export default function HeroSection() {
                   transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
                   className="block"
                 >
-                  One unified system
+                  where creativity meets growth
                 </motion.span>
               </span>
               <span className="block overflow-hidden py-1">
@@ -65,19 +65,9 @@ export default function HeroSection() {
                   initial={{ y: "100%" }}
                   animate={{ y: 0 }}
                   transition={{ duration: 0.9, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-                  className="block"
-                >
-                  for <span className="text-accent">unstoppable</span>
-                </motion.span>
-              </span>
-              <span className="block overflow-hidden py-1">
-                <motion.span
-                  initial={{ y: "100%" }}
-                  animate={{ y: 0 }}
-                  transition={{ duration: 0.9, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
                   className="block text-accent"
                 >
-                  brand growth.
+                  strategy turn into success
                 </motion.span>
               </span>
             </h1>
